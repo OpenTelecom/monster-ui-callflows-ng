@@ -1,0 +1,63 @@
+<div>
+	{{#if data.id }}
+		<h1>{{ i18nApp.editQueue }}</h1>
+	{{else}}
+		<h1>{{ i18nApp.createQueue }}</h1>
+	{{/if}}
+
+	<form id="queue-form" action="" method="post" class="form-vertical">
+		<div class="control-group">
+			<label class="control-label" for="name">{{ i18nApp.name }}</label>
+			<div class="controls">
+				<input id="name" name="name" type="text" data-placement="top" data-toggle="tooltip" placeholder="{{ i18nApp.namePlaceholder }}" value="{{ data.name}}" rel="popover" data-original-title="{{this.help}}" data-content="{{ i18nApp.nameDataContent }}" />
+			</div>
+		 </div>
+
+		<div class="control-group">
+			<label class="control-label" for="connection_timeout">{{ i18nApp.queueTimeout }}</label>
+			<div class="controls">
+				<input id="connection_timeout" name="connection_timeout" type="text" placeholder="{{ i18nApp.queueTimeoutPlaceholder }}" value="{{ data.connection_timeout }}" rel="popover" data-content="{{ i18nApp.queueTimeoutDataContent }}"/>
+			</div>
+		</div>
+
+		<div class="control-group">
+			<label class="control-label" for="member_timeout">{{ i18nApp.memberTimeout }}</label>
+			<div class="controls">
+				<input id="member_timeout" name="member_timeout" type="text" placeholder="{{ i18nApp.memberTimeoutPlaceholder }}" value="{{ data.member_timeout }}" rel="popover" data-content="{{ i18nApp.memberTimeoutDataContent }}"/>
+			</div>
+		</div>
+
+		<div class="control-group">
+			<label class="control-label" for="users-list">{{ i18nApp.userLabel }}</label>
+			<div class="controls">
+				<table class="table">
+					<thead>
+					<tr>
+						<th>{{ i18nApp.user }}</th>
+						<th>{{ i18nApp.actions }}</th>
+					</tr>
+					</thead>
+					<tbody class="js-user-table-body"></tbody>
+				</table>
+				<h4>{{ i18nApp.addUser }}</h4>
+				<select name="user_id" id="users-list">
+					<option id="empty_option_user" value="empty_option_user">-- {{ i18nApp.select }} --</option>
+					{{#each field_data.users}}
+						<option value="{{ id }}" id="option_user_{{ id }}">{{ first_name }} {{ last_name }}</option>
+					{{/each}}
+				</select>
+				<a class="js-add-user-btn" href="" data-queue_id="{{ data.id }}">
+					<i class="fa fa-arrow-up"></i>
+					{{ i18nApp.addThisUser }}
+				</a>
+			</div>
+		</div>
+
+		<div class="buttons-wrapper">
+			{{#if data.id}}
+				<button class="btn btn-danger queue-delete">{{ i18nApp.delete }}</button>
+			{{/if}}
+			<button class="btn btn-primary queue-save">{{ i18nApp.save }}</button>
+		</div>
+	</form>
+</div>

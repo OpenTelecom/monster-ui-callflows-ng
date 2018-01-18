@@ -1,0 +1,171 @@
+.callflows-port #user-form input[disabled=disabled] {
+	background: #ccc;
+}
+
+.callflows-port #user-form #equipment {
+	text-align: center;
+	font-size: 12px;
+	font-family: 'Helvetica';
+}
+
+.callflows-port #user-form #equipment .help_box {
+	color: #333333;
+	line-height: 12px;
+}
+
+.callflows-port #user-form #equipment .add_device {
+	margin-top: 15px;
+	display: inline-block;
+}
+
+.callflows-port #user-form #equipment .add_device:hover a {
+	color: #333333;
+}
+
+.callflows-port #user-form #equipment .add_device:hover .add_device_icon {
+	background-position: 0 -24px;
+	cursor: pointer;
+}
+
+.callflows-port #user-form #equipment #tab_devices  {
+	border: 2px solid #666666;
+	border-radius: 15px 15px 15px 15px;
+	color: #666666;
+	margin: 20px auto auto;
+	width: 560px;
+}
+
+.callflows-port #user-form #equipment #tab_devices .action_device {
+	color: #666666;
+	cursor: pointer;
+	text-decoration: underline;
+	line-height: 30px;
+}
+
+.callflows-port #user-form #equipment #tab_devices .action_device:not(:first-child) {
+	margin-left: 10px;
+}
+.callflows-port #user-form #equipment #tab_devices .action_device:hover {
+	color: #05addc;
+}
+
+.callflows-port #user-form #equipment #tab_devices .column:not(.fifth) {
+	border-right: 1px solid #A6A6A6;
+}
+
+.callflows-port #user-form #equipment #tab_devices .column {
+	float: left;
+	text-align: center;
+	height: 30px;
+	line-height: 30px;
+}
+
+.callflows-port #user-form #equipment #tab_devices .column.first {
+	width: 190px;
+	overflow: hidden;
+	text-align:center;
+}
+
+.callflows-port #user-form #equipment #tab_devices .column.second {
+	width: 99px;
+}
+
+.callflows-port #user-form #equipment #tab_devices .column.third {
+	min-width: 49px;
+}
+
+.callflows-port #user-form #equipment #tab_devices .rows .column.third {
+	background-image: url('../../style/static/images/red_phone.png');
+	background-repeat: no-repeat;
+	background-position: 16px center;
+}
+
+.callflows-port #user-form #equipment #tab_devices .rows .column.third.registered,.callflows-port #user-form #equipment #tab_devices .rows .column.third.cellphone {
+	background-image: url('../../style/static/images/green_phone.png');
+}
+
+.callflows-port #user-form #equipment #tab_devices .rows .column.third.disabled {
+	background-image: url('../../style/static/images/gray_phone.png') !important;
+}
+
+.callflows-port #user-form #equipment #tab_devices .column.fourth {
+	width: 59px;
+}
+
+.callflows-port #user-form #equipment #tab_devices .column.fourth .enabled_checkbox {
+	margin-top: 8px;
+}
+
+.callflows-port #user-form #equipment #tab_devices .column.fifth {
+	width: 159px;
+}
+
+.callflows-port #user-form #equipment #tab_devices .column.merged {
+	width: 560px;
+	border-right: none;
+}
+
+.callflows-port #user-form #equipment #tab_devices .row {
+	height: 30px;
+	margin-left: 0px;
+}
+
+.callflows-port #user-form #equipment #tab_devices .row.title {
+	background-color: #dddddd !important;
+	border-bottom: 2px solid #666666 !important;
+	border-radius: 15px 15px 0px 0px;
+	font-weight: bold;
+}
+
+.callflows-port #user-form #equipment #tab_devices .row:not(:last-child) {
+	border-bottom: 1px solid #A6A6A6;
+}
+
+.callflows-port #user-form #equipment #tab_devices .row:last-child {
+	border-radius: 0px 0px 15px 15px;
+}
+
+.callflows-port #user-form #equipment #tab_devices .row:nth-child(odd) {
+	background-color: #eeeeee;
+}
+
+.callflows-port #user-form #equipment #tab_devices .row:nth-child(even) {
+	background-color: #dddddd;
+}
+
+.callflows-port #user-form #username_label {
+	color: #05addc;
+	text-align: left;
+	font-weight: bold;
+}
+
+.callflows-port #user-form .shoutcast-div {
+	display: none;
+}
+
+.callflows-port #user-form .shoutcast-div.active {
+	display: block;
+}
+
+/* Hotdesk devices */
+.callflows-port #user-form #hotdesk_devices {
+	/*width: 400px;*/
+	width: 320px;
+}
+
+.callflows-port #user-form #hotdesk_devices .row .column:nth-child(1) {
+	width: 300px;
+}
+
+.callflows-port #user-form #hotdesk_devices .row .column:nth-child(2) {
+	width: 80px;
+}
+
+.callflows-port #user-form #hotdesk_devices .row .column.merged {
+	/* width: 400px; */
+	width: 320px;
+}
+
+.callflows-port #user-form #hotdesk_devices .row input[type="checkbox"] {
+	margin-top: 10px;
+}

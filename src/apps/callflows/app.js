@@ -19,7 +19,8 @@ define(function(require){
 		'./submodules/user/user',
 		'./submodules/vmbox/vmbox',
 		'./submodules/featurecodes/featurecodes',
-		'./submodules/temporalset/temporalset'
+		'./submodules/temporalset/temporalset',
+		'./submodules/callcenter/callcenter'
 	]);
 
 	var app = {
@@ -39,7 +40,7 @@ define(function(require){
 			'callflows.fetchActions': 'define_callflow_nodes'
 		},
 
-		subModules: ['misc', 'blacklist', 'conference', 'device', 'directory', 'faxbox', 'groups', 'media', 'menu', 'qubicle', 'resource', 'timeofday', 'user', 'vmbox', 'featurecodes', 'temporalset'],
+		subModules: ['misc', 'blacklist', 'conference', 'device', 'directory', 'faxbox', 'groups', 'media', 'menu', 'qubicle', 'resource', 'timeofday', 'user', 'vmbox', 'featurecodes', 'temporalset', 'callcenter'],
 
 		appFlags: {
 			flow: {},
@@ -1479,8 +1480,7 @@ define(function(require){
 							action;
 
 						if (ui.draggable.hasClass('action')) {
-							action = ui.draggable.attr('name'),
-
+							action = ui.draggable.attr('name');
 							branch = self.branch(action);
 							branch.caption = self.actions[action].caption(branch, self.flow.caption_map);
 
