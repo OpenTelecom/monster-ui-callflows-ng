@@ -1,0 +1,62 @@
+<div>
+	<div class="left-bar-container">
+		<div class="search-box">
+			<i class="fa fa-search"></i>
+			<input type="text" class="search-query" placeholder="{{ i18n.search }}">
+		</div>
+		<div class="list-add">
+			<i class="fa fa-plus-circle fa-lg"></i>
+			<span>{{ i18n.callflows.addCallflow }}</span>
+		</div>
+		<div class="list-container clearfix">
+			<ul class="list"></ul>
+		</div>
+	</div>
+
+	<div class="callflow-content listing-mode">
+		<div class="entity-header">
+			<div class="entity-title">{{ i18n.entityManager.callflowsTitle }}</div>
+			
+			<button type="button" class="back-button monster-button-secondary">{{ i18n.entityManager.backButton }}</button>
+			{{#if canToggleCallflows}}
+				<div class="superadmin-mode">
+					<span class="switch-title">
+						<i class="help-popover fa fa-question-circle" data-toggle="tooltip" data-placement="right" data-original-title="{{ i18n.entityManager.showSystemCallflows.help }}"></i>
+						{{ i18n.entityManager.showSystemCallflows.title }}
+					</span>
+					{{#monsterSwitch}}
+						<input type="checkbox" id="switch_role" {{#if hasAllCallflows}} checked{{/if}} />
+					{{/monsterSwitch}}
+				</div>
+			{{/if}}
+		</div>
+		<div class="callflow-view clearfix">
+			<div class="real-content"> 
+				<div class="callflow-help"/>
+
+				<div id="ws_callflow" class="clearfix">
+					<div class="tools">
+						<div id="ws_cf_tools"></div>
+					</div>
+					<div class="flowchart">
+						<div id="callflow_header">
+							<div id="pending_change">
+								<span>{{ i18n.oldCallflows.you_have_modified_this_callflow }}</span>
+							</div>
+						</div>
+						<div id="hidden_callflow_warning">{{ i18n.callflows.hiddenCallflowWarning }}</div>
+						<div class="callflow">
+							<div>
+								<span class="flow">
+									<div class="buttons"></div>
+									<div id="ws_cf_flow"></div>
+								</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+

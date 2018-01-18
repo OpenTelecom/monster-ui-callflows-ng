@@ -1,0 +1,30 @@
+<div class="dialog_popup callflows-port">
+	<h1>{{ i18n.oldCallflows.prepend_caller_id }}</h1>
+	<form name="form" method="post" action="#">
+		<div class="form_content">
+			<div class="popup_field">
+				<label for="cid_name_prefix">{{ i18n.oldCallflows.callerid_name_prefix }}: </label>
+				<input type="text" id="cid_name_prefix" value="{{ data_cid.caller_id_name_prefix }}"/>
+			</div>
+			<div class="popup_field">
+				<label for="cid_number_prefix">{{ i18n.oldCallflows.callerid_number_prefix }}: </label>
+				<input type="text" id="cid_number_prefix" value="{{ data_cid.caller_id_number_prefix }}"/>
+			</div>
+			<div class="popup_field">
+				<label for="apply_to">{{ i18n.oldCallflows.applyTo.label }}<i class="help-popover fa fa-question-circle" data-original-title="{{ i18n.oldCallflows.applyTo.tooltip}}" data-placement="right" data-toggle="tooltip"></i></label>
+				<div class="select_wrapper">
+					<select id="apply_to">
+						{{#select data_cid.apply_to}}
+							<option value="original">{{ i18n.oldCallflows.applyTo.options.original }}</option>
+							<option value="current">{{ i18n.oldCallflows.applyTo.options.current }}</option>
+						{{/select}}
+					</select>
+				</div>
+				<div class="clear"/>
+			</div>
+		</div>
+	</form>
+	<div class="buttons-center">
+		<button id="add" class="monster-button monster-button-primary">{{ i18n.save }}</button>
+	</div>
+</div>

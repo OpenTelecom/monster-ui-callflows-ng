@@ -1,0 +1,42 @@
+<div id="callflow_container">
+	<div class="entity-manager callflow-app-section">
+		<div class="grid-header">{{ i18n.entityManager.header }}</div>
+		<div class="entity-element callflow-element">
+			<div>{{ i18n.entityManager.callflowsTitle }}</div>
+		</div>
+		<div class="entity-element account-element">
+			<div>{{ i18n.entityManager.accountTitle }}</div>
+		</div>
+		<div class="entity-element feature-code-element">
+			<div>{{ i18n.entityManager.featureCodeTitle }}</div>
+		</div>
+		{{#each actions}}
+		<div class="entity-element" data-type="{{@key}}">
+			<div>{{this.name}}</div>
+		</div>
+		{{/each}}
+	</div>
+	<div class="entity-edition callflow-app-section">
+		<div class="left-bar-container">
+			<div class="search-box">
+				<i class="fa fa-search"></i>
+				<input type="text" class="search-query" placeholder="{{ i18n.search }}">
+			</div>
+			<div class="list-add">
+				<i class="fa fa-plus-circle fa-lg"></i>
+				<span>{{ i18n.add }}</span>
+			</div>
+			<div class="list-container clearfix">
+				<ul class="list"></ul>
+			</div>
+		</div>
+		<div class="callflow-content callflows-port">
+			<div class="entity-header">
+				<div class="entity-title"></div>
+				<button type="button" class="back-button monster-button-secondary">{{ i18n.entityManager.backButton }}</button>
+			</div>
+			<div class="entity-content"></div>
+		</div>
+	</div>
+	<div class="callflow-edition callflow-app-section"></div>
+</div>

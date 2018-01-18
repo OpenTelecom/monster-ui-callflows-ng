@@ -1,0 +1,31 @@
+<div>
+	<div class="title">{{ i18n.oldCallflows.actions }}<div class="tooltip"/></div>
+	<div class="search-bar">
+		<div class="search-box">
+			<i class="fa fa-search"></i>
+			<input type="text" class="search-query" placeholder="{{ i18n.search }}">
+		</div>
+	</div>
+	{{#each categories}}
+		<div id="{{key}}" name="{{key}}" class="category inactive">
+			<div class="open">{{key}}</div>
+			<div class="content">
+				{{#each actions}}
+					<div class="tool" help="{{tip}}" data-name="{{name}}">
+						<div name="{{key}}" class="action">
+							<div class="icon medium app_sm {{icon}}"></div>
+							<div class="tool_name">{{name}}</div>
+						</div>
+					</div>
+				{{/each}}
+				<div class="clear"></div>
+				<div class="app_list_nav"></div>
+			</div>
+		</div>
+	{{/each}}
+	<div class="callflow_helpbox_wrapper">
+		<div id="help_box" class="tip_box">
+			Drag this items to the left
+		</div>
+	</div>
+</div>
