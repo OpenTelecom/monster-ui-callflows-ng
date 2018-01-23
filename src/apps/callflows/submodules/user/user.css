@@ -1,3 +1,10 @@
+.callflows-port #user-form .row.title .fa {
+	font-size: 16px;
+	margin-right: 5px;
+	color: #303039;
+	vertical-align: -1px;
+}
+
 .callflows-port #user-form input[disabled=disabled] {
 	background: #ccc;
 }
@@ -5,17 +12,16 @@
 .callflows-port #user-form #equipment {
 	text-align: center;
 	font-size: 12px;
-	font-family: 'Helvetica';
+	font-family: 'Helvetica', sans-serif;
 }
 
 .callflows-port #user-form #equipment .help_box {
-	color: #333333;
-	line-height: 12px;
 }
 
 .callflows-port #user-form #equipment .add_device {
 	margin-top: 15px;
 	display: inline-block;
+	color: white;
 }
 
 .callflows-port #user-form #equipment .add_device:hover a {
@@ -28,11 +34,11 @@
 }
 
 .callflows-port #user-form #equipment #tab_devices  {
-	border: 2px solid #666666;
-	border-radius: 15px 15px 15px 15px;
-	color: #666666;
+	border: none;
+	color: #303039;
 	margin: 20px auto auto;
 	width: 560px;
+	font-size: 13px;
 }
 
 .callflows-port #user-form #equipment #tab_devices .action_device {
@@ -42,11 +48,21 @@
 	line-height: 30px;
 }
 
+.callflows-port #user-form #equipment #tab_devices .action_device .fa {
+	font-size: 20px;
+	color: #303039;
+}
+
 .callflows-port #user-form #equipment #tab_devices .action_device:not(:first-child) {
 	margin-left: 10px;
 }
+
 .callflows-port #user-form #equipment #tab_devices .action_device:hover {
-	color: #05addc;
+	color: #22A5FF;
+}
+
+.callflows-port #user-form #equipment #tab_devices .action_device:hover .fa {
+	color: #22A5FF;
 }
 
 .callflows-port #user-form #equipment #tab_devices .column:not(.fifth) {
@@ -93,7 +109,7 @@
 }
 
 .callflows-port #user-form #equipment #tab_devices .column.fourth .enabled_checkbox {
-	margin-top: 8px;
+	margin: 0;
 }
 
 .callflows-port #user-form #equipment #tab_devices .column.fifth {
@@ -111,9 +127,8 @@
 }
 
 .callflows-port #user-form #equipment #tab_devices .row.title {
-	background-color: #dddddd !important;
-	border-bottom: 2px solid #666666 !important;
-	border-radius: 15px 15px 0px 0px;
+	background-color: #D9D9D9 !important;
+	border-bottom: 1px solid #A6A6A6 !important;
 	font-weight: bold;
 }
 
@@ -122,7 +137,6 @@
 }
 
 .callflows-port #user-form #equipment #tab_devices .row:last-child {
-	border-radius: 0px 0px 15px 15px;
 }
 
 .callflows-port #user-form #equipment #tab_devices .row:nth-child(odd) {

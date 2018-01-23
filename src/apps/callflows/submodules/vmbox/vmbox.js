@@ -385,7 +385,7 @@ define(function(require){
 				getVoicemailNode = function(hasCategory) {
 					var action = {
 						name: self.i18n.active().callflows.vmbox.voicemail,
-						icon: 'voicemail',
+						icon: 'envelope',
 						module: 'voicemail',
 						tip: self.i18n.active().callflows.vmbox.voicemail_tip,
 						data: {
@@ -495,7 +495,7 @@ define(function(require){
 
 				'voicemail[action=check]': {
 					name: self.i18n.active().callflows.vmbox.check_voicemail,
-					icon: 'voicemail',
+					icon: 'envelope',
 					category: self.i18n.active().oldCallflows.advanced_cat,
 					module: 'voicemail',
 					tip: self.i18n.active().callflows.vmbox.check_voicemail_tip,

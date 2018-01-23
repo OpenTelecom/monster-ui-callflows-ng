@@ -127,7 +127,7 @@ define(function(require){
 				},
 				'hotdesk[action=login]': {
 					name: self.i18n.active().callflows.user.hot_desk_login,
-					icon: 'hotdesk_login',
+					icon: 'sign-in',
 					category: self.i18n.active().callflows.user.hotdesking_cat,
 					module: 'hotdesk',
 					tip: self.i18n.active().callflows.user.hot_desk_login_tip,
@@ -153,7 +153,7 @@ define(function(require){
 				},
 				'hotdesk[action=logout]': {
 					name: self.i18n.active().callflows.user.hot_desk_logout,
-					icon: 'hotdesk_logout',
+					icon: 'sign-out',
 					category: self.i18n.active().callflows.user.hotdesking_cat,
 					module: 'hotdesk',
 					tip: self.i18n.active().callflows.user.hot_desk_logout_tip,
@@ -179,7 +179,7 @@ define(function(require){
 				},
 				'hotdesk[action=toggle]': {
 					name: self.i18n.active().callflows.user.hot_desk_toggle,
-					icon: 'hotdesk_toggle',
+					icon: 'toggle-off',
 					category: self.i18n.active().callflows.user.hotdesking_cat,
 					module: 'hotdesk',
 					tip: self.i18n.active().callflows.user.hot_desk_toggle_tip,

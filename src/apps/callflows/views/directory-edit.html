@@ -15,7 +15,7 @@
 	<div>
 		<ul class="tabs" data-tabs="tabs">
 			<li class="active"><a href="#basic">{{ i18n.callflows.directory.basic }}</a></li>
-			<li><a href="#options"><span class="icon wrench_screw"></span>{{ i18n.callflows.directory.options }}</a></li>
+			<li><a href="#options"><i class="fa fa-wrench"></i>{{ i18n.callflows.directory.options }}</a></li>
 		</ul>
 		<form id="directory-form" action="" method="post">
 			<div class="pill-content">
@@ -28,58 +28,58 @@
 					</div>
 
 					<div class="clearfix">
-						<div id="tab_users">
-							<div class="row row-user title">
-								<div class="column first">{{ i18n.callflows.directory.user }}&nbsp;&nbsp;<span class="icon medium user"/></div>
-								<div class="column second">{{ i18n.callflows.directory.callflow }}&nbsp;&nbsp;<span class="icon medium callflow"/></div>
-								<div class="column third">{{ i18n.callflows.directory.remove }}</div>
-							</div>
-							<div class="rows">
-							</div>
-						</div>
-
 						<div class="add_user">
 							<div class="add_user_title">{{ i18n.callflows.directory.add_user }}</div>
 							<div class="add_content_wrapper">
 								<div class="add_user_fields">
-									<ul class="controls">
-										<div id="user_list_select">
-											<li>
-												<label>{{ i18n.callflows.directory.user }}</label>
-												<select name="select_user_id" id="select_user_id">
-													<option id="empty_option_user" value="empty_option_user">-- {{ i18n.callflows.directory.select }} --</option>
-													{{#each field_data.users}}
-														<option value="{{ id }}" id="option_user_{{ id }}">{{ first_name }} {{ last_name }}</option>
-													{{/each}}
-												</select>
-											</li>
-											<div class="clear"/>
-										</div>
-										<li id="callflow_li">
-											</span>
-											<label>{{ i18n.callflows.directory.callflow }}</label>
-											<select name="callflow_id" id="callflow_id">
-												<option id="empty_option_callflow" value="empty_option_callflow">-- {{ i18n.callflows.directory.select }} --</option>
-												{{#each field_data.callflows}}
-													<option value="{{ id }}" id="option_callflow_{{ id }}">
-														&nbsp;
-														{{#if name}}
-															{{name}}&nbsp;
-														{{else}}
-															{{#each numbers}} {{this}}&nbsp;{{/each}}
-														{{/if}}
-													</option>
-												{{/each}}
-											</select>
-										</li>
-										<div class="clear"/>
-									</ul>
+									<div id="user_list_select" class="user-item-wrapper">
+										<label>{{ i18n.callflows.directory.user }}</label>
+										<select name="select_user_id" id="select_user_id">
+											<option id="empty_option_user" value="empty_option_user">-- {{ i18n.callflows.directory.select }} --</option>
+											{{#each field_data.users}}
+												<option value="{{ id }}" id="option_user_{{ id }}">{{ first_name }} {{ last_name }}</option>
+											{{/each}}
+										</select>
+									</div>
+									<div id="callflow_li" class="callflow-item-wrapper">
+										<label>{{ i18n.callflows.directory.callflow }}</label>
+										<select name="callflow_id" id="callflow_id">
+											<option id="empty_option_callflow" value="empty_option_callflow">-- {{ i18n.callflows.directory.select }} --</option>
+											{{#each field_data.callflows}}
+												<option value="{{ id }}" id="option_callflow_{{ id }}">
+													&nbsp;
+													{{#if name}}
+														{{name}}&nbsp;
+													{{else}}
+														{{#each numbers}} {{this}}&nbsp;{{/each}}
+													{{/if}}
+												</option>
+											{{/each}}
+										</select>
+									</div>
 								</div>
-								<div class="add_user_div">
+								<div class="add_user_div btn">
 									<span class="fa fa-plus-circle"/>&nbsp;
 									<a class="add_user_link" href="javascript:void(0);" data-directory_id="{{ data.id }}">{{ i18n.callflows.directory.add_this_user }}</a>
-									<div class="clear"/>
 								</div>
+							</div>
+						</div>
+
+						<div id="tab_users">
+							<div class="row row-user title">
+								<div class="column first">
+									<i class="fa fa-users"></i>
+									{{ i18n.callflows.directory.user }}
+								</div>
+								<div class="column second">
+									<i class="fa fa-link"></i>
+									{{ i18n.callflows.directory.callflow }}
+								</div>
+								<div class="column third">
+									{{ i18n.callflows.directory.remove }}
+								</div>
+							</div>
+							<div class="rows">
 							</div>
 						</div>
 					</div>
@@ -130,7 +130,7 @@
 				</div>
 			</div>
 		</form>
-		<div class="buttons-right">
+		<div class="buttons-wrapper">
 			{{#if data.id}}
 				<button class="monster-button monster-button-danger directory-delete">{{ i18n.callflows.directory.delete }}</button>
 			{{/if}}

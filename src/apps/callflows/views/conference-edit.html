@@ -10,8 +10,8 @@
 	<div>
 		<ul class="tabs" data-tabs="tabs">
 			<li class="active"><a href="#basic">{{ i18n.callflows.conference.basic }}</a></li>
-			<li><a href="#options"><span class="icon wrench_screw"></span>{{ i18n.callflows.conference.options }}</a></li>
-			<li><a href="#conference_server"><span class="icon conference"></span>{{ i18n.callflows.conference.conference_server }}</a></li>
+			<li><a href="#options"><i class="fa fa-wrench"></i>{{ i18n.callflows.conference.options }}</a></li>
+			<li><a href="#conference_server"><i class="fa fa-comments"></i>{{ i18n.callflows.conference.conference_server }}</a></li>
 		</ul>
 
 		<form id="conference_form" action="" method="post" >
@@ -124,7 +124,7 @@
 			</div>
 		</form>
 
-		<div class="buttons-right">
+		<div class="buttons-wrapper">
 			{{#if data.id}}
 				<button class="monster-button monster-button-danger conference-delete">{{ i18n.callflows.conference.delete }}</button>
 			{{/if}}

@@ -19,7 +19,7 @@ define(function(require){
 			$.extend(callflow_nodes, {
 				'faxbox[id=*]': {
 					name: self.i18n.active().callflows.faxbox.faxboxes_label,
-					icon: 'printer2',
+					icon: 'fax',
 					category: self.i18n.active().oldCallflows.advanced_cat,
 					module: 'faxbox',
 					tip: self.i18n.active().callflows.faxbox.faxbox_tip,

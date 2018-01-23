@@ -1,8 +1,12 @@
 <div>
 	{{#if endpoint_id}}
 		<div class="row" id="row_endpoint_{{endpoint_id}}" data-id="{{endpoint_id}}" data-type="{{endpoint_type}}">
-			<div class="column first">{{#compare endpoint_type "===" "user"}}<span class="icon medium userportal">{{else}}<span class="icon medium device">{{/compare}}</span>&nbsp;&nbsp;{{endpoint_name}}</div>
-			<div class="column second"><a class="action_endpoint delete icon medium trash" data-id="{{endpoint_id}}"></a></div>
+			<div class="column first">{{#compare endpoint_type "===" "user"}}<i class="fa fa-user"></i>{{else}}<i class="fa fa-fax"></i>{{/compare}} {{endpoint_name}}</div>
+			<div class="column second">
+				<a class="action_endpoint delete" data-id="{{endpoint_id}}">
+					<i class="fa fa-trash"></i>
+				</a>
+			</div>
 	{{else}}
 		<div class="row" id="row_no_data">
 			<div class="column merged">{{ @root.i18n.callflows.groups.there_are_currently_no_endpoint }}</div>

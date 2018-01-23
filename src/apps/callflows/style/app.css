@@ -9,6 +9,7 @@
 @import url('../submodules/groups/groups.css');
 @import url('../submodules/featurecodes/featurecodes.css');
 @import url('../submodules/temporalset/temporalset.css');
+@import url('../submodules/callcenter/callcenter.css');
 /* style.css */
 #ws_callflow > .callflow {
 	float: left;
@@ -19,9 +20,10 @@
 }
 
 #ws_callflow .callflow .root > .top_bar {
-	background-image: url(static/images/blue_bar.png);
+	background: #22A5FF;
 	height: 25px;
 	text-align: left;
+	border-radius: 6px 6px 0 0;
 }
 
 #ws_callflow .callflow .root > .top_bar > span {
@@ -31,7 +33,8 @@
 #ws_callflow .callflow .root > .top_bar .name {
 	float: left;
 	margin-left: 10px;
-	font-weight: bold;
+	font-weight: normal;
+	color: white;
 	cursor: default;
 }
 
@@ -44,12 +47,12 @@
 	background-position: bottom;
 	background-repeat: repeat-x;
 	height: 32px;
-	background-color: #424242;
+	background-color: #303039;
 }
 
 #ws_callflow .callflow .root > .content .number_row:last-child {
 	background: none;
-	background-color: #424242;
+	background-color: #303039;
 	height: 30px;
 	border-radius: 0px 0px 2px 2px;
 }
@@ -131,21 +134,23 @@
 	background-image: url(static/images/btn_delete_blue.png);
 }
 
-#ws_callflow .tool .icon {
-	margin: 2px;
-	display: inline-block;
+#ws_callflow .tool .fa {
+	margin: 2px 2px 5px;
+	color: white;
 }
 
 #ws_callflow .tools .category {
 	text-align: center;
-	background: url(static/images/background_category.png) no-repeat;
+	background: #22A5FF;
 	background-position: top center;
 	cursor: default;
+	border-bottom: 1px solid white;
 }
 
 #ws_callflow .tools .category .content {
-	background-color: #777777;
-	border: 1px solid #333333;
+	background-color: white;
+	border: 1px solid #22A5FF;
+	padding: 1px 0px 3px;
 }
 
 #ws_callflow .tools .open {
@@ -157,23 +162,56 @@
 }
 
 #ws_callflow .tools .active .open {
-	background-image: url(static/images/arrow_active.png);
-	color: #22A5FF;
+	color: white;
+	position: relative;
 }
 
-#ws_callflow .tools .inactive .open{
-	background-image: url(static/images/arrow_inactive.png);
+#ws_callflow .tools .active .open::before {
+	content: '\f078';
+	font: normal normal normal 14px/1 FontAwesome;
+	display: inline-block;
+	vertical-align: top;
+	width: 16px;
+	height: 14px;
+	position: absolute;
+	left: 5px;
+	top: 5px;
+	color: white;
+}
+
+#ws_callflow .tools .inactive .open {
+	color: white;
+	position: relative;
+	cursor: pointer;
+}
+
+#ws_callflow .tools .inactive .open:hover {
+	background: #0081D6;
+}
+
+#ws_callflow .tools .inactive .open::before {
+	content: '\f054';
+	font: normal normal normal 14px/1 FontAwesome;
+	display: inline-block;
+	vertical-align: top;
+	width: 16px;
+	height: 14px;
+	position: absolute;
+	left: 5px;
+	top: 5px;
+	color: white;
 }
 
 #ws_callflow .tools .tool {
-	background: #777777;
+	background: white;
 	float: left;
-	width: 82px;
+	width: 78px;
 	padding-left: 1px;
 	padding-top: 1px;
 	cursor: -moz-grab;
 	cursor: -webkit-grab;
 	cursor: grab;
+	margin: 1px 1px 1px 2px;
 }
 
 #ws_callflow .destination {
@@ -183,20 +221,28 @@
 
 #ws_callflow .tools .tool .action {
 	z-index: 19;
-	height:56px;
-	background: url(static/images/blackbox_small.png) no-repeat;
-	min-width: 82px;
+	height: 53px;
+	border-radius: 6px;
+	background: #22A5FF;
+	color: white;
+	border: 1px solid #22A5FF;
+	padding-top: 7px;
+}
+
+#ws_callflow .tools .tool .action:hover {
+	background: #303039;
+	border: 1px solid #303039;
 }
 
 #ws_callflow .tools .app_list_nav {
-	background: #777777;
-	padding-top: 1px;
+	background: white;
 }
 
 #ws_callflow .callflow .icons_black.node {
 	width: 143px;
 	height: 84px;
-	background: url(static/images/blackbox.png) no-repeat;
+	background: #303039;
+	border-radius: 6px;
 }
 
 #ws_callflow #ws_cf_flow .children .child:last-child:not(:first-child) {
@@ -265,6 +311,12 @@
 	background-image: url(static/images/tall_arrow.png);
 }
 
+#ws_callflow .children > .child > .fa {
+	font-size: 48px;
+	color: #303039;
+	margin: 9px 0 7px;
+}
+
 #ws_callflow .a_link_option {
 	color: #EEE;
 	font-size: 12px;
@@ -283,30 +335,36 @@
 }
 
 #ws_callflow .div_icon {
-	height: 50px;
+	height: 46px;
+	padding: 0 10px;
 }
 
-#ws_callflow .div_icon > span {
-	display: inline-block;
-	max-width: 100px;
-	vertical-align: middle;
+#ws_callflow .div_icon > .fa {
+	font-size: 23px;
+	margin-right: 7px;
+	color: white;
+	vertical-align: top;
 }
 
 #ws_callflow .module {
 	font-size: 13px;
 	height: 59px;
-	margin-top: 25px;
+	margin-top: 15px;
 	cursor: default;
 }
 
 #ws_callflow .div_icon .module_name {
 	text-transform: uppercase;
 	text-align: center;
+	vertical-align: top;
+	display: inline-block;
+	line-height: 15px;
+	width: 100%;
+	padding-top: 5px;
 }
 
 #ws_callflow .details {
 	font-size: 10px;
-	margin-top: -10px;
 	overflow: hidden;
 }
 
@@ -400,15 +458,37 @@
 }
 
 #ws_callflow .root .top_bar .edit_icon {
-	background: url('static/images/edit_icon.png') no-repeat scroll center center transparent;
 	cursor: pointer;
 	display: inline-block;
-	height: 18px;
-	margin: 3px 0px 0px 7px;
-	width: 20px;
+	margin: 3px 0 0 7px;
+	font-size: 16px;
+	line-height: 18px !important;
+	color: white;
+}
+
+#ws_callflow .root .top_bar .edit_icon i {
+	color: white;
 }
 
 /* callflow.css */
+.callflows-port .monster-button-primary {
+	color: white;
+}
+
+.callflows-port .buttons-wrapper .btn,
+.callflows-port .buttons-wrapper .monster-button {
+	margin-right: 10px;
+}
+
+.callflows-port .monster-button-primary:hover {
+	border-color: #0081D6;
+	background: #0081D6;
+}
+
+#callflow_container .tab-content {
+	overflow: visible;
+}
+
 #callflow_container .callflow-help, .popup_help .callflow-help {
 	background: url(static/images/callflow_help.gif) no-repeat center;
 	height: 644px;
@@ -516,16 +596,19 @@
 }
 
 #ws_callflow .tools .search-box {
-	background: #444;
+	border-left: 1px solid #22A5FF;
+	border-right: 1px solid #22A5FF;
+	position: relative;
 }
 
 #ws_callflow .tools .search-box input {
 	width: 120px;
 	height: 15px;
-	border-radius: 20px;
 	margin-top: 3px;
 	margin-bottom: 3px;
 	margin-left: 3px;
+	border: none;
+	box-shadow: none;
 }
 
 #ws_callflow .tool {
@@ -551,14 +634,14 @@
 }
 
 #ws_callflow .title {
-	background: url("static/images/blue_bar.png");
-	font-size: 12px;
+	background: #22A5FF;
+	font-size: 15px;
 	height: 25px;
 	line-height: 25px;
-	border-radius: 2px 2px 0px 0px;
+	border-radius: 6px 6px 0 0;
 	text-align: center;
 	color: #fff;
-	font-weight: bold;
+	font-weight: normal;
 }
 
 #callflow_container .wrapper_callflow_buttons {
@@ -591,7 +674,7 @@
 	background-color: #3D3D3D;
 	border: 1px solid #333333;
 	border-radius: 2px;
-	opacity: 80%;
+	opacity: 0.8;
 	padding: 5px 2px 5px 9px;
 	text-align: left;
 	font-size: 10px;
@@ -627,7 +710,6 @@
 
 /* JR's customization */
 #callflow_container {
-	color: #ebebeb;
 	min-height: 100%;
 }
 
@@ -677,15 +759,9 @@
 	line-height: 50px;
 	max-height: 50px;
 	font-weight: 600;
-	background-color: #ddd;
+	background-color: #eee;
 	width: 241px;
-
-	background-image: -webkit-linear-gradient(top, hsl(0, 0%, 90%) 0%, hsl(0, 0%, 80%) 100%);
-	background-image:    -moz-linear-gradient(top, hsl(0, 0%, 90%) 0%, hsl(0, 0%, 80%) 100%);
-	background-image:     -ms-linear-gradient(top, hsl(0, 0%, 90%) 0%, hsl(0, 0%, 80%) 100%);
-	background-image:      -o-linear-gradient(top, hsl(0, 0%, 90%) 0%, hsl(0, 0%, 80%) 100%);
-	background-image:         linear-gradient(top, hsl(0, 0%, 90%) 0%, hsl(0, 0%, 80%) 100%);
-	color: #555;
+	color: #303039;
 }
 
 #callflow_container .left-bar-container .list-add i {
@@ -693,13 +769,13 @@
 }
 
 #callflow_container .left-bar-container .list-add:hover {
-	background: #ccc;
-	/*color: #22a5ff;*/
+	background: #22A5FF;
+	color: white;
 	cursor: pointer;
 }
 
 #callflow_container .left-bar-container .list-add:hover i {
-	/*color: #22a5ff;*/
+	color: white;
 }
 
 #callflow_container .left-bar-container .list-loader {
@@ -726,7 +802,7 @@
 }
 
 #callflow_container .left-bar-container .list-element > div:hover {
-	background: #eee;
+	background: white;
 	cursor: pointer;
 	/*color: #22a5ff;*/
 }
@@ -935,19 +1011,20 @@
 }
 
 .callflows-port h3 {
-	font-size:14px;
+	font-size: 17px;
+	font-weight: 400;
 }
 
 .callflows-port h1 {
 	font-size:24px;
 	letter-spacing: 1px;
 	margin-top: 0;
+	font-weight: 400;
 }
 
 .callflows-port hr {
-	margin:0;
-	border-top:1px solid #404040;
-	border-bottom:1px solid #202020;
+	margin: 0;
+	border-bottom: 1px solid #d4d4d4;
 }
 
 .callflows-port .monster-button {
@@ -1020,38 +1097,24 @@
 }
 
 .callflows-port .pill-content {
-	background:#373737;
-	background:-moz-linear-gradient(top, #373737 0, #2e2e2e 50%, #2f2f2f 100%);
-	background:-webkit-gradient(linear, left top, left bottom, color-stop(0%, #373737), color-stop(50%, #2e2e2e), color-stop(100%, #2f2f2f));
-	background:-webkit-linear-gradient(top, #373737 0, #2e2e2e 50%, #2f2f2f 100%);
-	background:-o-linear-gradient(top, #373737 0, #2e2e2e 50%, #2f2f2f 100%);
-	background:-ms-linear-gradient(top, #373737 0, #2e2e2e 50%, #2f2f2f 100%);
-	background:linear-gradient(top, #373737 0, #2e2e2e 50%, #2f2f2f 100%);
-	filter:progid:dximagetransform.microsoft.gradient(startColorstr='#373737', endColorstr='#2f2f2f', GradientType=0);
-	color: #EEE;
-	padding:30px;
-	border:1px solid #22A5FF;
-	box-shadow:1px 2px 5px 0px #363636;
-	-moz-box-shadow:4px 5px 10px 1px #262626;
-	-webkit-box-shadow:4px 5px 10px 1px #262626;
+	background: white;
+	color: #565656;
+	padding: 10px 0;
 }
 
 .callflows-port .pill-content h3,
 .callflows-port .row h3 {
-	margin-bottom:20px;
-	color:#0ac9ff;
+	margin-bottom: 4px;
+	color: #22A5FF;
 }
 
 .callflows-port .pill-content .edit_create {
 	margin-left:20px;
 	display:inline;
 }
-.callflows-port .pill-content .edit_create a {
-	color: #EEE;
-}
 
 .callflows-port .pill-content .edit_create > a:not(:first-child) {
-	margin-left:5px;
+	margin-left: 15px;
 }
 
 .callflows-port .btn.black:first-child {
@@ -1063,40 +1126,32 @@
 }
 
 .callflows-port .btn.black {
-	background:#434343;
-	background:-moz-linear-gradient(top, #434343 0, #353535 50%, #282828 100%);
-	background:-webkit-gradient(linear, left top, left bottom, color-stop(0%, #434343), color-stop(50%, #353535), color-stop(100%, #282828));
-	background:-webkit-linear-gradient(top, #434343 0, #353535 50%, #282828 100%);
-	background:-o-linear-gradient(top, #434343 0, #353535 50%, #282828 100%);
-	background:-ms-linear-gradient(top, #434343 0, #353535 50%, #282828 100%);
-	background:linear-gradient(top, #434343 0, #353535 50%, #282828 100%);
-	filter:progid:dximagetransform.microsoft.gradient(startColorstr='#434343', endColorstr='#282828', GradientType=0);
-	color:#e6e6e6;
-	text-shadow:none;
-	font-size:12px;
-	border:1px solid #1a1a1a;
+	background: white;
+	color: #565656;
+	text-shadow: none;
+	font-size: 13px;
+	border: 1px solid #bbbbbb;
 	border-radius: 0;
+	box-shadow: none;
+}
+
+.callflows-port .btn.black + .btn.black {
+	border-left: none;
 }
 
 .callflows-port .btn.black.activate {
-	box-shadow:inset 0 0 10px 1px #000;
+	border-color: #22A5FF;
+	color: white;
+	background: #22A5FF;
+	/*box-shadow:inset 0 0 10px 1px #000;
 	-moz-box-shadow:inset 0 0 10px 1px #000;
-	-webkit-box-shadow:inset 0 0 10px 1px #000;
+	-webkit-box-shadow:inset 0 0 10px 1px #000;*/
 }
 
 .callflows-port .btn.black:hover {
-	color:#e6e6e6;
-	background:#434343;
-	background:-moz-linear-gradient(top, #434343 0, #353535 50%, #282828 100%);
-	background:-webkit-gradient(linear, left top, left bottom, color-stop(0%, #434343), color-stop(50%, #353535), color-stop(100%, #282828));
-	background:-webkit-linear-gradient(top, #434343 0, #353535 50%, #282828 100%);
-	background:-o-linear-gradient(top, #434343 0, #353535 50%, #282828 100%);
-	background:-ms-linear-gradient(top, #434343 0, #353535 50%, #282828 100%);
-	background:linear-gradient(top, #434343 0, #353535 50%, #282828 100%);
-	filter:progid:dximagetransform.microsoft.gradient(startColorstr='#434343', endColorstr='#282828', GradientType=0);
-	box-shadow:inset 0 0 10px 1px #000;
-	-moz-box-shadow:inset 0 0 10px 1px #000;
-	-webkit-box-shadow:inset 0 0 10px 1px #000;
+	border-color: #22A5FF;
+	color: white;
+	background: #22A5FF;
 }
 
 .callflows-port .buttons-right {
@@ -1157,12 +1212,12 @@
 
 .callflows-port form label:not(.monster-invalid) {
 	float: left;
-	font-size: 13px;
+	font-size: 15px;
 	line-height: 18px;
 	padding-top: 6px;
 	text-align: right;
 	width: 130px;
-	color:#e6e6e6;
+	color: #565656;
 }
 
 .callflows-port form label.monster-switch {
@@ -1262,85 +1317,66 @@
 }
 
 .callflows-port .tabs > li {
-	background:#434343;
-	background:-moz-linear-gradient(top, #434343 0, #353535 50%, #282828 100%);
-	background:-webkit-gradient(linear, left top, left bottom, color-stop(0%, #434343), color-stop(50%, #353535), color-stop(100%, #282828));
-	background:-webkit-linear-gradient(top, #434343 0, #353535 50%, #282828 100%);
-	background:-o-linear-gradient(top, #434343 0, #353535 50%, #282828 100%);
-	background:-ms-linear-gradient(top, #434343 0, #353535 50%, #282828 100%);
-	background:linear-gradient(top, #434343 0, #353535 50%, #282828 100%);
-	filter:progid:dximagetransform.microsoft.gradient(startColorstr='#434343', endColorstr='#282828', GradientType=0);
-	border-top:1px solid;
-	border-top-color:#262626;
-	border-left:1px solid;
-	border-left-color:#2f2f2f;
+	background: white;
+	border: none;
+	color: #565656;
 	float: left;
 	font-size: 12px;
-	margin-bottom: -1px;
 	position: relative;
+	border-radius: 6px 6px 0 0;
 }
 
 .callflows-port .tabs > li:first-child {
-	border-radius: 2px 0 0 0;
-	border-left: 1px solid;
-	border-left-color:#1a1a1a;
 }
 
 .callflows-port .tabs > li:last-child {
-	border-radius: 0 2px 0 0;
-	border-right: 1px solid;
-	border-right-color: #1a1a1a;
 }
 
 .callflows-port .tabs > li > a {
-	border-radius: 2px 2px 0 0;
+	border-radius: 6px 6px 0 0;
 	display: block;
 	line-height: 34px;
 	padding: 0 15px;
-	color: #fff;
+	color: #565656;
+	background: #e2e2e2;
+	margin-right: 2px;
+	margin-bottom: 3px;
+	font-size: 14px;
 }
 
 .callflows-port .tabs > li > a:hover {
 	text-decoration: none;
 }
 
-.callflows-port .tabs .active {
-	border-top:0;
-	border-bottom:1px solid #373737;
-}
-
-.callflows-port .tabs > li:first-child.active {
-	border-left:1px solid #22A5FF;
-}
-
-.callflows-port .tabs > li:last-child.active {
-	border-right:0;
+.callflows-port .tabs > li > a > .fa {
+	margin-right: 5px;
 }
 
 .callflows-port .tabs > li > a > .icon {
-	margin-right:3px;
+	margin-right: 3px;
 }
 
 .callflows-port .tabs > li > a:hover {
-	color:#fff;
-	background-color:transparent;
+	border-color: #22A5FF;
+	color: white;
+	background: #22A5FF;
+}
+
+.callflows-port .tabs > li > a:hover .fa {
+	color: white;
 }
 
 .callflows-port .tabs .active > a,
 .callflows-port .tabs .active > a:hover {
-	border:0;
-	background-color:none;
-	border-radius: 2px 2px 0 0;
-	color:#fff;
-	background:#373737;
-	border-top:1px solid;
-	border-top-color:#22A5FF;
-	border-left:1px solid;
-	border-left-color:#22A5FF;
-	border-right:1px solid;
-	border-right-color:#22A5FF;
 	font-weight:bold;
 	text-decoration: none;
+	border-color: #22A5FF;
+	color: white;
+	background: #22A5FF;
+}
+
+.callflows-port .tabs .active > a .fa {
+	color: white;
 }
 
 .callflows-port .tabs li:first-child.active > a {
@@ -1354,16 +1390,11 @@
 .callflows-port .help_box {
 	margin-bottom: 10px;
 	padding: 10px;
-	padding-bottom: 10px;
-	border: 1px solid #363636;
 	border-radius: 2px 2px 2px 2px;
 	background: #22A5FF;
-	background: -webkit-gradient(linear, left top, left bottom, from(#22A5FF), to(#036884)) !important;
-	background: -moz-linear-gradient(top,  #22A5FF,  #036884) !important;
-	box-shadow: 1px 1px 1px #333333;
 	text-align: center;
-	font-style: italic;
-	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#22A5FF', endColorstr='#036884') !important;
+	font-style: normal;
+	color: white;
 }
 
 /********** Misc images **********/
@@ -1585,4 +1616,116 @@
 
 .media-edit-callflow-popup #edit_link.active {
 	display: block;
+}
+
+.callflows-port .monster-button-danger,
+#callflow_container .monster-button-danger {
+	color: white;
+	border-color: #B91B0C;
+	background: #B91B0C;
+}
+
+.callflows-port .monster-button-danger:hover,
+#callflow_container .monster-button-danger:hover {
+	background: #D61C0D;
+}
+
+.callflows-port .monster-button-success,
+#callflow_container .monster-button-success {
+	color: white;
+	border-color: #22A5FF;
+	background: #22A5FF;
+}
+
+.callflows-port .monster-button-success:hover,
+#callflow_container .monster-button-success:hover {
+	border-color: #0081D6;
+	background: #0081D6;
+}
+
+.callflows-port .items-selector .box-selector .item-selector {
+	color: #303039;
+}
+
+.callflows-port .items-selector .box-selector .item-selector:hover {
+	background: #22A5FF;
+	color: white;
+}
+
+.callflows-port .table.table-striped {
+	border-left: 0;
+	border-right: 0;
+}
+
+.callflows-port .table.table-striped thead tr {
+	color: #303039;
+	background: #D9D9D9;
+	font-weight: bold;
+}
+
+.callflows-port .table.table-striped thead tr th {
+	border-bottom: 1px solid #A6A6A6;
+}
+
+.callflows-port .table.table-striped thead tr th:not(:last-child) {
+	border-right: 1px solid #A6A6A6;
+}
+
+.callflows-port .table.table-striped thead tr th .fa {
+	margin-right: 5px;
+	color: #303039;
+}
+
+.callflows-port .table.table-striped .link-icon {
+	font-size: 20px;
+	margin-right: 10px;
+	cursor: pointer;
+}
+
+.callflows-port .table.table-striped .link-icon .fa {
+	color: #5C5C61;
+}
+
+.callflows-port .table.table-striped .link-icon .fa:hover,
+.callflows-port .table.table-striped .link-icon .fa:active {
+	color: #22A5FF;
+}
+
+.callflows-port .form-horizontal label.control-label {
+	float: left;
+	width: 160px;
+	padding-top: 5px;
+	text-align: right;
+}
+
+
+.callflows-port .callflow-panel {
+	background: #22A5FF;
+	display: inline-block;
+	vertical-align: top;
+	margin-bottom: 20px;
+}
+
+.callflows-port .callflow-panel_title {
+	color: #eeeeee;
+	font-weight: bold;
+	height: 25px;
+	line-height: 25px;
+	text-align: center;
+	border-radius: 10px 10px 0 0;
+}
+
+.callflows-port .callflow-panel_body {
+	background: #EEEEEE;
+	padding: 15px 15px 20px;
+}
+
+.callflows-port .callflow-panel_body_item {
+	display: inline-block;
+	vertical-align: top;
+	margin: 0 10px 10px 0;
+}
+
+.callflows-port .link-with-icon .fa {
+	margin-right: 5px;
 }

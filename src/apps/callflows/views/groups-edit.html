@@ -26,20 +26,14 @@
 						</div>
 					</div>
 
-					<div class="row">
+					<div>
 						<div id="table_wrapper">
-							<div id="tab_users">
-								<div class="row title">
-									<div class="column first">{{ @root.i18n.callflows.groups.endpoints }}</div>
-									<div class="column second">{{ @root.i18n.callflows.groups.remove }}</div>
-								</div>
-								<div class="rows">
-								</div>
-							</div>
-
 							<div class="add_endpoint_wrapper">
 								<div class="add_endpoint">
-									<div class="add_endpoint_title"><span class="icon user"/>{{ @root.i18n.callflows.groups.add_user }}</div>
+									<div class="add_endpoint_title">
+										<i class="fa fa-users"></i>
+										{{ @root.i18n.callflows.groups.add_user }}
+									</div>
 									<div class="add_content_wrapper">
 										<select name="extra.select_user_id" id="select_user_id">
 											<option id="empty_option_user" value="empty_option_user">-- {{ @root.i18n.callflows.groups.select }} --</option>
@@ -51,7 +45,10 @@
 								</div>
 
 								<div class="add_endpoint">
-									<div class="add_endpoint_title"><span class="icon device"/>{{ @root.i18n.callflows.groups.add_device }}</div>
+									<div class="add_endpoint_title">
+										<i class="fa fa-fax"></i>
+										{{ @root.i18n.callflows.groups.add_device }}
+									</div>
 									<div class="add_content_wrapper">
 										<select name="extra.select_device_id" id="select_device_id">
 											<option id="empty_option_device" value="empty_option_device">-- {{ @root.i18n.callflows.groups.select }} --</option>
@@ -62,12 +59,21 @@
 									</div>
 								</div>
 							</div>
+
+							<div id="tab_users">
+								<div class="row title">
+									<div class="column first">{{ @root.i18n.callflows.groups.endpoints }}</div>
+									<div class="column second">{{ @root.i18n.callflows.groups.remove }}</div>
+								</div>
+								<div class="rows">
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 		</form>
-		<div class="buttons-right">
+		<div class="buttons-wrapper">
 			{{#if data.id}}
 				<button class="monster-button monster-button-danger group-delete">{{ @root.i18n.callflows.groups.delete }}</button>
 			{{/if}}

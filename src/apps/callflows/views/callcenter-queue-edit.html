@@ -5,7 +5,7 @@
 		<h1>{{ i18nApp.createQueue }}</h1>
 	{{/if}}
 
-	<form id="queue-form" action="" method="post" class="form-vertical">
+	<form id="queue-form" action="" method="post" class="form-horizontal">
 		<div class="control-group">
 			<label class="control-label" for="name">{{ i18nApp.name }}</label>
 			<div class="controls">
@@ -27,29 +27,36 @@
 			</div>
 		</div>
 
-		<div class="control-group">
-			<label class="control-label" for="users-list">{{ i18nApp.userLabel }}</label>
-			<div class="controls">
-				<table class="table">
-					<thead>
-					<tr>
-						<th>{{ i18nApp.user }}</th>
-						<th>{{ i18nApp.actions }}</th>
-					</tr>
-					</thead>
-					<tbody class="js-user-table-body"></tbody>
-				</table>
-				<h4>{{ i18nApp.addUser }}</h4>
-				<select name="user_id" id="users-list">
-					<option id="empty_option_user" value="empty_option_user">-- {{ i18nApp.select }} --</option>
-					{{#each field_data.users}}
-						<option value="{{ id }}" id="option_user_{{ id }}">{{ first_name }} {{ last_name }}</option>
-					{{/each}}
-				</select>
-				<a class="js-add-user-btn" href="" data-queue_id="{{ data.id }}">
-					<i class="fa fa-arrow-up"></i>
-					{{ i18nApp.addThisUser }}
-				</a>
+		<h4>{{ i18nApp.userLabel }}</h4>
+		<table class="users-table table table-striped">
+			<thead>
+			<tr>
+				<th>{{ i18nApp.user }}</th>
+				<th>{{ i18nApp.actions }}</th>
+			</tr>
+			</thead>
+			<tbody class="js-user-table-body"></tbody>
+		</table>
+
+		<div class="add-user-panel callflow-panel">
+			<div class="callflow-panel_title">
+				{{ i18nApp.addUser }}
+			</div>
+			<div class="callflow-panel_body">
+				<div class="callflow-panel_body_item">
+					<select name="user_id" id="users-list">
+						<option id="empty_option_user" value="empty_option_user">-- {{ i18nApp.select }} --</option>
+						{{#each field_data.users}}
+							<option value="{{ id }}" id="option_user_{{ id }}">{{ first_name }} {{ last_name }}</option>
+						{{/each}}
+					</select>
+				</div>
+				<div class="callflow-panel_body_item">
+					<a class="js-add-user-btn add-user-btn btn" href="" data-queue_id="{{ data.id }}">
+						<i class="fa fa-plus"></i>
+						 {{ i18nApp.addThisUser }}
+					</a>
+				</div>
 			</div>
 		</div>
 

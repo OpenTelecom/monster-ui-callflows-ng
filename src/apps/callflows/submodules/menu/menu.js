@@ -344,7 +344,7 @@ define(function(require){
 			$.extend(callflow_nodes, {
 				'menu[id=*]': {
 					name: self.i18n.active().callflows.menu.menu_title,
-					icon: 'menu1',
+					icon: 'bars',
 					category: self.i18n.active().oldCallflows.basic_cat,
 					module: 'menu',
 					tip: self.i18n.active().callflows.menu.menu_tip,

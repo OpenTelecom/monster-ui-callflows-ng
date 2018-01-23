@@ -142,14 +142,22 @@
 					</div>
 					<div id="tab_devices">
 						<div class="row title">
-							<div class="column first">{{ i18n.callflows.user.device_name }}&nbsp;&nbsp;<span class="icon medium device"/></div>
-							<div class="column second">{{ i18n.callflows.user.type }}&nbsp;&nbsp;<span class="icon medium iphone" style="margin-bottom: 4px;"/></div>
+							<div class="column first">
+								<i class="fa fa-fax"></i>
+								{{ i18n.callflows.user.device_name }}
+							</div>
+							<div class="column second">
+								<i class="fa fa-mobile"></i>
+								{{ i18n.callflows.user.type }}
+							</div>
 							<div class="column third">{{ i18n.callflows.user.status }}</div>
 							<div class="column fourth">{{ i18n.callflows.user.enabled }}</div>
-							<div class="column fifth">{{ i18n.callflows.user.actions }}&nbsp;&nbsp;<span class="icon medium settings" style="margin-bottom: 2px;"/></div>
+							<div class="column fifth">
+								<i class="fa fa-cog"></i>
+								{{ i18n.callflows.user.actions }}
+							</div>
 						</div>
-						<div class="rows">
-						</div>
+						<div class="rows"></div>
 					</div>
 
 					{{#if field_data.new_user}}
@@ -555,26 +563,29 @@
 
 					<!--<div class="help_box">In order to actually log out from the devices listed below, you need to tick the checkbox on the right of the device and then press the Save button!</div>-->
 
-					<div id="hotdesk_devices" class="small-table">
-						<div class="row title">
-							<div class="column">{{ i18n.callflows.user.devices }}&nbsp;&nbsp;<span class="icon medium device"/></div>
-							<!--<div class="column">Log out</div>-->
-						</div>
-						<div class="rows">
+					<table id="hotdesk_devices" class="table table-striped">
+						<thead>
+							<tr>
+								<th>
+									<i class="fa fa-fax"></i>
+									{{ i18n.callflows.user.devices }}
+								</th>
+							</tr>
+						</thead>
+						<tbody>
 							{{#if field_data.device_list}}
 								{{#each field_data.device_list}}
-									<div id="row_hotdesk_{{@key}}" data-id="{{@key}}">
-										<div class="column">{{name}}</div>
-										<!-- <div class="column"><input type="checkbox" name="hotdesk.log_out[]" value="{{@key}}"></input></a></div> -->
-									</div>
+									<tr id="row_hotdesk_{{@key}}" data-id="{{@key}}">
+										<td>{{name}}</td>
+									</tr>
 								{{/each}}
 							{{else}}
-								<div id="row_no_data">
-									<div class="column merged">{{ i18n.callflows.user.this_user_is_not_logged }}</div>
-								</div>
+								<tr id="row_no_data">
+									<td>{{ i18n.callflows.user.this_user_is_not_logged }}</td>
+								</tr>
 							{{/if}}
-						</div>
-					</div>
+						</tbody>
+					</table>
 				{{/if}}
 			</div>
 
@@ -617,7 +628,7 @@
 			</div>
 		</div>
 	</form>
-	<div class="buttons-right">
+	<div class="buttons-wrapper">
 		{{#if data.id}}
 			<button class="monster-button monster-button-danger user-delete">{{ i18n.callflows.user.delete }}</button>
 		{{/if}}

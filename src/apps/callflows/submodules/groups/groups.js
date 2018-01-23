@@ -315,7 +315,7 @@ define(function(require){
 			$.extend(callflow_nodes, {
 				'ring_group[]': {
 					name: self.i18n.active().oldCallflows.ring_group,
-					icon: 'ring_group',
+					icon: 'users',
 					category: self.i18n.active().oldCallflows.basic_cat,
 					module: 'ring_group',
 					tip: self.i18n.active().oldCallflows.ring_group_tip,
@@ -356,7 +356,7 @@ define(function(require){
 				},
 				'page_group[]': {
 					name: self.i18n.active().oldCallflows.page_group,
-					icon: 'ring_group',
+					icon: 'users',
 					category: self.i18n.active().oldCallflows.advanced_cat,
 					module: 'page_group',
 					tip: self.i18n.active().oldCallflows.page_group_tip,
@@ -519,7 +519,7 @@ define(function(require){
 
 				'ring_group_toggle[action=login]': {
 					name: self.i18n.active().callflows.ringGroupToggle.loginTitle,
-					icon: 'ring_group',
+					icon: 'users',
 					category: self.i18n.active().callflows.ringGroupToggle.category,
 					module: 'ring_group_toggle',
 					tip: self.i18n.active().callflows.ringGroupToggle.loginTip,
@@ -598,7 +598,7 @@ define(function(require){
 
 				'ring_group_toggle[action=logout]': {
 					name: self.i18n.active().callflows.ringGroupToggle.logoutTitle,
-					icon: 'ring_group',
+					icon: 'users',
 					category: self.i18n.active().callflows.ringGroupToggle.category,
 					module: 'ring_group_toggle',
 					tip: self.i18n.active().callflows.ringGroupToggle.logoutTip,

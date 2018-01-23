@@ -9,22 +9,22 @@
 
 .callflows-port #timeofday-form #days_checkboxes .fake_checkbox {
 	float: left;
-	color: #eeeeee;
-	width: 15px;
-	height: 20px;
-	line-height: 20px;
+	color: #303039;
+	width: 31px;
+	height: 25px;
+	line-height: 25px;
 	text-align: center;
-	padding: 0px;
-	margin: 0px;
+	padding: 0;
+	margin: 0;
 	border-top: 1px solid #000000;
 	border-bottom: 1px solid #000000;
 	border-right: 1px solid #000000;
-	background-color: #989898;
+	background-color: white;
 	cursor: pointer;
 }
 
 .callflows-port #timeofday-form #days_checkboxes .fake_checkbox:first-child {
-	border-left: 1px solid #000000;
+	border-left: 1px solid #303039;
 	border-radius: 5px 0 0 5px;
 }
 
@@ -33,11 +33,13 @@
 }
 
 .callflows-port #timeofday-form #days_checkboxes .fake_checkbox:hover {
-	background-color: #BEBEBE;
+	background-color: #22A5FF;
+	color: white;
 }
 
 .callflows-port #timeofday-form #days_checkboxes .fake_checkbox.checked {
 	background-color: #05ADDC;
+	color: white;
 }
 
 .callflows-port #timeofday-form .time-wrapper label.monster-invalid {

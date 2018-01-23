@@ -264,9 +264,9 @@
 			"user": "User",
 			"callflow": "Callflow",
 			"remove": "Remove",
-			"add_user": "Add User",
+			"add_user": "Add user to the directory",
 			"select": "Select",
-			"add_this_user": "Add this user to the directory",
+			"add_this_user": "Add",
 			"minimum_number_of_input": "Minimum number of input",
 			"minimum_number_of_input_placeholder": "Min of input",
 			"minimum_number_of_input_data_content": "Count of how many DTMFs must be collected before processing begins",
@@ -1115,9 +1115,9 @@
 			"nameDataContent": "Friendly name for this Queue",
 			"user": "User",
 			"actions": "Actions",
-			"addUser": "Add User",
+			"addUser": "Add user to the queue",
 			"select": "Select",
-			"addThisUser": "Add this user to the queue",
+			"addThisUser": "Add",
 			"queueTimeoutPlaceholder": "Queue timeout (s)",
 			"queueTimeoutDataContent": "How long caller stays in queue, in seconds",
 			"queueTimeout": "Queue timeout (s)",
@@ -1127,7 +1127,7 @@
 			"delete": "Delete",
 			"save": "Save",
 			"thereIsCurrentlyNoUser": "There is currently no user in this queue",
-			"userLabel": "User"
+			"userLabel": "Users list"
 		}
 	},
 	"oldCallflows": {

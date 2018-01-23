@@ -15,7 +15,7 @@
 	<div>
 		<ul class="tabs" data-tabs="tabs">
 			<li class="active"><a href="#basic">{{ i18n.callflows.device.basic }}</a></li>
-			<li><a href="#options"><span class="icon wrench_screw"></span>{{ i18n.callflows.device.options }}</a></li>
+			<li><a href="#options"><i class="fa fa-wrench"></i>{{ i18n.callflows.device.options }}</a></li>
 			<li><a href="#sip_settings">{{ i18n.callflows.device.wifi_calling }}</a></li>
 			<li><a href="#restrictions">{{ i18n.callflows.device.restrictions }}</a></li>
 		</ul>
@@ -221,7 +221,7 @@
 				</div>
 			</div>
 		</form>
-		<div class="buttons-right">
+		<div class="buttons-wrapper">
 			{{#if data.id}}
 				<button class="monster-button monster-button-danger device-delete">{{ i18n.callflows.device.delete }}</button>
 			{{/if}}

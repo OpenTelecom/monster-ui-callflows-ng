@@ -56,7 +56,7 @@ define(function(require){
 				},
 				'callflow[id=*]': {
 					name: self.i18n.active().oldCallflows.callflow,
-					icon: 'callflow',
+					icon: 'share-alt',
 					category: self.i18n.active().oldCallflows.advanced_cat,
 					module: 'callflow',
 					tip: self.i18n.active().oldCallflows.callflow_tip,
@@ -134,7 +134,7 @@ define(function(require){
 				},
 				'do_not_disturb[action=activate]': {
 					name: self.i18n.active().callflows.doNotDisturb.activate.label,
-					icon: 'x_circle',
+					icon: 'bell-slash',
 					category: self.i18n.active().callflows.doNotDisturb.categoryName,
 					module: 'do_not_disturb',
 					tip: self.i18n.active().callflows.doNotDisturb.activate.tip,
@@ -160,7 +160,7 @@ define(function(require){
 				},
 				'do_not_disturb[action=deactivate]': {
 					name: self.i18n.active().callflows.doNotDisturb.deactivate.label,
-					icon: 'x_circle',
+					icon: 'bell-slash',
 					category: self.i18n.active().callflows.doNotDisturb.categoryName,
 					module: 'do_not_disturb',
 					tip: self.i18n.active().callflows.doNotDisturb.deactivate.tip,
@@ -186,7 +186,7 @@ define(function(require){
 				},
 				'do_not_disturb[action=toggle]': {
 					name: self.i18n.active().callflows.doNotDisturb.toggle.label,
-					icon: 'x_circle',
+					icon: 'bell-slash',
 					category: self.i18n.active().callflows.doNotDisturb.categoryName,
 					module: 'do_not_disturb',
 					tip: self.i18n.active().callflows.doNotDisturb.toggle.tip,
@@ -212,7 +212,7 @@ define(function(require){
 				},
 				'call_forward[action=activate]': {
 					name: self.i18n.active().oldCallflows.enable_call_forwarding,
-					icon: 'rightarrow',
+					icon: 'mail-reply',
 					category: self.i18n.active().oldCallflows.call_forwarding_cat,
 					module: 'call_forward',
 					tip: self.i18n.active().oldCallflows.enable_call_forwarding_tip,
@@ -238,7 +238,7 @@ define(function(require){
 				},
 				'call_forward[action=deactivate]': {
 					name: self.i18n.active().oldCallflows.disable_call_forwarding,
-					icon: 'rightarrow',
+					icon: 'mail-reply',
 					category: self.i18n.active().oldCallflows.call_forwarding_cat,
 					module: 'call_forward',
 					tip: self.i18n.active().oldCallflows.disable_call_forwarding_tip,
@@ -264,7 +264,7 @@ define(function(require){
 				},
 				'call_forward[action=update]': {
 					name: self.i18n.active().oldCallflows.update_call_forwarding,
-					icon: 'rightarrow',
+					icon: 'mail-reply',
 					category: self.i18n.active().oldCallflows.call_forwarding_cat,
 					module: 'call_forward',
 					tip: self.i18n.active().oldCallflows.update_call_forwarding_tip,
@@ -290,7 +290,7 @@ define(function(require){
 				},
 				'dynamic_cid[]': {
 					name: self.i18n.active().oldCallflows.dynamic_cid,
-					icon: 'rightarrow',
+					icon: 'mail-reply',
 					category: self.i18n.active().oldCallflows.caller_id_cat,
 					module: 'dynamic_cid',
 					tip: self.i18n.active().oldCallflows.dynamic_cid_tip,
@@ -307,7 +307,7 @@ define(function(require){
 				},
 				'prepend_cid[action=prepend]': {
 					name: self.i18n.active().oldCallflows.prepend,
-					icon: 'plus_circle',
+					icon: 'plus-circle',
 					category: self.i18n.active().oldCallflows.caller_id_cat,
 					module: 'prepend_cid',
 					tip: self.i18n.active().oldCallflows.prepend_tip,
@@ -371,7 +371,7 @@ define(function(require){
 				},
 				'prepend_cid[action=reset]': {
 					name: self.i18n.active().oldCallflows.reset_prepend,
-					icon: 'loop2',
+					icon: 'undo',
 					category: self.i18n.active().oldCallflows.caller_id_cat,
 					module: 'prepend_cid',
 					tip: self.i18n.active().oldCallflows.reset_prepend_tip,
@@ -397,7 +397,7 @@ define(function(require){
 				},
 				'manual_presence[]': {
 					name: self.i18n.active().oldCallflows.manual_presence,
-					icon: 'lightbulb_on',
+					icon: 'lightbulb-o',
 					category: self.i18n.active().oldCallflows.advanced_cat,
 					module: 'manual_presence',
 					tip: self.i18n.active().oldCallflows.manual_presence_tip,
@@ -445,7 +445,7 @@ define(function(require){
 				},
 				'language[]': {
 					name: self.i18n.active().oldCallflows.language,
-					icon: 'earth',
+					icon: 'language',
 					category: self.i18n.active().oldCallflows.advanced_cat,
 					module: 'language',
 					tip: self.i18n.active().oldCallflows.language_tip,
@@ -491,7 +491,7 @@ define(function(require){
 				},
 				'group_pickup[]': {
 					name: self.i18n.active().oldCallflows.group_pickup,
-					icon: 'sip',
+					icon: 'hand-pointer-o',
 					category: self.i18n.active().oldCallflows.advanced_cat,
 					module: 'group_pickup',
 					tip: self.i18n.active().oldCallflows.group_pickup_tip,
@@ -547,7 +547,7 @@ define(function(require){
 				},
 				'receive_fax[]': {
 					name: self.i18n.active().oldCallflows.receive_fax,
-					icon: 'sip',
+					icon: 'hand-pointer-o',
 					category: self.i18n.active().oldCallflows.advanced_cat,
 					module: 'receive_fax',
 					tip: self.i18n.active().oldCallflows.receive_fax_tip,
@@ -623,7 +623,7 @@ define(function(require){
 				},
 				'record_call[action=start]': {
 					name: self.i18n.active().oldCallflows.start_call_recording,
-					icon: 'conference',
+					icon: 'comments',
 					category: self.i18n.active().oldCallflows.call_recording_cat,
 					module: 'record_call',
 					tip: self.i18n.active().oldCallflows.start_call_recording_tip,
@@ -672,7 +672,7 @@ define(function(require){
 				},
 				'record_call[action=stop]': {
 					name: self.i18n.active().oldCallflows.stop_call_recording,
-					icon: 'conference',
+					icon: 'comments',
 					category: self.i18n.active().oldCallflows.call_recording_cat,
 					module: 'record_call',
 					tip: self.i18n.active().oldCallflows.stop_call_recording_tip,
@@ -695,7 +695,7 @@ define(function(require){
 				},
 				'pivot[]': {
 					name: self.i18n.active().oldCallflows.pivot,
-					icon: 'conference',
+					icon: 'comments',
 					category: self.i18n.active().oldCallflows.advanced_cat,
 					module: 'pivot',
 					tip: self.i18n.active().oldCallflows.pivot_tip,
@@ -749,7 +749,7 @@ define(function(require){
 				},
 				'disa[]': {
 					name: self.i18n.active().oldCallflows.disa,
-					icon: 'conference',
+					icon: 'comments',
 					category: self.i18n.active().oldCallflows.advanced_cat,
 					module: 'disa',
 					tip: self.i18n.active().oldCallflows.disa_tip,
@@ -826,7 +826,7 @@ define(function(require){
 				},
 				'collect_dtmf[]': {
 					name: self.i18n.active().callflows.collectDTMF.title,
-					icon: 'conference',
+					icon: 'comments',
 					category: self.i18n.active().oldCallflows.advanced_cat,
 					module: 'collect_dtmf',
 					tip: self.i18n.active().callflows.collectDTMF.tip,
@@ -890,7 +890,7 @@ define(function(require){
 				},
 				'sleep[]': {
 					name: self.i18n.active().callflows.sleep.name,
-					icon: 'dot_chat',
+					icon: 'commenting',
 					category: self.i18n.active().oldCallflows.advanced_cat,
 					module: 'sleep',
 					tip: self.i18n.active().callflows.sleep.tip,
@@ -946,7 +946,7 @@ define(function(require){
 				},
 				'tts[]': {
 					name: self.i18n.active().callflows.tts.name,
-					icon: 'chat_circle',
+					icon: 'comment',
 					category: self.i18n.active().oldCallflows.advanced_cat,
 					module: 'tts',
 					tip: self.i18n.active().callflows.tts.tip,
@@ -1005,7 +1005,7 @@ define(function(require){
 				},
 				'response[]': {
 					name: self.i18n.active().oldCallflows.response,
-					icon: 'rightarrow',
+					icon: 'mail-reply',
 					category: self.i18n.active().oldCallflows.advanced_cat,
 					module: 'response',
 					tip: self.i18n.active().oldCallflows.response_tip,
@@ -1101,7 +1101,7 @@ define(function(require){
 				},
 				'missed_call_alert[]': {
 					name: self.i18n.active().callflows.missedCallAlert.title,
-					icon: 'bell1',
+					icon: 'bell',
 					category: self.i18n.active().oldCallflows.advanced_cat,
 					module: 'missed_call_alert',
 					tip: self.i18n.active().callflows.missedCallAlert.tip,

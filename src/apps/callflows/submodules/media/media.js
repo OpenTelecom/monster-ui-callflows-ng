@@ -318,7 +318,7 @@ define(function(require){
 			$.extend(callflow_nodes, {
 				'play[id=*]': {
 					name: self.i18n.active().callflows.media.play_media,
-					icon: 'play',
+					icon: 'music',
 					category: self.i18n.active().oldCallflows.basic_cat,
 					module: 'play',
 					tip: self.i18n.active().callflows.media.play_media_tip,

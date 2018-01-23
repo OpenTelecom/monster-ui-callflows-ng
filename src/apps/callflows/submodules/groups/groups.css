@@ -159,17 +159,19 @@
 /* Groups entity */
 #group-form #table_wrapper {
     display: inline-block;
-    text-align: center;
+	vertical-align: top;
+    text-align: left;
     width: 100%;
 }
 
 #group-form #tab_users  {
-    border: 2px solid #666666;
-    border-radius: 5px 5px 0px 0px;
-    color: #666666;
+    color: #303039;
     width: 330px;
     max-height: 342px;
     display: inline-block;
+	vertical-align: top;
+	margin: 0 15px 15px 0;
+	font-size: 16px;
 }
 
 #group-form #tab_users .rows {
@@ -203,18 +205,38 @@
 }
 
 #group-form #tab_users .column.first {
-    width: 250px;
+    width: 230px;
     overflow: hidden;
-    text-align:center;
+    text-align: left;
     cursor: move;
+	padding-left: 20px;
+}
+
+#group-form #tab_users .column.first i.fa {
+	font-size: 20px;
+	margin-right: 5px;
+	width: 20px;
 }
 
 #group-form #tab_users .column.second {
-    width: 59px;
+    width: 79px;
 }
 
 #group-form #tab_users .column.merged {
     width: 330px;
+}
+
+#group-form #tab_users .column .action_endpoint {
+	cursor: pointer;
+}
+
+#group-form #tab_users .column .action_endpoint i.fa {
+	font-size: 20px;
+}
+
+#group-form #tab_users .column .action_endpoint:hover,
+#group-form #tab_users .column .action_endpoint:hover i.fa {
+	color: #22A5FF;
 }
 
 #group-form #tab_users .row {
@@ -222,9 +244,20 @@
     margin-left: 0px;
 }
 
+#group-form #tab_users .row:hover {
+	background: #DDDDDD !important;
+}
+
+#group-form #tab_users .row:hover i.fa {
+	color: #303039;
+}
+
+#group-form #tab_users #row_no_data {
+	padding-bottom: 5px;
+}
+
 #group-form #tab_users .row.title {
-    background-color: #dddddd !important;
-    border-bottom: 2px solid #666666 !important;
+    background-color: #D9D9D9 !important;
     border-radius: 5px 5px 0px 0px;
     font-weight: bold;
 }
@@ -246,14 +279,15 @@
 }
 
 #group-form .add_endpoint_wrapper{
-    float: right;
-    width: 230px;
 }
 
 #group-form .add_endpoint {
-    color: #666666;
-    background: #666666;
-    border-radius: 5px 5px 5px 5px;
+    color: white;
+	background: #22A5FF;
+	border-radius: 5px 5px 5px 5px;
+	display: inline-block;
+	vertical-align: top;
+	margin: 0 15px 15px 0;
 }
 
 #group-form .add_endpoint:not(:last-child) {
@@ -269,11 +303,16 @@
 
 #group-form .add_endpoint .add_endpoint_title {
     color: #eeeeee;
-    font-weight: bold;
+    font-weight: normal;
     height: 25px;
     line-height: 25px;
     text-align: center;
     border-radius: 5px 5px 0 0;
+}
+
+#group-form .add_endpoint .add_endpoint_title i.fa {
+	margin-right: 5px;
+	color: white;
 }
 
 #group-form .add_endpoint .add_endpoint_div {
