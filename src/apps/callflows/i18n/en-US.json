@@ -1113,6 +1113,7 @@
 			"name": "Name",
 			"namePlaceholder": "Name",
 			"nameDataContent": "Friendly name for this Queue",
+			"noName": "no name",
 			"user": "User",
 			"actions": "Actions",
 			"addUser": "Add user to the queue",
@@ -1125,6 +1126,7 @@
 			"memberTimeoutPlaceholder": "Member timeout (s)",
 			"memberTimeoutDataContent": "How long to ring an agent's phone before moving to the next agent",
 			"delete": "Delete",
+			"deleteConfirmMessage": "Are you sure you want to delete this queue?",
 			"save": "Save",
 			"thereIsCurrentlyNoUser": "There is currently no user in this queue",
 			"userLabel": "Users list"

@@ -77,10 +77,9 @@ define(function(require){
 		},
 
 		subscribe: {
-			//'callflows.queue.activate': 'activate', // TODO
-			'callflows.queue.edit': 'queueEdit',
 			'callflows.fetchActions': 'callcenterDefineActions',
-			'callflows.queue.popupEdit': 'queuePopupEdit'
+			'callflows.queue.editPopup': 'queuePopupEdit',
+			'callflows.queue.edit': 'queueEdit'
 
 		},
 
@@ -367,7 +366,7 @@ define(function(require){
 				_callbacks = args.callbacks || {},
 				callbacks = {
 					save_success: _callbacks.save_success || function(_data) {
-						// self.queueRenderList(parent);
+						self.queueRenderList(parent);
 
 						self.queueEdit({
 							data: {
@@ -384,7 +383,7 @@ define(function(require){
 					delete_success: _callbacks.delete_success || function() {
 						target.empty();
 
-						//self.queueRenderList(parent);
+						self.queueRenderList(parent);
 					},
 
 					delete_error: _callbacks.delete_error,
@@ -409,31 +408,23 @@ define(function(require){
 				defaults.field_data.users = users;
 
 				if(typeof data == 'object' && data.id) {
+					self.queueGet(data.id, function (queueData) {
+						var render_data = $.extend(true, defaults, queueData);
 
-					monster.request({
-						resource: 'callcenter.queues.get',
-						data: {
-							accountId: self.accountId,
-							queuesId: data.id,
-							generateError: false
-						},
-						success: function (_data) {
-							var render_data = $.extend(true, defaults, _data);
-							render_data.field_data.old_list = [];
-							if('agents' in _data.data) {
-								render_data.field_data.old_list = _data.data.agents;
-							}
-							self.queueRender(render_data, target, callbacks);
+						render_data.field_data.old_list = [];
+						if('agents' in queueData.data) {
+							render_data.field_data.old_list = queueData.data.agents;
+						}
+						self.queueRender(render_data, target, callbacks);
 
-							if(typeof callbacks.after_render == 'function') {
-								callbacks.after_render();
-							}
+						if(typeof(callbacks.after_render) === 'function') {
+							callbacks.after_render();
 						}
 					});
 				} else {
 					self.queueRender(defaults, target, callbacks);
 
-					if(typeof callbacks.after_render == 'function') {
+					if(typeof(callbacks.after_render) === 'function') {
 						callbacks.after_render();
 					}
 				}
@@ -457,7 +448,7 @@ define(function(require){
 			});
 		},
 
-		queueRenderList: function(_parent){
+		queueRenderList: function(_parent, callback){
 			var self = this,
 				parent = _parent || $('#queue-content'),
 				i18nApp = self.i18n.active().callflows.callcenter;
@@ -470,7 +461,7 @@ define(function(require){
 						$.each(data, function(key, val) {
 							new_list.push({
 								id: val.id,
-								title: val.name || _t('voip_queue', 'no_name')
+								title: val.name || i18nApp.noName
 							});
 						});
 					}
@@ -482,20 +473,7 @@ define(function(require){
 					return new_list;
 				};
 
-				// TODO!
-
-				/*$('#queue-listpanel', parent)
-					.empty()
-					.listpanel({
-						label: i18nApp.queues_label,
-						identifier: 'queue-listview',
-						new_entity_label: i18nApp.add_queue_label,
-						data: map_crossbar_data(data.data),
-						publisher: winkstart.publish,
-						notifyMethod: 'queue.edit',
-						notifyCreateMethod: 'queue.edit',
-						notifyParent: parent
-					});*/
+				callback && callback();
 			});
 		},
 
@@ -514,17 +492,23 @@ define(function(require){
 			});
 		},
 
-		// TODO
-		/*activate: function(parent) {
-			var self = this,
-				queue_html = $(monster.template(self, 'callcenter-queue'));
+		queueGet: function(queueId, callback) {
+			var self = this;
+			monster.request({
+				resource: 'callcenter.queues.get',
+				data: {
+					accountId: self.accountId,
+					queuesId: queueId,
+					generateError: false
+				},
+				success: function (_data) {
+					if(typeof(callback) === 'function') {
+						callback(_data);
+					}
+				}
+			});
+		},
 
-			(parent || $('#monster_content'))
-				.empty()
-				.append(queue_html);
-
-			self.queueRenderList(queue_html);
-		},*/
 
 		queueRender: function(data, target, callbacks) {
 			var self = this;
@@ -547,20 +531,21 @@ define(function(require){
 				ev.preventDefault();
 
 				if(monster.ui.valid($form)) {
-					var form_data = monster.ui.getFormData($form);
+					var form_data = monster.ui.getFormData($form[0]);
 
-					var new_list = [];
+					var agentsList = [];
 
-					$('.rows .row:not(#row_no_data)', queue_html).each(function() {
-						new_list.push($(this).dataset('id'));
+					$('.js-user-table-item:not(#row_no_data)', queue_html).each(function() {
+						agentsList.push($(this).data('id'));
 					});
 
 					data.field_data.user_list = {
 						old_list: data.data.agents || [],
-						new_list: new_list
+						new_list: agentsList
 					};
 
 					self.queueSave(form_data, data, callbacks.save_success, callbacks.save_error);
+
 				} else {
 					toastr.error(self.i18n.active().callflows.callcenter.formHasErrorsMessage);
 				}
@@ -630,11 +615,30 @@ define(function(require){
 			target.empty().append(queue_html);
 		},
 
+		agentsSave: function(queueId, agentsIdList, callback) {
+			var self = this;
+
+			monster.request({
+				resource: 'callcenter.agents.update',
+				data: {
+					accountId: self.accountId,
+					generateError: false,
+					queuesId: queueId,
+					data: agentsIdList
+				},
+				success: function(data) {
+					if(typeof(callback) === 'function' && data.data) {
+						callback(data.data);
+					}
+				}
+			});
+		},
+
 		queueDelete: function(data, success, error) {
 			var self = this;
 
 			if(typeof data.data == 'object' && data.data.id) {
-				self.callApi({
+				monster.request({
 					resource: 'callcenter.queues.delete',
 					data: {
 						accountId: self.accountId,
@@ -686,146 +690,77 @@ define(function(require){
 			var self = this,
 				normalized_data = self.normalizeData($.extend(true, {}, data.data, form_data));
 
-			if (typeof data.data == 'object' && data.data.id) {
-				monster.request({
-					resource: 'callcenter.queues.update',
-					data: {
-						accountId: self.accountId,
-						queuesId: data.id,
-						generateError: false,
-						data: normalized_data
-					},
-					success: function (_data, status) {
-						if(typeof success == 'function') {
-							self.usersUpdate(data.field_data.user_list, _data.data.id, function() {
-								success(_data, status, 'update');
-							});
+			if(typeof data.data == 'object' && data.data.id) {
+				var queueId = data.data.id;
+				self.queueUpdate(queueId, normalized_data, function(queueData) {
+					self.agentsSave(queueId, data.field_data.user_list.new_list, function(agentsData) {
+						queueData.agents = agentsData.agents;
+						if(typeof(success) === 'function') {
+							success(queueData);
 						}
-					},
-					error: function(_data, status) {
-						if(typeof error == 'function') {
-							error(_data, status, 'update');
-						}
-					}
-				});
-			} else {
-				monster.request({
-					resource: 'callcenter.queues.create',
-					data: {
-						accountId: self.accountId,
-						generateError: false,
-						data: normalized_data
-					},
-					success: function (_data, status) {
-						if(typeof success == 'function') {
-							self.usersUpdate(data.field_data.user_list, _data.data.id, function() {
-								success(_data, status, 'create');
-							});
-						}
-					},
-					error: function(_data, status) {
-						if(typeof error == 'function') {
-							error(_data, status, 'update');
-						}
-					}
-				});
-			}
-		},
-
-		usersUpdate: function(data, queue_id, success) {
-			var old_queue_user_list = data.old_list,
-				new_queue_user_list = data.new_list,
-				self = this,
-				users_updated_count = 0,
-				users_count = 0,
-				callback = function() {
-					users_updated_count++;
-					if(users_updated_count >= users_count) {
-						success();
-					}
-				};
-
-
-			if(old_queue_user_list) {
-				$.each(old_queue_user_list, function(k, v) {
-					if(new_queue_user_list.indexOf(v) === -1) {
-						//Request to update user without this queue.
-						users_count++;
-						self.singleUserUpdate(v, queue_id, 'remove', callback);
-					}
-				});
-
-				$.each(new_queue_user_list, function(k, v) {
-					if(old_queue_user_list.indexOf(v) === -1) {
-						users_count++;
-						self.singleUserUpdate(v, queue_id, 'add', callback);
-					}
-				});
-			} else {
-				if(new_queue_user_list) {
-					$.each(new_queue_user_list, function(k, v) {
-						users_count++;
-						self.singleUserUpdate(v, queue_id, 'add', callback);
 					});
-				}
-			}
-
-			/* If no users has been updated, we still need to refresh the view for the other attributes */
-			if(users_count == 0) {
-				success();
+				});
+			} else {
+				self.queueCreate(normalized_data, function(queueData){
+					self.agentsSave(queueData.id, data.field_data.user_list.new_list, function(agentsData) {
+						queueData.agents = agentsData.agents;
+						if(typeof(success) === 'function') {
+							success(queueData);
+						}
+					});
+				});
 			}
 		},
 
-		singleUserUpdate: function(user_id, queue_id, action, callback) {
+		queueUpdate: function(queueId, data, success, error){
 			var self = this;
 
-			self.callApi({
-				resource: 'user.get',
+			monster.request({
+				resource: 'callcenter.queues.update',
 				data: {
 					accountId: self.accountId,
-					userId: user_id,
-					generateError: false
+					queuesId: queueId,
+					generateError: false,
+					data: data
 				},
-				success: function(_data, status) {
-					if(action =='add') {
-						if(!_data.data.queues || typeof _data.data.queues != 'object') {
-							_data.data.queues = [];
-						}
-						_data.data.queues.push(queue_id);
-
-						/* If a user is added to a queue, but is not enabled as an agent, we enable this user automatically */
-						if(!('queue_pin' in _data.data)) {
-							_data.data.queue_pin = '';
-						}
-					} else { //remove
-						_data.data.queues.splice(_data.data.queues.indexOf(queue_id), 1);
+				success: function (data) {
+					if(typeof(success) === 'function' && data.data) {
+						success(data.data);
 					}
+				},
+				error: function(data) {
+					if(typeof(error) === 'function') {
+						error(data);
+					}
+				}
+			});
+		},
 
-					self.callApi({
-						resource: 'user.update',
-						data: {
-							accountId: self.accountId,
-							userId: user_id,
-							data: _data.data,
-							generateError: false
-						},
-						success: function(_data, status) {
-							if(typeof callback === 'function') {
-								callback(status);
-							}
-						},
-						error: function(_data, status) {
-							if(typeof callback === 'function') {
-								callback(status);
-							}
-						}
-					});
+		queueCreate: function(data, success, error){
+			var self = this;
+
+			monster.request({
+				resource: 'callcenter.queues.create',
+				data: {
+					accountId: self.accountId,
+					generateError: false,
+					data: data
+				},
+				success: function (_data) {
+					if(typeof(success) === 'function') {
+						success(_data.data);
+					}
+				},
+				error: function(_data) {
+					if(typeof(error) === 'function') {
+						error(_data);
+					}
 				}
 			});
 		},
 
 		normalizeData: function(form_data) {
-			delete form_data.users;
+			delete form_data.user_id;
 			return form_data;
 		}
 	};

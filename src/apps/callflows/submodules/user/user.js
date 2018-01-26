@@ -294,7 +294,7 @@ define(function(require){
 						},
 						hotdesk: {},
 						contact_list: {
-							exclude: false,
+							exclude: false
 						},
 						priv_level: 'user',
 						music_on_hold: {},

@@ -1,8 +1,18 @@
-.callflows-port #queue-form .users-table {
-	max-width: 450px;
+.callflows-port #queue-form .users-table,
+.callflows-port #queue-form .add-user-panel {
+	max-width: 400px;
+}
+
+.callflows-port #queue-form .users-table tr th:nth-child(2),
+.callflows-port #queue-form .users-table tr td:nth-child(2) {
+	width: 64px;
+	text-align: center;
 }
 
 .callflows-port #queue-form .add-user-panel {
 	width: 100%;
-	max-width: 450px;
+}
+
+.callflows-port .add-user-panel .callflow-panel_body {
+	text-align: center;
 }
