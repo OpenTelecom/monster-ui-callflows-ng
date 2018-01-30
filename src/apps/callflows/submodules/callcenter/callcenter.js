@@ -159,7 +159,7 @@ define(function(require){
 							});
 
 							popup = monster.ui.dialog(popup_html, {
-								title: self.i18n.active().callflows.callcenter.select_queue,
+								title: self.i18n.active().callflows.callcenter.selectQueue,
 								minHeight: '0',
 								beforeClose: function() {
 									if(typeof callback == 'function') {
@@ -318,7 +318,7 @@ define(function(require){
 
 		queuePopupEdit: function(args) {
 			var self = this,
-				popup_html = $('<div class="inline_popup callflows-queue"><div class="inline_content main_content"></div></div>'),
+				popup_html = $('<div class="callflows-callcenter-popup inline_popup callflows-port"><div class="inline_content main_content"></div></div>'),
 				callback = args.callback,
 				popup,
 				data = args.data,
@@ -350,7 +350,7 @@ define(function(require){
 					},
 					after_render: function() {
 						popup = monster.ui.dialog(popup_html, {
-							title: (data.id) ? self.i18n.active().callflows.callcenter.queue_edit : self.i18n.active().callflows.callcenter.queue_create
+							title: (data.id) ? self.i18n.active().callflows.callcenter.editQueue : self.i18n.active().callflows.callcenter.createQueue
 						});
 					}
 				},

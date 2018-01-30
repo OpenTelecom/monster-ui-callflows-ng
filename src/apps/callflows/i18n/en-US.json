@@ -1099,7 +1099,6 @@
 			"tooltip": "Ask the caller to input the first letters of the name of the person that he wants to reach.",
 			"connect_caller_to_queue": "Connect caller to queue...",
 			"queue_edit_options": "Edit queue options",
-			"queue_create": "Create Queue",
 			"agentResume": "Agent Resume",
 			"agentBreak": "Agent Break",
 			"logoutAgent": "Logout Agent",
@@ -1129,7 +1128,8 @@
 			"deleteConfirmMessage": "Are you sure you want to delete this queue?",
 			"save": "Save",
 			"thereIsCurrentlyNoUser": "There is currently no user in this queue",
-			"userLabel": "Users list"
+			"userLabel": "Users list",
+			"selectQueue": "Select Queue"
 		}
 	},
 	"oldCallflows": {

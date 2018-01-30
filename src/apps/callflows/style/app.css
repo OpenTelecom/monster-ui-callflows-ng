@@ -81,6 +81,7 @@
 
 #ws_callflow .callflow .root > .content .number_column.first {
 	width: 159px;
+	color: white;
 }
 
 #ws_callflow .callflow .root > .content .number_column.empty {
@@ -230,8 +231,8 @@
 }
 
 #ws_callflow .tools .tool .action:hover {
-	background: #303039;
-	border: 1px solid #303039;
+	background: #0081D6;
+	border: 1px solid #0081D6;
 }
 
 #ws_callflow .tools .app_list_nav {
@@ -361,11 +362,13 @@
 	line-height: 15px;
 	width: 100%;
 	padding-top: 5px;
+	color: white;
 }
 
 #ws_callflow .details {
 	font-size: 10px;
 	overflow: hidden;
+	color: white;
 }
 
 /* Add number and Edit name popups */
@@ -532,7 +535,6 @@
 
 #ws_callflow #callflow_header #pending_change span {
 	color: #22A5FF;
-	font-weight: lighter;
 	font-style: italic;
 }
 
@@ -668,6 +670,7 @@
 	width: 160px;
 	top: 100px;
 	display: none;
+	z-index: 100;
 }
 
 #callflow_container .callflow_helpbox_wrapper .tip_box {
@@ -679,6 +682,7 @@
 	text-align: left;
 	font-size: 10px;
 	line-height: 12px;
+	color: white;
 }
 
 #callflow_container .tooltip {
@@ -699,13 +703,13 @@
 }
 
 @-webkit-keyframes pulse-box {
-	0% { box-shadow: 0px 0px 0px #73F03C inset, 0px 0px 0px #14FF00; }
-	100% { box-shadow: 0px 0px 30px #73F03C inset, 0px 0px 10px #14FF00; }
+	0% { box-shadow: 0px 0px 0px #0081D6 inset, 0px 0px 0px #0081D6; }
+	100% { box-shadow: 0px 0px 30px #0081D6 inset, 0px 0px 10px #0081D6; }
 }
 
 @keyframes pulse-box {
-	0% { box-shadow: 0px 0px 0px #73F03C inset, 0px 0px 0px #14FF00; }
-	100% { box-shadow: 0px 0px 30px #73F03C inset, 0px 0px 10px #14FF00; }
+	0% { box-shadow: 0px 0px 0px #0081D6 inset, 0px 0px 0px #0081D6; }
+	100% { box-shadow: 0px 0px 30px #0081D6 inset, 0px 0px 10px #0081D6; }
 }
 
 /* JR's customization */
@@ -1728,4 +1732,12 @@
 
 .callflows-port .link-with-icon .fa {
 	margin-right: 5px;
+}
+
+.ui-dialog-content .monster-link:not(.disabled):hover,
+.ui-dialog-content .monster-link:not(.disabled):hover .fa,
+.ui-dialog-content .monster-link:not(.disabled):focus,
+.ui-dialog-content .monster-link:not(.disabled):focus .fa {
+	background: transparent;
+	color: #22A5FF;
 }

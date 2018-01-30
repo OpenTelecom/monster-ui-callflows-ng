@@ -16,3 +16,7 @@
 .callflows-port .add-user-panel .callflow-panel_body {
 	text-align: center;
 }
+
+.callflows-callcenter-popup .inline_content.main_content {
+	width: auto;
+}
