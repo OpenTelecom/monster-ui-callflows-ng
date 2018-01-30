@@ -91,11 +91,11 @@ define(function(require){
 				i18nApp = self.i18n.active().callflows.callcenter;
 
 			$.extend(callflow_nodes, {
-				'acdc_queue[id=*]': {
+				'acdc_member[id=*]': {
 					name: i18nApp.queue,
 					icon: 'link',
 					category: i18nApp.category,
-					module: 'acdc_queue',
+					module: 'acdc_member',
 					tip: i18nApp.tooltip,
 					data: {
 						id: 'null'
