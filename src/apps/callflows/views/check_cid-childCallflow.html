@@ -1,0 +1,23 @@
+<div class="dialog_popup">
+	<form name="form" method="post" action="#">
+            <div class="form_content">
+                <div class="popup_field">
+                    <label for="check_cid_callflow_key_selector">{{ i18n.oldCallflows.check_cid_matchnomatch }}</label>
+                    <div class="select_wrapper">
+                        <select id="check_cid_callflow_key_selector">
+                                        {{#compare selected "===" "match"}}
+                                                <option value="match" selected="selected">{{ i18n.oldCallflows.check_cid_match }}</option>
+                                                <option value="nomatch">{{ i18n.oldCallflows.check_cid_nomatch }}</option>
+                                        {{else}}
+                                                <option value="match">{{ i18n.oldCallflows.check_cid_match }}</option>
+                                                <option value="nomatch" selected="selected">{{ i18n.oldCallflows.check_cid_nomatch }}</option>
+                                        {{/compare}}
+                       </select>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="buttons-center">
+            <button id="add" class="monster-button monster-button-primary">{{i18n.save}}</button>
+        </div>
+    </div>

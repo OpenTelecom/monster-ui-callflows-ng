@@ -1286,7 +1286,13 @@
 				"current": "Current",
 				"original": "Original"
 			}
-		}
+		},
+		"check_cid": "Match caller number",
+		"check_cid_tip": "Branch in a callflow based on the A number",
+		"check_cid_match": "Match",
+		"check_cid_nomatch": "No match",
+		"check_cid_matchnomatch": "Match or no match?",
+		"regex": "Regex"
 	},
 	"__comment": "UI-1260: created common control for carrier selection",
 	"__version": "v3.20_s2",
