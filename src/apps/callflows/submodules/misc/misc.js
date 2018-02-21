@@ -397,7 +397,7 @@ define(function(require){
 				},
 				'check_cid[]': {
 					name: self.i18n.active().oldCallflows.check_cid,
-                                        icon: 'lightbulb-o',
+                                        icon: 'list-ol',
                                         category: self.i18n.active().oldCallflows.caller_id_cat,
                                         module: 'check_cid',
                                         tip: self.i18n.active().oldCallflows.check_cid_tip,
@@ -475,6 +475,53 @@ define(function(require){
                                                 });
 
 
+                                        }
+
+				},
+				'webhook[]': {
+					name: self.i18n.active().oldCallflows.webhook,
+					icon: 'upload',
+					category: self.i18n.active().oldCallflows.integrations_cat,
+					module: 'webhook',
+					tip: self.i18n.active().oldCallflows.webhook_tip,
+					data: {
+					},
+					rules: [
+						{
+							type: 'quantity',
+							maxSize: '1'
+						}
+					],
+					isUsable: 'true',
+					weight: 40,
+					caption: function(node, caption_map) {
+						return node.getMetadata('webhook') || '';
+					},
+					edit: function(node, callback) {
+						var popup_html = $(monster.template(self, 'webhook-callflowEdit', {
+								data_webhook: {
+									'http_verb': node.getMetadata('http_verb') || 'get',
+									'retries': node.getMetadata('retries') || '3',
+									'uri': node.getMetadata('uri') || ''		
+								}
+							})),
+							popup;
+						$('#add', popup_html).click(function() {
+							node.setMetadata('http_verb', $('#http_verb option:selected', popup_html).val());
+							node.setMetadata('retries', $('#retries_input', popup_html).val());
+							node.setMetadata('uri', $('#uri_input', popup_html).val());
+							
+							popup.dialog('close');
+						});
+
+                                                popup = monster.ui.dialog(popup_html, {
+                                                        title: self.i18n.active().oldCallflows.webhook_title,
+                                                        beforeClose: function() {
+                                                                if(typeof callback == 'function') {
+                                                                         callback();
+                                                                }
+                                                        }
+                                                });
                                         }
 
 				},

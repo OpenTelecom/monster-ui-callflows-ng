@@ -1,0 +1,28 @@
+<div class="dialog_popup">
+	<h1>{{ i18n.oldCallflows.webhook }}</h1>
+	<form name="form" method="post" action="#">
+		<div class="form_content">
+
+                        <div class="popup_field">
+                                <label for="uri_input">{{ i18n.oldCallflows.webhook_uri }} </label>
+                                <input type="text" id="uri_input" class="medium" value="{{data_webhook.uri}}"/>
+                        </div>
+
+			<div class="popup_field">
+				<label for="retries_input">{{ i18n.oldCallflows.webhook_retry }} </label>
+				<input type="text" id="retries_input" class="medium" value="{{data_webhook.retries}}"/>
+			</div>
+			
+			<div class="popup_field">
+				<label for="http_verb">{{ i18n.oldCallflows.webhook_method }}: </label>
+				<select id="http_verb" style="width: 100px; height: 28px;">
+					<option value="get"{{#compare data_webhook.http_verb '===' 'get'}} selected="selected"{{/compare}}>GET</option>
+					<option value="post"{{#compare data_webhook.http_verb '===' 'post'}} selected="selected"{{/compare}}>POST</option>
+				</select>
+			</div>
+		</div>
+	</form>
+	<div class="buttons-center">
+		<button id="add" class="monster-button monster-button-primary">{{i18n.save}}</button>
+	</div>
+</div>
