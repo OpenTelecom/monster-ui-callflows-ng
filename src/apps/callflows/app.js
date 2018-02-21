@@ -144,6 +144,7 @@ define(function(require){
 				self.editCallflow({ id: callflowId });
 			});
 
+
 			callflowList.on('scroll', function() {
 				if(!isLoading && callflowList.data('next-key') && (callflowList.scrollTop() >= (callflowList[0].scrollHeight - callflowList.innerHeight() - 100))) {
 					isLoading = true;
@@ -1560,6 +1561,13 @@ define(function(require){
 					self.repaintFlow();
 				}
 			});
+
+			$('.node-options .jump', layout).click(function() {
+				
+                                var $this = $(this),
+                                        callflowId = $this.attr('id');
+                                self.editCallflow({ id: callflowId });
+                        });
 
 			return layout;
 		},
