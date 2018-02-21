@@ -1138,6 +1138,7 @@
 		"advanced_cat": "Advanced",
 		"call_recording_cat": "Call Recording",
 		"caller_id_cat": "Caller-ID",
+		"integrations_cat": "Integrations",
 		"delete_callflow": "Delete callflow",
 		"save_changes": "Save changes",
 		"invalid_number": "Invalid number!",
@@ -1292,7 +1293,13 @@
 		"check_cid_match": "Match",
 		"check_cid_nomatch": "No match",
 		"check_cid_matchnomatch": "Match or no match?",
-		"regex": "Regex"
+		"regex": "Regex",
+		"webhook": "Send webhook",
+		"webhook_tip": "Send a webhook to an external webservice when this callflow node is hit",
+		"webhook_title": "Send a HTTP webhook",
+		"webhook_uri": "URI",
+		"webhook_method": "HTTP method",
+		"webhook_retry": "# retries"
 	},
 	"__comment": "UI-1260: created common control for carrier selection",
 	"__version": "v3.20_s2",
