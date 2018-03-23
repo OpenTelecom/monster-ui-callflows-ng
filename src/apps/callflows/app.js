@@ -1915,6 +1915,58 @@ define(function(require){
 					input.unbind('.link');
 				}
 			});
+		},
+		getAll: function(callApiData, startKey, continueData) {
+			// Warning! Method works for listed data only!
+			// -- Usage:
+			// self.getAll({
+			//   resource: 'user.list',
+			//   success: function(result){},
+			//   error: function(data){},
+			//   data: {
+			//      someParam: someValue
+			//   }
+			// })
+
+			continueData = continueData || { data:[] };
+			var self = this;
+
+			if(typeof(callApiData.resource) === 'undefined') {
+				self.log('Error! Api keyword is undefined');
+				return;
+			}
+
+			var requestData = $.extend({
+				accountId: self.accountId,
+				generateError: false
+			}, callApiData.data || {});
+
+			if(typeof(startKey) !== 'undefined') {
+				requestData.startKey = startKey;
+			}
+
+			var newRequestData = {
+				resource: callApiData.resource,
+				data: requestData,
+				success: function(response){
+					response.data = $.merge(continueData.data, response.data);
+					if(response.next_start_key && startKey !== response.next_start_key) {
+						self.getAll(callApiData, response.next_start_key, response);
+						return;
+					}
+
+					if(typeof(callApiData.success) === 'function') {
+						callApiData.success(response);
+					}
+				},
+				error: callApiData.error || function(){}
+			};
+
+			if(self.requests.hasOwnProperty(callApiData.resource)) {
+				monster.request(newRequestData);
+			} else {
+				self.callApi(newRequestData);
+			}
 		}
 	};
 

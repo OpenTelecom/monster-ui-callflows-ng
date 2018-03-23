@@ -170,7 +170,7 @@ define(function(require){
 						});
 					},
 					listEntities: function(callback) {
-						monster.request({
+						self.getAll({
 							resource: 'callcenter.queues.list',
 							data: {
 								accountId: self.accountId,
@@ -435,7 +435,7 @@ define(function(require){
 		getUsersList: function(callback) {
 			var self = this;
 
-			self.callApi({
+			self.getAll({
 				resource: 'user.list',
 				data: {
 					accountId: self.accountId,
@@ -480,7 +480,7 @@ define(function(require){
 		getQueuesList: function(callback) {
 			var self = this;
 
-			monster.request({
+			self.getAll({
 				resource: 'callcenter.queues.list',
 				data: {
 					accountId: self.accountId,
