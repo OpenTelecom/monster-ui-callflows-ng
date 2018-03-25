@@ -190,7 +190,7 @@ define(function(require){
 
 			monster.parallel({
 					'device_list': function(callback) {
-						self.callApi({
+						self.getAll({
 							resource: 'device.list',
 							data: {
 								accountId: self.accountId
@@ -203,7 +203,7 @@ define(function(require){
 					},
 
 					'user_list': function(callback) {
-						self.callApi({
+						self.getAll({
 							resource: 'user.list',
 							data: {
 								accountId: self.accountId

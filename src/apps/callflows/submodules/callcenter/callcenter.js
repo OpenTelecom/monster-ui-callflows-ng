@@ -173,8 +173,7 @@ define(function(require){
 						self.getAll({
 							resource: 'callcenter.queues.list',
 							data: {
-								accountId: self.accountId,
-								filters: { paginate:false }
+								accountId: self.accountId
 							},
 							success: function(data, status) {
 								callback && callback(data.data);
@@ -479,7 +478,6 @@ define(function(require){
 
 		getQueuesList: function(callback) {
 			var self = this;
-
 			self.getAll({
 				resource: 'callcenter.queues.list',
 				data: {
