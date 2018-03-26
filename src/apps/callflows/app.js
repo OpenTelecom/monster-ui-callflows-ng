@@ -73,6 +73,49 @@ define(function(require){
 				app: self,
 				callback: callback
 			});
+
+			self.initHandlebarsHelpers();
+		},
+
+		initHandlebarsHelpers: function() {
+			Handlebars.registerHelper('compare', function (lvalue, operator, rvalue, options) {
+				var operators, result;
+
+				if (arguments.length < 3) {
+					throw new Error('Handlerbars Helper \'compare\' needs 2 parameters');
+				}
+
+				if (options === undefined) {
+					options = rvalue;
+					rvalue = operator;
+					operator = '===';
+				}
+
+				operators = {
+					'==': function (l, r) { return l == r; },
+					'===': function (l, r) { return l === r; },
+					'!=': function (l, r) { return l != r; },
+					'!==': function (l, r) { return l !== r; },
+					'<': function (l, r) { return l < r; },
+					'>': function (l, r) { return l > r; },
+					'<=': function (l, r) { return l <= r; },
+					'>=': function (l, r) { return l >= r; },
+					'typeof': function (l, r) { return typeof l == r; }
+				};
+
+				if (!operators[operator]) {
+					throw new Error('Handlerbars Helper \'compare\' doesn\'t know the operator ' + operator);
+				}
+
+				result = operators[operator](lvalue, rvalue);
+
+				if (result) {
+					return options.fn(this);
+				} else {
+					return options.inverse(this);
+				}
+
+			});
 		},
 
 		// Entry Point of the app
@@ -240,7 +283,6 @@ define(function(require){
 				template = args.template,
 				actions = args.actions,
 				editEntity = function(type, id) {
-
 					monster.pub(actions[type].editEntity, {
 						data: id ? { id: id } : {},
 						parent: template,
@@ -254,7 +296,8 @@ define(function(require){
 								self.refreshEntityList({
 									template: template,
 									actions: actions,
-									entityType: type
+									entityType: type,
+									activeEntityId: data.id
 								});
 								editEntity(type, data.id);
 							},
@@ -315,6 +358,7 @@ define(function(require){
 
 			template.find('.entity-edition .list-add').on('click', function() {
 				var type = template.find('.entity-edition .list-container .list').data('type');
+				$('.entity-edition .list-container .list-element-active').removeClass('list-element-active');
 				editEntity(type);
 			});
 
@@ -322,6 +366,9 @@ define(function(require){
 				var $this = $(this),
 					id = $this.data('id'),
 					type = $this.parents('.list').data('type');
+
+				$this.closest('.list').find('.list-element-active').removeClass('list-element-active');
+				$this.addClass('list-element-active');
 
 				editEntity(type, id);
 			});
@@ -348,11 +395,15 @@ define(function(require){
 				template = args.template,
 				actions = args.actions,
 				entityType = args.entityType,
-				callback = args.callbacks;
+				callback = args.callbacks,
+				activeEntityId = args.activeEntityId || null;
 
 			actions[entityType].listEntities(function(entities) {
 				self.formatEntityData(entities, entityType);
-				var listEntities = $(monster.template(self, 'entity-list', { entities: entities }));
+				var listEntities = $(monster.template(self, 'entity-list', {
+					entities: entities,
+					activeEntityId: activeEntityId
+				}));
 
 				monster.ui.tooltips(listEntities);
 

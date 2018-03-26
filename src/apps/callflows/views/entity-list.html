@@ -1,5 +1,5 @@
 {{#each entities}}
-	<li class="list-element" data-id="{{this.id}}" data-search="{{this.displayName}} {{this.id}}">
+	<li class="list-element {{#compare @root.activeEntityId '===' this.id}}list-element-active{{/compare}}" data-id="{{this.id}}" data-search="{{this.displayName}} {{this.id}}">
 		<div class="link">
 			{{#if customEntityTemplate}}
 				{{{customEntityTemplate}}}

@@ -773,13 +773,13 @@
 }
 
 #callflow_container .left-bar-container .list-add:hover {
-	background: #22A5FF;
-	color: white;
+	background: #E3E3E3;
+	color: #303039;
 	cursor: pointer;
 }
 
 #callflow_container .left-bar-container .list-add:hover i {
-	color: white;
+	color: #303039;
 }
 
 #callflow_container .left-bar-container .list-loader {
@@ -792,6 +792,13 @@
 	max-height: 60px;
 	overflow: hidden;
 	border-bottom: solid 1px #ccc;
+}
+
+#callflow_container .left-bar-container .list-element.list-element-active > div,
+#callflow_container .left-bar-container .list-element.list-element-active > div:hover {
+	background: #22A5FF;
+	color: white;
+	cursor: default;
 }
 
 #callflow_container .left-bar-container .list-element > div {
