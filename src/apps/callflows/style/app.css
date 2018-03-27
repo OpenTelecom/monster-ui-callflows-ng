@@ -65,6 +65,7 @@
 	text-indent: 15px;
 	text-align: left;
 	position: relative;
+	color: white;
 }
 
 #ws_callflow .callflow .root > .content .number_column.full {
@@ -81,7 +82,6 @@
 
 #ws_callflow .callflow .root > .content .number_column.first {
 	width: 159px;
-	color: white;
 }
 
 #ws_callflow .callflow .root > .content .number_column.empty {
