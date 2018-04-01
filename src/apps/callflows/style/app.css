@@ -10,6 +10,7 @@
 @import url('../submodules/featurecodes/featurecodes.css');
 @import url('../submodules/temporalset/temporalset.css');
 @import url('../submodules/callcenter/callcenter.css');
+@import url('../../../css/vendor/bootstrap-tour.css');
 /* style.css */
 #ws_callflow > .callflow {
 	float: left;
@@ -20,7 +21,7 @@
 }
 
 #ws_callflow .callflow .root > .top_bar {
-	background: #22A5FF;
+	background: #0081D6;
 	height: 25px;
 	text-align: left;
 	border-radius: 6px 6px 0 0;
@@ -43,16 +44,12 @@
 }
 
 #ws_callflow .callflow .root > .content .number_row {
-	background-image: url(static/images/nav_line_horizontal.jpg);
-	background-position: bottom;
-	background-repeat: repeat-x;
-	height: 32px;
-	background-color: #303039;
+	height: 30px;
+	background: #0081D6;
+	border-top: 1px solid white;
 }
 
 #ws_callflow .callflow .root > .content .number_row:last-child {
-	background: none;
-	background-color: #303039;
 	height: 30px;
 	border-radius: 0px 0px 2px 2px;
 }
@@ -69,15 +66,13 @@
 }
 
 #ws_callflow .callflow .root > .content .number_column.full {
-	width: 312px;
+	width: 100%;
 	text-align: center;
 }
 
 #ws_callflow .callflow .root > .content .number_column.second {
-	width: 163px;
-	background-image: url(static/images/nav_line.jpg);
-	background-position: left;
-	background-repeat: repeat-y;
+	width: 162px;
+	border-left: 1px solid white;
 }
 
 #ws_callflow .callflow .root > .content .number_column.first {
@@ -85,8 +80,13 @@
 }
 
 #ws_callflow .callflow .root > .content .number_column.empty {
-	color: #A0A0A0;
+	color: white;
 	cursor: default;
+}
+
+#ws_callflow .callflow .root > .content .number_column.add-number {
+	cursor: pointer;
+	background: #22A5FF;
 }
 
 #ws_callflow .callflow .root > .content .number_column .delete {
@@ -101,10 +101,6 @@
 	right: 0px;
 	top: 0px;
 	cursor: pointer;
-}
-
-#ws_callflow .callflow .root > .content .number_column .delete:hover {
-	background-image: url(static/images/btn_delete_blue.png);
 }
 
 #ws_callflow .callflow .node {
@@ -129,10 +125,7 @@
 	right: 0px;
 	padding: 5px;
 	cursor: pointer;
-}
-
-#ws_callflow .callflow .node .node-options .delete:hover {
-	background-image: url(static/images/btn_delete_blue.png);
+	color: #555;
 }
 
 #ws_callflow .tool .fa {
@@ -142,7 +135,7 @@
 
 #ws_callflow .tools .category {
 	text-align: center;
-	background: #22A5FF;
+	background: #0081D6;
 	background-position: top center;
 	cursor: default;
 	border-bottom: 1px solid white;
@@ -150,7 +143,7 @@
 
 #ws_callflow .tools .category .content {
 	background-color: white;
-	border: 1px solid #22A5FF;
+	border: 1px solid #0081D6;
 	padding: 1px 0px 3px;
 }
 
@@ -187,7 +180,7 @@
 }
 
 #ws_callflow .tools .inactive .open:hover {
-	background: #0081D6;
+	background: #22A5FF;
 }
 
 #ws_callflow .tools .inactive .open::before {
@@ -224,15 +217,16 @@
 	z-index: 19;
 	height: 53px;
 	border-radius: 6px;
-	background: #22A5FF;
+	background: #0081D6;
 	color: white;
-	border: 1px solid #22A5FF;
+	border: 1px solid #0081D6;
 	padding-top: 7px;
+	width: 76px;
 }
 
 #ws_callflow .tools .tool .action:hover {
-	background: #0081D6;
-	border: 1px solid #0081D6;
+	background: #22A5FF;
+	border: 1px solid #22A5FF;
 }
 
 #ws_callflow .tools .app_list_nav {
@@ -240,9 +234,9 @@
 }
 
 #ws_callflow .callflow .icons_black.node {
-	width: 143px;
+	width: 132px;
 	height: 84px;
-	background: #303039;
+	background: #0081D6;
 	border-radius: 6px;
 }
 
@@ -319,19 +313,20 @@
 }
 
 #ws_callflow .a_link_option {
-	color: #EEE;
-	font-size: 12px;
+	color: white;
+	font-size: 17px;
+	display: block;
+	padding: 2px 0;
 }
 
 #ws_callflow .div_option {
 	display: inline-block;
-	height: 15px;
-	line-height: 15px;
+	line-height: 1;
 	width: 131px;
-	background-color: #474747;
-	margin: 0;
-	padding: 0;
-	border: 1px solid #303030;
+	background-color: #22A5FF;
+	margin: 0 0 2px;
+	padding: 2px 0;
+	border: 1px solid #22A5FF;
 	border-radius: 2px;
 }
 
@@ -492,16 +487,13 @@
 	overflow: visible;
 }
 
-#callflow_container .callflow-help, .popup_help .callflow-help {
-	background: url(static/images/callflow_help.gif) no-repeat center;
-	height: 644px;
-	width: 847px;
-	margin: 20px auto auto;
-	border-radius: 10px;
+#callflow_container .callflow-intro {
+	padding: 0 0 0 40px;
 }
 
-#callflow_container .callflow-content.edition-mode .callflow-help {
-	display: none;
+#callflow_container .callflow-intro .callflow-intro-title {
+	font-weight: normal;
+	font-size: 23px;
 }
 
 #callflow_container .callflow-content.listing-mode #ws_callflow {
@@ -598,8 +590,8 @@
 }
 
 #ws_callflow .tools .search-box {
-	border-left: 1px solid #22A5FF;
-	border-right: 1px solid #22A5FF;
+	border-left: 1px solid #0081D6;
+	border-right: 1px solid #0081D6;
 	position: relative;
 }
 
@@ -636,7 +628,7 @@
 }
 
 #ws_callflow .title {
-	background: #22A5FF;
+	background: #0081D6;
 	font-size: 15px;
 	height: 25px;
 	line-height: 25px;
@@ -648,7 +640,8 @@
 
 #callflow_container .wrapper_callflow_buttons {
 	display: block;
-	width: 322px;
+	width: 100%;
+	text-align: center;
 	margin: auto;
 	margin-bottom: 5px;
 }
@@ -657,7 +650,7 @@
 	width: 114px;
 	text-align: center;
 	display: inline-block;
-	margin-left: 0px;
+	margin-left: 0;
 }
 
 #callflow_container .wrapper_callflow_buttons .monster-button:first-child {
@@ -703,13 +696,13 @@
 }
 
 @-webkit-keyframes pulse-box {
-	0% { box-shadow: 0px 0px 0px #0081D6 inset, 0px 0px 0px #0081D6; }
-	100% { box-shadow: 0px 0px 30px #0081D6 inset, 0px 0px 10px #0081D6; }
+	0% { box-shadow: 0px 0px 0px #09DB4B inset, 0px 0px 0px #09DB4B; }
+	100% { box-shadow: 0px 0px 30px #09DB4B inset, 0px 0px 10px #09DB4B; }
 }
 
 @keyframes pulse-box {
-	0% { box-shadow: 0px 0px 0px #0081D6 inset, 0px 0px 0px #0081D6; }
-	100% { box-shadow: 0px 0px 30px #0081D6 inset, 0px 0px 10px #0081D6; }
+	0% { box-shadow: 0px 0px 0px #09DB4B inset, 0px 0px 0px #09DB4B; }
+	100% { box-shadow: 0px 0px 30px #09DB4B inset, 0px 0px 10px #09DB4B; }
 }
 
 /* JR's customization */
@@ -1644,14 +1637,14 @@
 .callflows-port .monster-button-success,
 #callflow_container .monster-button-success {
 	color: white;
-	border-color: #22A5FF;
-	background: #22A5FF;
+	border-color: #09A74B;
+	background: #09A74B;
 }
 
 .callflows-port .monster-button-success:hover,
 #callflow_container .monster-button-success:hover {
-	border-color: #0081D6;
-	background: #0081D6;
+	border-color: #18B65A;
+	background: #18B65A;
 }
 
 .callflows-port .items-selector .box-selector .item-selector {
@@ -1747,4 +1740,22 @@
 .ui-dialog-content .monster-link:not(.disabled):focus .fa {
 	background: transparent;
 	color: #22A5FF;
+}
+
+.callflows-drag-and-drop {
+	width: 285px;
+	height: 148px;
+	background: url('static/images/callflows-drag-and-drop.gif') no-repeat;
+}
+
+
+/*
+ * Bootstrap guide tour - override styles
+ */
+.popover[class*="tour-"] {
+	min-width: 350px;
+}
+
+.tour-backdrop {
+	opacity: 0.6;
 }

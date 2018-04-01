@@ -1130,6 +1130,15 @@
 			"thereIsCurrentlyNoUser": "There is currently no user in this queue",
 			"userLabel": "Users list",
 			"selectQueue": "Select Queue"
+		},
+		"introTitle": "What is Callflow?",
+		"introDescription": "A callflow defines what happens when someone dials an extension or phone number.",
+		"guide": {
+			"addCallflow": "Click this button to create new callflow",
+			"addNumber": "Click this button to add phone or extension number into callflow <br/>When someone dials these number, they will behave according to the way you set up the callflow in the next step.",
+			"dragAndDropAction": "Drag actions from the actions panel to the callflow box. You can customize a callflow by adding more actions. <div class='callflows-drag-and-drop'></div>",
+			"nextBtnText": "Next »",
+			"endTourBtnText": "Close"
 		}
 	},
 	"oldCallflows": {

@@ -20,7 +20,8 @@ define(function(require){
 		'./submodules/vmbox/vmbox',
 		'./submodules/featurecodes/featurecodes',
 		'./submodules/temporalset/temporalset',
-		'./submodules/callcenter/callcenter'
+		'./submodules/callcenter/callcenter',
+		'bootstraptour'
 	]);
 
 	var app = {
@@ -147,10 +148,79 @@ define(function(require){
 						.append(callflowsTemplate);
 
 					container.find('.search-query').focus();
-
 					self.hackResize(callflowsTemplate);
+
+					if($('.js-callflows-list .list-element').length === 0) {
+						self.initGuideTour();
+					}
 				}
 			});
+		},
+
+		initGuideTour: function() {
+			var self = this;
+			var i18n = self.i18n.active();
+
+			self.tour = new Tour({
+				name: 'callflow-guide',
+				backdrop: true,
+				debug: true,
+				template: '' +
+					'<div class="popover tour">' +
+						'<div class="arrow"></div>' +
+						'<h3 class="popover-title"></h3>' +
+						'<div class="popover-content"></div>' +
+						'<div class="popover-navigation">' +
+							'<button class="btn btn-default" data-role="next">' +
+								i18n.callflows.guide.nextBtnText +
+							'</button>' +
+							'<button class="btn btn-default" data-role="end">' +
+								i18n.callflows.guide.endTourBtnText +
+							'</button>' +
+						'</div>' +
+					'</div>',
+				steps: [
+					{
+						element: '.js-callflow-edition .js-list-add',
+						placement: 'right',
+						content: i18n.callflows.guide.addCallflow,
+						onShown: function (tour) {
+							$('.popover').find('[data-role="prev"]').remove();
+						},
+						onNext: function (tour) {
+							$('.js-callflow-edition .js-list-add').click();
+						}
+					},
+					{
+						element: '#ws_callflow .js-add-number',
+						placement: 'bottom',
+						content: i18n.callflows.guide.addNumber,
+						onShown: function (tour) {
+							$('.popover').find('[data-role="prev"]').remove();
+						},
+						onNext: function (tour) {
+							$('#ws_callflow .js-add-number').click();
+							tour.end();
+						}
+					},
+					{
+						element: '#ws_cf_tools > div',
+						placement: 'left',
+						content: i18n.callflows.guide.dragAndDropAction,
+						onShown: function (tour) {
+							$('.popover').find('[data-role="next"],[data-role="prev"]').remove();
+						}
+					}
+				]});
+
+			self.tour.init();
+			if(self.tour.ended()) {
+				self.tour.restart();
+			}
+
+			if(self.tour.getCurrentStep() !== 0) {
+				self.tour.goTo(0);
+			}
 		},
 
 		bindCallflowsEvents: function(template, container) {
@@ -173,6 +243,17 @@ define(function(require){
 						.addClass('edition-mode');
 
 				self.editCallflow();
+
+				if($('.js-callflows-list .list-element').length === 0) {
+					if(self.tour.ended()) {
+						self.tour.restart();
+					}
+					if(self.tour.getCurrentStep() !== 1) {
+						self.tour.goTo(1);
+					}
+				} else {
+					delete self.tour;
+				}
 			});
 
 			// Edit Callflow
@@ -910,7 +991,7 @@ define(function(require){
 
 			delete self.original_flow; // clear original_flow
 
-			$('#callflow-view .callflow_help').hide();
+			$('.js-callflow-intro').hide();
 
 			self.resetFlow();
 
@@ -1390,6 +1471,9 @@ define(function(require){
 					}
 
 					$('.number_column.empty', node_html).click(function() {
+						if(self.tour) {
+							self.tour.end();
+						}
 						self.listNumbers(function(phoneNumbers) {
 							var parsedNumbers = [];
 
@@ -1479,6 +1563,16 @@ define(function(require){
 									popup.dialog('close');
 
 									self.repaintFlow();
+
+									if(self.tour
+										&& $('#ws_callflow .number_column').not('.js-add-number').length === 1) {
+										if(self.tour.ended()) {
+											self.tour.restart();
+										}
+										if(self.tour.getCurrentStep() !== 2) {
+											self.tour.goTo(2);
+										}
+									}
 								}
 								else {
 									monster.ui.alert(self.i18n.active().oldCallflows.you_didnt_select);
@@ -1772,6 +1866,9 @@ define(function(require){
 						$(this).addClass('inactive');
 					},
 					drag: function () {
+						if(self.tour) {
+							self.tour.end();
+						}
 						$('.callflow_helpbox_wrapper', '#callflow-view').hide();
 					},
 					stop: function () {

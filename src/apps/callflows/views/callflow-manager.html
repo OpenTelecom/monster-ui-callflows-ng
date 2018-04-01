@@ -4,11 +4,11 @@
 			<i class="fa fa-search"></i>
 			<input type="text" class="search-query" placeholder="{{ i18n.search }}">
 		</div>
-		<div class="list-add">
+		<div class="js-list-add list-add">
 			<i class="fa fa-plus-circle fa-lg"></i>
 			<span>{{ i18n.callflows.addCallflow }}</span>
 		</div>
-		<div class="list-container clearfix">
+		<div class="js-callflows-list list-container clearfix">
 			<ul class="list"></ul>
 		</div>
 	</div>
@@ -32,7 +32,12 @@
 		</div>
 		<div class="callflow-view clearfix">
 			<div class="real-content"> 
-				<div class="callflow-help"/>
+				<div class="js-callflow-intro callflow-intro">
+					<h2 class="callflow-intro-title">
+						{{ i18n.callflows.introTitle }}
+					</h2>
+					<p>{{ i18n.callflows.introDescription }}</p>
+				</div>
 
 				<div id="ws_callflow" class="clearfix">
 					<div class="tools">
