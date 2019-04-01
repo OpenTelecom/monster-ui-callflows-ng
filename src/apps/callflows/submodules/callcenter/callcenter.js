@@ -1,6 +1,6 @@
 define(function(require){
 	var $ = require('jquery'),
-		_ = require('underscore'),
+		_ = require('lodash'),
 		toastr = require('toastr'),
 		monster = require('monster'),
 		timezone = require('monster-timezone');
@@ -141,7 +141,7 @@ define(function(require){
 								ev.preventDefault();
 
 								self.queuePopupEdit({
-									data: _data, 
+									data: _data,
 									callback: function(_data) {
 										node.setMetadata('id', _data.id || 'null');
 										node.caption = _data.name || '';

@@ -1,6 +1,6 @@
 define(function(require){
 	var $ = require('jquery'),
-		_ = require('underscore'),
+		_ = require('lodash'),
 		monster = require('monster');
 
 	var app = {
@@ -389,7 +389,7 @@ define(function(require){
 			dataGlobal.extra = dataGlobal.extra || {};
 			dataGlobal.extra.isShoutcast = false;
 
-			// if the value is set to a stream, we need to set the value of the media_id to shoutcast so it gets selected by the old select mechanism, 
+			// if the value is set to a stream, we need to set the value of the media_id to shoutcast so it gets selected by the old select mechanism,
 			// but we also need to store the  value so we can display it
 			if (dataGlobal.data.hasOwnProperty('music_on_hold') && dataGlobal.data.music_on_hold.hasOwnProperty('media_id')) {
 				if (dataGlobal.data.music_on_hold.media_id.indexOf('://') >= 0) {

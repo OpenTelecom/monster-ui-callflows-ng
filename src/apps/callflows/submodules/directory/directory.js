@@ -1,6 +1,6 @@
 define(function(require){
 	var $ = require('jquery'),
-		_ = require('underscore'),
+		_ = require('lodash'),
 		monster = require('monster');
 
 	var app = {
@@ -287,7 +287,7 @@ define(function(require){
 
 		directoryPopupEdit: function(args) {
 			var self = this,
-				popup, 
+				popup,
 				popup_html,
 				data = args.data,
 				callback = args.callback,

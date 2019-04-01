@@ -1,6 +1,6 @@
 define(function(require){
 	var $ = require('jquery'),
-		_ = require('underscore'),
+		_ = require('lodash'),
 		monster = require('monster'),
 		timezone = require('monster-timezone');
 
@@ -431,7 +431,7 @@ define(function(require){
 										ev.preventDefault();
 
 										self.vmboxPopupEdit({
-											data: _data, 
+											data: _data,
 											callback: function(vmbox) {
 												node.setMetadata('id', vmbox.id || 'null');
 
@@ -489,7 +489,7 @@ define(function(require){
 				// this is also the node we want to use when we drag it onto a callflow as we want the back-end to use the default action set in the schemas
 				'voicemail[id=*]': getVoicemailNode(true),
 
-				// the default action being "compose", the front-end needs a node handling the "compose" action. 
+				// the default action being "compose", the front-end needs a node handling the "compose" action.
 				// but we set the flag to false so we don't have 2 times the same node in the right list of actions
 				'voicemail[id=*,action=compose]': getVoicemailNode(false),
 

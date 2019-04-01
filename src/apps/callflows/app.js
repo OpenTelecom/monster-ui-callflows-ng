@@ -1,6 +1,6 @@
 define(function(require){
 	var $ = require('jquery'),
-		_ = require('underscore'),
+		_ = require('lodash'),
 		monster = require('monster');
 
 	require([
@@ -29,14 +29,14 @@ define(function(require){
 
 		css: [ 'app', 'icons' ],
 
-		i18n: { 
+		i18n: {
 			'en-US': { customCss: false }
 		},
 
 		// Defines API requests not included in the SDK
 		requests: {},
 
-		// Define the events available for other apps 
+		// Define the events available for other apps
 		subscribe: {
 			'callflows.fetchActions': 'define_callflow_nodes'
 		},
@@ -342,7 +342,7 @@ define(function(require){
 
 		renderEntityManager: function(container) {
 			var self = this,
-				entityActions = _.indexBy(_.filter(self.actions, function(action) {
+				entityActions = _.keyBy(_.filter(self.actions, function(action) {
 					return action.hasOwnProperty('listEntities');
 				}), 'module'),
 				template = $(monster.template(self, 'layout', { actions: entityActions }));
@@ -997,7 +997,7 @@ define(function(require){
 
 			if(data && data.id) {
 				self.callApi({
-					resource: 'callflow.get', 
+					resource: 'callflow.get',
 					data: {
 						accountId: self.accountId,
 						callflowId: data.id
@@ -1105,7 +1105,7 @@ define(function(require){
 			return parent;
 		},
 
-		construct_action: function(json) {  
+		construct_action: function(json) {
 			var action = '';
 
 			if('data' in json) {
@@ -1328,7 +1328,7 @@ define(function(require){
 			}
 
 			var metadata = self.dataCallflow.hasOwnProperty('ui_metadata') ? self.dataCallflow.ui_metadata : false,
-				isHiddenCallflow = metadata && metadata.hasOwnProperty('origin') && _.contains(['voip','migration','mobile', 'callqueues'], metadata.origin);
+				isHiddenCallflow = metadata && metadata.hasOwnProperty('origin') && _.includes(['voip','migration','mobile', 'callqueues'], metadata.origin);
 
 			isHiddenCallflow ? $('#hidden_callflow_warning').show() : $('#hidden_callflow_warning').hide();
 		},
@@ -1557,7 +1557,7 @@ define(function(require){
 							$('.add_number', popup).click(function(event) {
 								event.preventDefault();
 								var number = $('input[name="number_type"]:checked', popup).val() === 'your_numbers' ? $('#list_numbers option:selected', popup).val() : $('#add_number_text', popup).val();
-								
+
 								if(number !== 'select_none' && number !== '') {
 									self.flow.numbers.push(number);
 									popup.dialog('close');
@@ -1599,7 +1599,7 @@ define(function(require){
 						callflow: self.actions[node.actionName]
 					}));
 
-					// If an API request takes some time, the user can try to re-click on the element, we do not want to let that re-fire a request to the back-end. 
+					// If an API request takes some time, the user can try to re-click on the element, we do not want to let that re-fire a request to the back-end.
 					// So we set a 500ms timer that will prevent any other interaction with the callflow element.
 					var isAlreadyClicked = false;
 
@@ -1708,7 +1708,7 @@ define(function(require){
 			});
 
 			$('.node-options .jump', layout).click(function() {
-				
+
                                 var $this = $(this),
                                         callflowId = $this.attr('id');
                                 self.editCallflow({ id: callflowId });
@@ -2029,7 +2029,7 @@ define(function(require){
 				}
 			});
 
-			tabs.find('li').on('click', function(ev) { 
+			tabs.find('li').on('click', function(ev) {
 				ev.preventDefault();
 
 				var $this = $(this),

@@ -1,6 +1,6 @@
 define(function(require){
 	var $ = require('jquery'),
-		_ = require('underscore'),
+		_ = require('lodash'),
 		monster = require('monster');
 
 	var app = {
@@ -502,7 +502,7 @@ define(function(require){
 								data_webhook: {
 									'http_verb': node.getMetadata('http_verb') || 'get',
 									'retries': node.getMetadata('retries') || '3',
-									'uri': node.getMetadata('uri') || ''		
+									'uri': node.getMetadata('uri') || ''
 								}
 							})),
 							popup;
@@ -510,7 +510,7 @@ define(function(require){
 							node.setMetadata('http_verb', $('#http_verb option:selected', popup_html).val());
 							node.setMetadata('retries', $('#retries_input', popup_html).val());
 							node.setMetadata('uri', $('#uri_input', popup_html).val());
-							
+
 							popup.dialog('close');
 						});
 

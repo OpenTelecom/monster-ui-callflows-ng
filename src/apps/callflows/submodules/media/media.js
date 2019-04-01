@@ -1,6 +1,6 @@
 define(function(require){
 	var $ = require('jquery'),
-		_ = require('underscore'),
+		_ = require('lodash'),
 		monster = require('monster');
 
 	var app = {
@@ -107,7 +107,7 @@ define(function(require){
 								if($('#upload_div', media_html).is(':visible') && $('#file').val() != '') {
 									if(file === 'updating') {
 										monster.ui.alert(self.i18n.active().callflows.media.the_file_you_want_to_apply);
-										
+
 										$this.removeClass('disabled');
 									}
 									else {
@@ -285,7 +285,7 @@ define(function(require){
 				data = args.data,
 				callback = args.callback,
 				data_defaults = args.data_defaults || {},
-				popup, 
+				popup,
 				popup_html = $('<div class="inline_popup callflows-port"><div class="inline_content main_content"/></div>');
 
 			self.mediaEdit(data, popup_html, $('.inline_content', popup_html), {
@@ -377,7 +377,7 @@ define(function(require){
 								ev.preventDefault();
 
 								self.mediaPopupEdit({
-									data: _data, 
+									data: _data,
 									callback: function(media) {
 										node.setMetadata('id', media.id || 'null');
 										node.caption = media.name || '';

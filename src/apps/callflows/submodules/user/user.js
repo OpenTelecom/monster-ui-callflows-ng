@@ -1,6 +1,6 @@
 define(function(require){
 	var $ = require('jquery'),
-		_ = require('underscore'),
+		_ = require('lodash'),
 		monster = require('monster'),
 		timezone = require('monster-timezone');
 
@@ -78,7 +78,7 @@ define(function(require){
 								ev.preventDefault();
 
 								self.userPopupEdit({
-									data: _data, 
+									data: _data,
 									callback: function(_data) {
 										node.setMetadata('id', _data.id || 'null');
 										node.setMetadata('timeout', $('#parameter_input', popup_html).val());
@@ -433,7 +433,7 @@ define(function(require){
 					render_data.extra = render_data.extra || {};
 					render_data.extra.isShoutcast = false;
 
-					// if the value is set to a stream, we need to set the value of the media_id to shoutcast so it gets selected by the old select mechanism, 
+					// if the value is set to a stream, we need to set the value of the media_id to shoutcast so it gets selected by the old select mechanism,
 					// but we also need to store the  value so we can display it
 					if (render_data.data.hasOwnProperty('music_on_hold') && render_data.data.music_on_hold.hasOwnProperty('media_id')) {
 						if (render_data.data.music_on_hold.media_id.indexOf('://') >= 0) {

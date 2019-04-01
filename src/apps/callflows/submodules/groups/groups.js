@@ -1,6 +1,6 @@
 define(function(require){
 	var $ = require('jquery'),
-		_ = require('underscore'),
+		_ = require('lodash'),
 		monster = require('monster');
 
 	var app = {
@@ -47,7 +47,7 @@ define(function(require){
 						form_data.endpoints = {};
 
 						$('.rows .row:not(#row_no_data)', groups_html).each(function(k, v) {
-								form_data.endpoints[$(v).data('id')] = { 
+								form_data.endpoints[$(v).data('id')] = {
 										type: $(v).data('type'),
 										weight: k+1
 								};
@@ -1157,7 +1157,7 @@ define(function(require){
 									mediaData = isCreation ? {} : { id: $('#ringback', popup_html).val() };
 
 								monster.pub('callflows.media.editPopup', {
-									data: mediaData, 
+									data: mediaData,
 									callback: function(_mediaData) {
 										if (_mediaData) {
 											if (isCreation) {
@@ -1290,7 +1290,7 @@ define(function(require){
 									endpoints.push(item_data);
 									global_timeout = computeTimeout(parseFloat(item_data.delay), parseFloat(item_data.timeout), global_timeout);
 								});
-								
+
 								if (repeats < 1) {
 									repeats = 1;
 								}
@@ -1476,7 +1476,7 @@ define(function(require){
 			delete form_data.users;
 			return form_data;
 		},
-		
+
 		groupsSave: function(form_data, data, success, error) {
 			var self = this,
 				normalized_data = self.groupsNormalizeData($.extend(true, {}, data.data, form_data));
