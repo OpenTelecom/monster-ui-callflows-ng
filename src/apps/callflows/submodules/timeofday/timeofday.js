@@ -1,4 +1,4 @@
-define(function(require){
+define(function(require) {
 	var $ = require('jquery'),
 		_ = require('lodash'),
 		monster = require('monster'),
@@ -16,12 +16,11 @@ define(function(require){
 			var self = this,
 				normalized_data = self.timeofdayNormalizeData($.extend(true, {}, data.data, form_data));
 
-			if(typeof data.data == 'object' && data.data.id) {
+			if (typeof data.data === 'object' && data.data.id) {
 				self.temporalRuleUpdate(normalized_data, function(_data, status) {
 					success && success(_data, status, 'update');
 				});
-			}
-			else {
+			} else {
 				self.temporalRuleCreate(normalized_data, function(_data, status) {
 					success & success(_data, status, 'create');
 				});
@@ -42,14 +41,14 @@ define(function(require){
 				save_success: function(_data) {
 					popup.dialog('close');
 
-					if(typeof callback == 'function') {
+					if (typeof callback === 'function') {
 						callback(_data);
 					}
 				},
 				delete_success: function() {
 					popup.dialog('close');
 
-					if(typeof callback == 'function') {
+					if (typeof callback === 'function') {
 						callback({ data: {} });
 					}
 				},
@@ -70,7 +69,7 @@ define(function(require){
 		timeofdayEdit: function(data, _parent, _target, _callbacks, data_defaults) {
 			var self = this,
 				parent = _parent || $('#timeofday-content'),
-				target = _target || $('#timeofday-view', parent)
+				target = _target || $('#timeofday-view', parent),
 				_callbacks = _callbacks || {},
 				callbacks = {
 					save_success: _callbacks.save_success,
@@ -127,8 +126,8 @@ define(function(require){
 
 						cycle: [
 							{ id: 'weekly', value: 'Weekly' },
-							{ id: 'monthly', value:'Monthly' },
-							{ id: 'yearly', value:'Yearly' }
+							{ id: 'monthly', value: 'Monthly' },
+							{ id: 'yearly', value: 'Yearly' }
 						],
 
 						ordinals: [
@@ -160,7 +159,7 @@ define(function(require){
 					}
 				};
 
-			if(typeof data == 'object' && data.id) {
+			if (typeof data === 'object' && data.id) {
 				self.temporalRuleGet(data.id, function(_data, status) {
 					var oldFormatData = { data: _data };
 
@@ -179,20 +178,23 @@ define(function(require){
 						callbacks.after_render();
 					}
 				});
-			}
-			else {
+			} else {
 				self.timeofdayRender(defaults, target, callbacks);
 
-				if(typeof callbacks.after_render == 'function') {
+				if (typeof callbacks.after_render === 'function') {
 					callbacks.after_render();
 				}
 			}
 		},
 
-		timeofdayRender: function(data, target, callbacks){
+		timeofdayRender: function(data, target, callbacks) {
 			var self = this,
-				wday,
-				timeofday_html = $(monster.template(self, 'timeofday-callflowEdit', data)),
+				timeofday_html = $(self.getTemplate({
+					name: 'callflowEdit',
+					data: data,
+					submodule: 'timeofday'
+				})),
+				selectedWdays = data.data.wdays.length,
 				_after_render,
 				timeofdayForm = timeofday_html.find('#timeofday-form');
 
@@ -230,38 +232,47 @@ define(function(require){
 			$('#weekdays', timeofday_html).hide();
 			$('#specific_day', timeofday_html).hide();
 
-			if(data.data.id == undefined) {
+			if (data.data.id === undefined) {
 				$('#weekly_every', timeofday_html).show();
 				$('#days_checkboxes', timeofday_html).show();
 			} else {
-				if(data.data.cycle == 'monthly') {
+				if (data.data.cycle === 'monthly') {
 					$('#monthly_every', timeofday_html).show();
 					$('#ordinal', timeofday_html).show();
-					if(data.data.days != undefined && data.data.days[0] != undefined) {
+					if (data.data.days !== undefined && data.data.days[0] !== undefined) {
 						$('#specific_day', timeofday_html).show();
 					} else {
 						$('#weekdays', timeofday_html).show();
 					}
-				} else if(data.data.cycle == 'yearly') {
+				} else if (data.data.cycle === 'yearly') {
 					$('#yearly_every', timeofday_html).show();
 					$('#ordinal', timeofday_html).show();
-					if(data.data.days != undefined && data.data.days[0] != undefined) {
+					if (data.data.days !== undefined && data.data.days[0] !== undefined) {
 						$('#specific_day', timeofday_html).show();
 					} else {
 						$('#weekdays', timeofday_html).show();
 					}
-				} else if(data.data.cycle = 'weekly') {
+				} else if (data.data.cycle === 'weekly') {
 					$('#weekly_every', timeofday_html).show();
 					$('#days_checkboxes', timeofday_html).show();
 				}
 			}
 
 			$('.fake_checkbox', timeofday_html).click(function() {
+				var $this = $(this),
+					toCheck = !$this.hasClass('checked');
+
 				$(this).toggleClass('checked');
+
+				if (toCheck) {
+					selectedWdays += 1;
+				} else {
+					selectedWdays -= 1;
+				}
 			});
 
 			$('#ordinal', timeofday_html).change(function() {
-				if($(this).val() == 'every') {
+				if ($(this).val() === 'every') {
 					$('#weekdays', timeofday_html).hide();
 					$('#specific_day', timeofday_html).show();
 				} else {
@@ -271,6 +282,8 @@ define(function(require){
 			});
 
 			$('#cycle', timeofday_html).change(function() {
+				var $this = $(this);
+
 				$('#yearly_every', timeofday_html).hide();
 				$('#monthly_every', timeofday_html).hide();
 				$('#weekly_every', timeofday_html).hide();
@@ -279,35 +292,29 @@ define(function(require){
 				$('#weekdays', timeofday_html).hide();
 				$('#specific_day', timeofday_html).hide();
 
-				switch($(this).val()) {
-					case 'yearly':
-						$('#yearly_every', timeofday_html).show();
-						$('#ordinal', timeofday_html).show();
-						if($('#ordinal', timeofday_html).val() == 'every') {
-							//$('#weekdays', timeofday_html).hide();
-							$('#specific_day', timeofday_html).show();
-						} else {
-							$('#weekdays', timeofday_html).show();
-							//$('#specific_day', timeofday_html).hide();
-						}
-						break;
-
-					case 'monthly':
-						$('#monthly_every', timeofday_html).show();
-						$('#ordinal', timeofday_html).show();
-						if($('#ordinal', timeofday_html).val() == 'every') {
-							//$('#weekdays', timeofday_html).hide();
-							$('#specific_day', timeofday_html).show();
-						} else {
-							$('#weekdays', timeofday_html).show();
-							//$('#specific_day', timeofday_html).hide();
-						}
-						break;
-
-					case 'weekly':
-						$('#weekly_every', timeofday_html).show();
-						$('#days_checkboxes', timeofday_html).show();
-						break;
+				if ($this.val() === 'yearly') {
+					$('#yearly_every', timeofday_html).show();
+					$('#ordinal', timeofday_html).show();
+					if ($('#ordinal', timeofday_html).val() === 'every') {
+						//$('#weekdays', timeofday_html).hide();
+						$('#specific_day', timeofday_html).show();
+					} else {
+						$('#weekdays', timeofday_html).show();
+						//$('#specific_day', timeofday_html).hide();
+					}
+				} else if ($this.val() === 'monthly') {
+					$('#monthly_every', timeofday_html).show();
+					$('#ordinal', timeofday_html).show();
+					if ($('#ordinal', timeofday_html).val() === 'every') {
+						//$('#weekdays', timeofday_html).hide();
+						$('#specific_day', timeofday_html).show();
+					} else {
+						$('#weekdays', timeofday_html).show();
+						//$('#specific_day', timeofday_html).hide();
+					}
+				} else if ($this.val() === 'weekly') {
+					$('#weekly_every', timeofday_html).show();
+					$('#days_checkboxes', timeofday_html).show();
 				}
 			});
 
@@ -316,10 +323,15 @@ define(function(require){
 
 				var $this = $(this);
 
-				if(!$this.hasClass('disabled')) {
-					$this.addClass('disabled');
+				if (!$this.hasClass('disabled')) {
+					if ($('#cycle', timeofday_html).val() === 'weekly' && selectedWdays === 0) {
+						monster.ui.toast({
+							type: 'warning',
+							message: self.i18n.active().callflows.timeofday.toastr.warning.missingDay
+						});
+					} else if (monster.ui.valid(timeofdayForm)) {
+						$this.addClass('disabled');
 
-					if(monster.ui.valid(timeofdayForm)) {
 						var form_data = monster.ui.getFormData('timeofday-form');
 
 						form_data.wdays = [];
@@ -329,13 +341,12 @@ define(function(require){
 							form_data.wdays.push($(this).data('value'));
 						});
 
-						form_data.interval = $('#cycle', timeofday_html).val() == 'monthly' ? $('#interval_month', timeofday_html).val() : $('#interval_week', timeofday_html).val();
+						form_data.interval = $('#cycle', timeofday_html).val() === 'monthly' ? $('#interval_month', timeofday_html).val() : $('#interval_week', timeofday_html).val();
 						form_data.start_date = timeofday_html.find('#start_date').datepicker('getDate');
 						form_data = self.timeofdayCleanFormData(form_data);
 
 						self.timeofdaySave(form_data, data, callbacks.save_success);
-					}
-					else {
+					} else {
 						$this.removeClass('disabled');
 						monster.ui.alert('error', self.i18n.active().callflows.timeofday.there_were_errors_on_the_form);
 					}
@@ -360,7 +371,7 @@ define(function(require){
 			_after_render = callbacks.after_render;
 
 			callbacks.after_render = function() {
-				if(typeof _after_render == 'function') {
+				if (typeof _after_render === 'function') {
 					_after_render();
 				}
 			};
@@ -375,37 +386,36 @@ define(function(require){
 				timeStart = form_data.extra.allDay ? '0:00' : form_data.extra.timeofday.from,
 				timeEnd = form_data.extra.allDay ? '24:00' : form_data.extra.timeofday.to;
 
-			if(form_data.cycle != 'weekly' && form_data.weekday != undefined) {
+			if (form_data.cycle !== 'weekly' && form_data.weekday !== undefined) {
 				form_data.wdays = [];
 				form_data.wdays.push(form_data.weekday);
 			}
 
 			$.each(form_data.wdays, function(i, val) {
-				if(val) {
-					if(val == 'wednesday') {
+				if (val) {
+					if (val === 'wednesday') {
 						val = 'wensday';
 					}
 					wdays.push(val);
 				}
 			});
 
-			if(wdays.length > 0 && wdays[0] == 'sunday') {
+			if (wdays.length > 0 && wdays[0] === 'sunday') {
 				wdays.push(wdays.shift());
 			}
 
 			form_data.wdays = wdays;
 
-			if(form_data.start_date === '') {
+			if (form_data.start_date === '') {
 				delete form_data.start_date;
-			}
-			else {
+			} else {
 				form_data.start_date = monster.util.dateToGregorian(form_data.start_date);
 			}
 
 			form_data.time_window_start = parseInt(monster.util.timeToSeconds(timeStart));
 			form_data.time_window_stop = parseInt(monster.util.timeToSeconds(timeEnd));
 
-			if(form_data.month) {
+			if (form_data.month) {
 				form_data.month = parseInt(form_data.month);
 			}
 
@@ -415,22 +425,21 @@ define(function(require){
 		},
 
 		timeofdayNormalizeData: function(form_data) {
-			if(form_data.cycle == 'weekly') {
+			if (form_data.cycle === 'weekly') {
 				delete form_data.ordinal;
 				delete form_data.days;
 				delete form_data.month;
-			}
-			else {
-				form_data.cycle == 'yearly' ? delete form_data.interval : delete form_data.month;
-				form_data.ordinal != 'every' ? delete form_data.days : delete form_data.wdays;
+			} else {
+				form_data.cycle === 'yearly' ? delete form_data.interval : delete form_data.month;
+				form_data.ordinal !== 'every' ? delete form_data.days : delete form_data.wdays;
 			}
 
 			delete form_data.time;
 			delete form_data.weekday;
 
-			if(form_data.enabled === "true") {
+			if (form_data.enabled === 'true') {
 				form_data.enabled = true;
-			} else if(form_data.enabled === "false") {
+			} else if (form_data.enabled === 'false') {
 				form_data.enabled = false;
 			} else {
 				delete form_data.enabled;
@@ -469,10 +478,10 @@ define(function(require){
 			data.data.showSave = true;
 			data.data.showDelete = data.data.id ? true : false;
 
-			if(data.data.hasOwnProperty('ui_metadata') && data.data.ui_metadata.hasOwnProperty('origin') && data.data.ui_metadata.origin === 'voip') {
+			if (data.data.hasOwnProperty('ui_metadata') && data.data.ui_metadata.hasOwnProperty('origin') && data.data.ui_metadata.origin === 'voip') {
 				data.data.showSave = false;
 
-				if(!monster.util.isSuperDuper()) {
+				if (!monster.util.isSuperDuper()) {
 					data.data.showDelete = false;
 				}
 			}
@@ -482,8 +491,8 @@ define(function(require){
 
 		timeofdayMigrateData: function(data) {
 			// Check for spelling ;)
-			if('wdays' in data.data && (wday = $.inArray('wensday', data.data.wdays)) > -1) {
-				data.data.wdays[wday] = 'wednesday';
+			if ('wdays' in data.data && $.inArray('wensday', data.data.wdays) > -1) {
+				data.data.wdays[data.data.wdays.indexOf('wensday')] = 'wednesday';
 			}
 
 			return data;
@@ -530,9 +539,13 @@ define(function(require){
 
 							var popup, popup_html;
 
-							popup_html = $(monster.template(self, 'timeofday-callflowKey', {
-								items: formattedData,
-								selected: child_node.key
+							popup_html = $(self.getTemplate({
+								name: 'callflowKey',
+								data: {
+									items: formattedData,
+									selected: child_node.key
+								},
+								submodule: 'timeofday'
 							}));
 
 							$('.inline_action', popup_html).click(function(ev) {
@@ -586,9 +599,13 @@ define(function(require){
 					edit: function(node, callback) {
 						var popup, popup_html;
 
-						popup_html = $(monster.template(self, 'timeofday-callflowTimezone', {
-							items: {},
-							selected: {}
+						popup_html = $(self.getTemplate({
+							name: 'callflowTimezone',
+							data: {
+								items: {},
+								selected: {}
+							},
+							submodule: 'timeofday'
 						}));
 
 						timezone.populateDropdown($('#timezone_selector', popup_html), node.getMetadata('timezone') || 'inherit', {inherit: self.i18n.active().defaultTimezone});
@@ -637,40 +654,42 @@ define(function(require){
 					],
 					isUsable: 'true',
 					weight: 20,
-					caption: function(node, caption_map) {
+					caption: function(node) {
 						return '';
 					},
 					edit: function(node, callback) {
 						self.temporalRuleList(function(listRules) {
 							var popup,
 								popup_html,
-								rules,
+								rules = node.getMetadata('rules'),
 								unselected_rules = [],
 								selected_rules = [];
 
-							if(rules = node.getMetadata('rules')) {
+							if (rules) {
 								$.each(listRules, function(i, obj) {
-									if($.inArray(obj.id, rules) != -1) {
+									if ($.inArray(obj.id, rules) !== -1) {
 										selected_rules.push(obj);
-									}
-									else {
+									} else {
 										unselected_rules.push(obj);
 									}
 								});
-							}
-							else {
+							} else {
 								unselected_rules = listRules;
 							}
 
-							 popup_html = $(monster.template(self, 'timeofday-two_column', {
-								left: {
-									title: self.i18n.active().callflows.timeofday.unselected_time_of_day_rules,
-									items: unselected_rules
+							popup_html = $(self.getTemplate({
+								name: 'two_column',
+								data: {
+									left: {
+										title: self.i18n.active().callflows.timeofday.unselected_time_of_day_rules,
+										items: unselected_rules
+									},
+									right: {
+										title: self.i18n.active().callflows.timeofday.selected_time_of_day_rules,
+										items: selected_rules
+									}
 								},
-								right: {
-									title: self.i18n.active().callflows.timeofday.selected_time_of_day_rules,
-									items: selected_rules
-								}
+								submodule: 'timeofday'
 							}));
 
 							$('#add', popup_html).click(function() {
@@ -688,7 +707,7 @@ define(function(require){
 							popup = monster.ui.dialog(popup_html, {
 								title: self.i18n.active().callflows.timeofday.disable_time_of_day_rules_title,
 								beforeClose: function() {
-									if(typeof callback == 'function') {
+									if (typeof callback === 'function') {
 										callback();
 									}
 								}
@@ -732,38 +751,42 @@ define(function(require){
 					],
 					isUsable: 'true',
 					weight: 30,
-					caption: function(node, caption_map) {
+					caption: function(node) {
 						return '';
 					},
 					edit: function(node, callback) {
 						self.temporalRuleList(function(listRules) {
-							var popup, popup_html, rules,
-									unselected_rules = [],
-									selected_rules = [];
+							var popup,
+								popup_html,
+								rules = node.getMetadata('rules'),
+								unselected_rules = [],
+								selected_rules = [];
 
-							if(rules = node.getMetadata('rules')) {
+							if (rules) {
 								$.each(listRules, function(i, obj) {
-									if($.inArray(obj.id, rules) != -1) {
+									if ($.inArray(obj.id, rules) !== -1) {
 										selected_rules.push(obj);
-									}
-									else {
+									} else {
 										unselected_rules.push(obj);
 									}
 								});
-							}
-							else {
+							} else {
 								unselected_rules = listRules;
 							}
 
-							popup_html = $(monster.template(self, 'timeofday-two_column', {
-								left: {
-									title: self.i18n.active().callflows.timeofday.unselected_time_of_day_rules,
-									items: unselected_rules
+							popup_html = $(self.getTemplate({
+								name: 'two_column',
+								data: {
+									left: {
+										title: self.i18n.active().callflows.timeofday.unselected_time_of_day_rules,
+										items: unselected_rules
+									},
+									right: {
+										title: self.i18n.active().callflows.timeofday.selected_time_of_day_rules,
+										items: selected_rules
+									}
 								},
-								right: {
-									title: self.i18n.active().callflows.timeofday.selected_time_of_day_rules,
-									items: selected_rules
-								}
+								submodule: 'timeofday'
 							}));
 
 							$('#add', popup_html).click(function() {
@@ -781,7 +804,7 @@ define(function(require){
 							popup = monster.ui.dialog(popup_html, {
 								title: self.i18n.active().callflows.timeofday.enable_time_of_day_rules,
 								beforeClose: function() {
-									if(typeof callback == 'function') {
+									if (typeof callback === 'function') {
 										callback();
 									}
 								}
@@ -825,30 +848,32 @@ define(function(require){
 					],
 					isUsable: 'true',
 					weight: 40,
-					caption: function(node, caption_map) {
+					caption: function(node) {
 						return '';
 					},
 					edit: function(node, callback) {
 						self.temporalRuleList(function(listRules) {
-								var popup, popup_html, rules,
-									unselected_rules = [],
-									selected_rules = [];
+							var popup,
+								popup_html,
+								rules = node.getMetadata('rules'),
+								unselected_rules = [],
+								selected_rules = [];
 
-								if(rules = node.getMetadata('rules')) {
-									$.each(listRules, function(i, obj) {
-										if($.inArray(obj.id, rules) != -1) {
-											selected_rules.push(obj);
-										}
-										else {
-											unselected_rules.push(obj);
-										}
-									});
-								}
-								else {
-									unselected_rules = listRules;
-								}
+							if (rules) {
+								$.each(listRules, function(i, obj) {
+									if ($.inArray(obj.id, rules) !== -1) {
+										selected_rules.push(obj);
+									} else {
+										unselected_rules.push(obj);
+									}
+								});
+							} else {
+								unselected_rules = listRules;
+							}
 
-								popup_html = $(monster.template(self, 'timeofday-two_column', {
+							popup_html = $(self.getTemplate({
+								name: 'two_column',
+								data: {
 									left: {
 										title: self.i18n.active().callflows.timeofday.unselected_time_of_day_rules,
 										items: unselected_rules
@@ -857,49 +882,50 @@ define(function(require){
 										title: self.i18n.active().callflows.timeofday.selected_time_of_day_rules,
 										items: selected_rules
 									}
-								}));
+								},
+								submodule: 'timeofday'
+							}));
 
-								$('#add', popup_html).click(function() {
-									var _rules = [];
+							$('#add', popup_html).click(function() {
+								var _rules = [];
 
-									$('.right .connect li', popup_html).each(function() {
-										_rules.push($(this).data('id'));
-									});
-
-									node.setMetadata('rules', _rules);
-
-									popup.dialog('close');
+								$('.right .connect li', popup_html).each(function() {
+									_rules.push($(this).data('id'));
 								});
 
-								popup = monster.ui.dialog(popup_html, {
-									title: self.i18n.active().callflows.timeofday.reset_time_of_day_rules,
-									beforeClose: function() {
-										if(typeof callback == 'function') {
-											callback();
-										}
+								node.setMetadata('rules', _rules);
+
+								popup.dialog('close');
+							});
+
+							popup = monster.ui.dialog(popup_html, {
+								title: self.i18n.active().callflows.timeofday.reset_time_of_day_rules,
+								beforeClose: function() {
+									if (typeof callback === 'function') {
+										callback();
 									}
-								});
+								}
+							});
 
-								/* Initialize the scrollpane AFTER it has rendered */
+							/* Initialize the scrollpane AFTER it has rendered */
 
-								//$('.scrollable', popup).jScrollPane();
+							//$('.scrollable', popup).jScrollPane();
 
-								$('.connect', popup).sortable({
-									connectWith: $('.connect', popup),
-									zIndex: 2000,
-									helper: 'clone',
-									appendTo: $('.wrapper', popup),
-									scroll: false,
-									tolerance: 'pointer',
-									receive: function() {
-										//$('.scrollable', popup).data('jsp').reinitialise();
-									},
-									remove: function() {
-										//$('.scrollable', popup).data('jsp').reinitialise();
-									}
-								});
-							}
-						);
+							$('.connect', popup).sortable({
+								connectWith: $('.connect', popup),
+								zIndex: 2000,
+								helper: 'clone',
+								appendTo: $('.wrapper', popup),
+								scroll: false,
+								tolerance: 'pointer',
+								receive: function() {
+									//$('.scrollable', popup).data('jsp').reinitialise();
+								},
+								remove: function() {
+									//$('.scrollable', popup).data('jsp').reinitialise();
+								}
+							});
+						});
 					}
 				}
 			});

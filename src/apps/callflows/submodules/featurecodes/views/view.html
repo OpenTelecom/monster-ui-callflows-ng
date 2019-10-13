@@ -1,0 +1,42 @@
+<div class="account-settings-container">
+	<div class="entity-header">
+		<div class="entity-title">{{ i18n.callflows.featureCodes.title }}</div>
+		<button type="button" class="back-button monster-button-secondary">{{ i18n.entityManager.backButton }}</button>
+	</div>
+
+	<div class="entity-content">
+		<div id="featurecode_view">
+			<form class="form-horizontal">
+				{{#each categories}}
+					<div class="feature-category">
+						<h3>{{ category }}</h3>
+						{{#each items}}
+							<div class="control-group action_wrapper" data-id="{{id}}" data-action="{{tag}}" data-number="{{number}}" data-type="{{number_type}}" data-enabled="{{enabled}}">
+								<label class="control-label" for="{{name}}">{{name}}</label>
+								<div class="controls">
+									<div class="input-append">
+ 										{{#if hasStar}}
+ 											<span class="add-on" data-toggle="tooltip" data-original-title="{{ @root.i18n.callflows.featureCodes.star_data_content }}">*</span>
+ 										{{else}}
+											<span class="add-on empty"></span>
+ 										{{/if}}
+										<input class="featurecode-number input-mini" id="{{id}}" name="{{name}}" size="16" type="text" value="{{number}}">
+										<label class="add-on">
+											<input type="checkbox" class="featurecode_enabled"{{#if enabled}} checked="checked"{{/if}}>
+										</label>
+									</div>
+									{{#if hasConfig}}
+										<a class="edit-configuration-link monster-link"><i class="fa fa-cog"></i></a>
+									{{/if}}
+								</div>
+							</div>
+						{{/each}}
+					</div>
+				{{/each}}
+				<div class="action-bar clearfix">
+					<button type="button" class="monster-button-success featurecode-save pull-right">{{ i18n.save }}</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>

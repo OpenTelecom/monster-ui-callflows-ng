@@ -1,4 +1,4 @@
-define(function(require){
+define(function(require) {
 	var $ = require('jquery'),
 		_ = require('lodash'),
 		monster = require('monster');
@@ -30,11 +30,11 @@ define(function(require){
 					],
 					isUsable: 'true',
 					weight: 140,
-					caption: function(node, caption_map) {
+					caption: function(node) {
 						return '';
 					},
 					edit: function(node, callback) {
-						if(typeof callback == 'function') {
+						if (typeof callback === 'function') {
 							callback();
 						}
 					}
@@ -54,22 +54,26 @@ define(function(require){
 					],
 					isUsable: 'true',
 					weight: 150,
-					caption: function(node, caption_map) {
+					caption: function(node) {
 						return '';
 					},
 					edit: function(node, callback) {
 						var popup, popup_html;
 
-						popup_html = $(monster.template(self, 'resource-account_carrier',  {
-							data_resource: {
-								'hunt_account_id': node.getMetadata('hunt_account_id') || '',
-							}
+						popup_html = $(self.getTemplate({
+							name: 'account_carrier',
+							data: {
+								data_resource: {
+									'hunt_account_id': node.getMetadata('hunt_account_id') || ''
+								}
+							},
+							submodule: 'resource'
 						}));
 
 						$('#add', popup_html).click(function() {
 							var hunt_id = $('#hunt_account_id', popup_html).val();
 
-							if(hunt_id) {
+							if (hunt_id) {
 								node.setMetadata('hunt_account_id', hunt_id);
 							}
 
@@ -79,8 +83,8 @@ define(function(require){
 						popup = monster.ui.dialog(popup_html, {
 							title: self.i18n.active().callflows.resource.account_carrier_title,
 							beforeClose: function() {
-								if(typeof callback == 'function') {
-									 callback();
+								if (typeof callback === 'function') {
+									callback();
 								}
 							}
 						});

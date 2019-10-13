@@ -1,5 +1,5 @@
 {{#each callflows}}
-	<li class="list-element" data-id="{{this.id}}" data-search="{{this.title}} {{this.description}} {{this.id}}">
+	<li class="list-element {{#compare @root.activeEntityId '===' this.id}}list-element-active{{/compare}}" data-id="{{this.id}}" data-search="{{this.title}} {{this.description}} {{this.id}}">
 		<div class="link">
 			<div class="title">{{this.title}}</div>
 			<div class="description">{{this.description}}</div>

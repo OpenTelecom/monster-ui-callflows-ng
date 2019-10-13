@@ -1,8 +1,7 @@
-define(function(require){
+define(function(require) {
 	var $ = require('jquery'),
 		_ = require('lodash'),
-		monster = require('monster'),
-		toastr = require('toastr');
+		monster = require('monster');
 
 	var app = {
 		requests: {},
@@ -17,12 +16,17 @@ define(function(require){
 
 			self.featureCodeGetData(function(featureCodes) {
 				var formattedData = self.featureCodeFormatData(featureCodes),
-					template = $(monster.template(self, 'featurecodes-view', formattedData));
+					template = $(self.getTemplate({
+						name: 'view',
+						data: formattedData,
+						submodule: 'featurecodes'
+					}));
 
 				self.featureCodeBindEvents(template, formattedData.actions);
 
-				container.empty()
-						 .append(template);
+				container
+					.empty()
+					.append(template);
 			});
 		},
 
@@ -36,40 +40,53 @@ define(function(require){
 
 		featureCodeFormatData: function(data) {
 			var self = this,
-				actions = {},
-				categories = {},
-				formattedData = {
-					categories: {},
-					actions: {}
-				};
+				actions = self.featureCodesDefine();
 
-			self.featureCodesDefine(actions);
+			return {
+				actions: _.transform(data, function(object, callflow) {
+					_.merge(object[callflow.featurecode.name], {
+						id: callflow.id,
+						enabled: true,
+						number: callflow.featurecode.number.replace('\\', '')
+					});
+				}, actions),
+				categories: _
+					.chain(actions)
+					.map(function(value, key) {
+						return _.merge(value, {
+							action: key
+						});
+					})
+					.groupBy('category')
+					.map(function(codes, category) {
+						return {
+							category: category,
+							items: _
+								.chain(codes)
+								.map(function(code) {
+									return _.merge({
+										hasConfig: _.isFunction(code.editConfiguration),
+										number: _.get(code, 'number', code.default_number),
+										tag: code.action
+									}, _.pick(code, [
+										'enabled',
+										'hasStar',
+										'id',
+										'name',
+										'number_type'
+									]));
+								})
+								.sortBy(function(code) {
+									var number = _.toNumber(code.number);
 
-			_.each(data, function(callflow) {
-				if (callflow.hasOwnProperty('featurecode') && callflow.featurecode !== false) {
-					if (actions.hasOwnProperty(callflow.featurecode.name)) {
-						actions[callflow.featurecode.name].id = callflow.id;
-						actions[callflow.featurecode.name].enabled = true;
-						actions[callflow.featurecode.name].number = callflow.featurecode.number.replace('\\', '');
-					}
-				}
-			});
-
-			$.each(actions, function(i, action) {
-				this.tag = i;
-				this.number = typeof action.number === 'undefined' ? action.default_number : action.number;
-				this.hasConfig = this.hasOwnProperty('editConfiguration');
-
-				if (action.hasOwnProperty('category')) {
-					categories[action.category] = categories[action.category] || [];
-					categories[action.category].push(action);
-				}
-			});
-
-			formattedData.categories = categories;
-			formattedData.actions = actions;
-
-			return formattedData;
+									return _.isNaN(number) ? -1 : number;
+								})
+								.value()
+						};
+					})
+					.sortBy('category')
+					.value()
+			};
 		},
 
 		featureCodeBindEvents: function(template, actions) {
@@ -98,9 +115,9 @@ define(function(require){
 					action_wrapper = $this.parents('.action_wrapper'),
 					number_field = action_wrapper.find('.featurecode-number');
 
-				if(!$this.is(':checked') && action_wrapper.data('enabled') === true) {
+				if (!$this.is(':checked') && action_wrapper.data('enabled') === true) {
 					action_wrapper.addClass('disabled');
-				} else if($this.is(':checked') && action_wrapper.data('enabled') === false){
+				} else if ($this.is(':checked') && action_wrapper.data('enabled') === false) {
 					action_wrapper.addClass('enabled');
 				} else {
 					action_wrapper.removeClass('enabled');
@@ -113,13 +130,16 @@ define(function(require){
 			template.find('.featurecode-save').on('click', function(e) {
 				var $this = $(this);
 				e.preventDefault();
-				if(!$this.hasClass('disabled')) {
+				if (!$this.hasClass('disabled')) {
 					var formData = self.featureCodeCleanFormData(template, actions);
 
 					$this.addClass('disabled');
 
 					self.featureCodeMassUpdate(formData, function() {
-						toastr.success(self.i18n.active().callflows.featureCodes.successUpdate);
+						monster.ui.toast({
+							type: 'success',
+							message: self.i18n.active().callflows.featureCodes.successUpdate
+						});
 						$this.removeClass('disabled');
 
 						self.featureCodeRender();
@@ -147,6 +167,7 @@ define(function(require){
 				data: {
 					accountId: self.accountId,
 					filters: {
+						has_key: 'featurecode.name',
 						paginate: false
 					}
 				},
@@ -191,18 +212,17 @@ define(function(require){
 					children: {}
 				};
 
-			/*	if(callflow.type === 'number') { callflow.type = 'numbers'}
-				if(callflow.type === 'pattern') { callflow.type = 'patterns'}*/
+				// if (callflow.type === 'number') { callflow.type = 'numbers'}
+				// if (callflow.type === 'pattern') { callflow.type = 'patterns'}
 
 				/* if a star is in the pattern, then we need to escape it */
-				if(callflow.type === 'patterns' && typeof callflow.number === 'string') {
-					callflow.number = callflow.number.replace(/([*])/g,'\\$1');
+				if (callflow.type === 'patterns' && typeof callflow.number === 'string') {
+					callflow.number = callflow.number.replace(/([*])/g, '\\$1');
 				}
 
 				callflow[callflow.type] = [actions[callflow.action].build_regex(callflow.number)];
 				form_data.created_callflows.push(callflow);
 			});
-
 
 			template.find('.disabled').each(function() {
 				var callflow = $(this).data();
@@ -213,7 +233,7 @@ define(function(require){
 			});
 
 			template.find('.changed:not(.enabled, .disabled)').each(function() {
-				if($(this).data('enabled')) {
+				if ($(this).data('enabled')) {
 					var callflow = $(this).data();
 
 					// Casting in String, as back-end requires a String
@@ -226,8 +246,8 @@ define(function(require){
 					};
 
 					/* if a star is in the pattern, then we need to escape it */
-					if(callflow.type === 'patterns') {
-						callflow.number = callflow.number.replace(/([*])/g,'\\$1');
+					if (callflow.type === 'patterns') {
+						callflow.number = callflow.number.replace(/([*])/g, '\\$1');
 					}
 
 					callflow[callflow.type] = [actions[callflow.action].build_regex(callflow.number)];
@@ -289,7 +309,7 @@ define(function(require){
 			var self = this,
 				count = form_data.created_callflows.length + form_data.deleted_callflows.length + form_data.updated_callflows.length;
 
-			if(count) {
+			if (count) {
 				var parallelRequests = {};
 
 				_.each(form_data.created_callflows, function(callflow) {
@@ -339,17 +359,35 @@ define(function(require){
 				monster.parallel(parallelRequests, function(err, results) {
 					callback && callback();
 				});
-			}
-			else {
+			} else {
 				errorCallback && errorCallback();
-				toastr.error(self.i18n.active().callflows.featureCodes.nothing_to_save);
+				monster.ui.toast({
+					type: 'error',
+					message: self.i18n.active().callflows.featureCodes.nothing_to_save
+				});
 			}
 		},
 
 		featureCodesDefine: function(featurecodes) {
 			var self = this;
 
-			$.extend(featurecodes, {
+			return {
+				directed_ext_pickup: {
+					name: self.i18n.active().callflows.featureCodes.directed_ext_pickup,
+					category: self.i18n.active().callflows.featureCodes.miscellaneous_cat,
+					module: 'group_pickup_feature',
+					number_type: 'patterns',
+					data: {
+						type: 'extension'
+					},
+					enabled: false,
+					hasStar: true,
+					default_number: '87',
+					number: this.default_number,
+					build_regex: function(number) {
+						return '^\\*' + number + '([0-9]+)$';
+					}
+				},
 				'call_forward[action=activate]': {
 					name: self.i18n.active().callflows.featureCodes.enable_call_forward,
 					icon: 'phone',
@@ -364,7 +402,7 @@ define(function(require){
 					default_number: '72',
 					number: this.default_number,
 					build_regex: function(number) {
-						return '*'+number;
+						return '*' + number;
 					}
 				},
 				'call_forward[action=deactivate]': {
@@ -381,7 +419,7 @@ define(function(require){
 					default_number: '73',
 					number: this.default_number,
 					build_regex: function(number) {
-						return '*'+number;
+						return '*' + number;
 					}
 				},
 				'call_forward[action=toggle]': {
@@ -398,7 +436,7 @@ define(function(require){
 					default_number: '74',
 					number: this.default_number,
 					build_regex: function(number) {
-						return '^\\*'+number+'([0-9]*)$';
+						return '^\\*' + number + '([0-9]*)$';
 					}
 				},
 				'call_forward[action=update]': {
@@ -415,7 +453,7 @@ define(function(require){
 					default_number: '56',
 					number: this.default_number,
 					build_regex: function(number) {
-						return '*'+number;
+						return '*' + number;
 					}
 				},
 
@@ -433,7 +471,7 @@ define(function(require){
 					default_number: '11',
 					number: this.default_number,
 					build_regex: function(number) {
-						return '*'+number;
+						return '*' + number;
 					}
 				},
 				'hotdesk[action=logout]': {
@@ -450,7 +488,7 @@ define(function(require){
 					default_number: '12',
 					number: this.default_number,
 					build_regex: function(number) {
-						return '*'+number;
+						return '*' + number;
 					}
 				},
 				'hotdesk[action=toggle]': {
@@ -467,7 +505,7 @@ define(function(require){
 					default_number: '13',
 					number: this.default_number,
 					build_regex: function(number) {
-						return '*'+number;
+						return '*' + number;
 					}
 				},
 				'voicemail[action=check]': {
@@ -484,7 +522,7 @@ define(function(require){
 					default_number: '97',
 					number: this.default_number,
 					build_regex: function(number) {
-						return '^\\*'+number+'([0-9]*)$';
+						return '^\\*' + number + '([0-9]*)$';
 					}
 				},
 				'voicemail[single_mailbox_login]': {
@@ -502,7 +540,7 @@ define(function(require){
 					default_number: '98',
 					number: this.default_number,
 					build_regex: function(number) {
-						return '^\\*'+number+'([0-9]*)$';
+						return '^\\*' + number + '([0-9]*)$';
 					}
 				},
 				'voicemail[action="direct"]': {
@@ -518,7 +556,7 @@ define(function(require){
 					default_number: '*',
 					number: this.default_number,
 					build_regex: function(number) {
-						return '^\\*'+number+'([0-9]*)$';
+						return '^\\*' + number + '([0-9]*)$';
 					}
 				},
 				'intercom': {
@@ -534,7 +572,7 @@ define(function(require){
 					default_number: '0',
 					number: this.default_number,
 					build_regex: function(number) {
-						return '^\\*'+number+'([0-9]*)$';
+						return '^\\*' + number + '([0-9]*)$';
 					}
 				},
 				'privacy[mode=full]': {
@@ -551,7 +589,7 @@ define(function(require){
 					default_number: '67',
 					number: this.default_number,
 					build_regex: function(number) {
-						return '^\\*'+number+'([0-9]*)$';
+						return '^\\*' + number + '([0-9]*)$';
 					}
 				},
 				'park_and_retrieve': {
@@ -571,7 +609,7 @@ define(function(require){
 					default_number: '3',
 					number: this.default_number,
 					build_regex: function(number) {
-						return '^\\*'+number+'([0-9]*)$';
+						return '^\\*' + number + '([0-9]*)$';
 					}
 				},
 				'valet': {
@@ -591,7 +629,7 @@ define(function(require){
 					default_number: '4',
 					number: this.default_number,
 					build_regex: function(number) {
-						return '*'+number;
+						return '*' + number;
 					}
 				},
 				'retrieve': {
@@ -608,7 +646,7 @@ define(function(require){
 					default_number: '5',
 					number: this.default_number,
 					build_regex: function(number) {
-						return '^\\*'+number+'([0-9]*)$';
+						return '^\\*' + number + '([0-9]*)$';
 					}
 				},
 				'move': {
@@ -626,7 +664,7 @@ define(function(require){
 					build_regex: function(number) {
 						return number;
 					}
-				},
+				}
 				/*'call_forward[action=on_busy_enable]': {
 					name: 'Enable Call-Forward on Busy',
 					icon: 'phone',
@@ -850,7 +888,7 @@ define(function(require){
 						return '^\\*'+number+'([0-9]*)$';
 					}
 				}*/
-			});
+			};
 		},
 
 		featureCodesEditParkingParkAndRetrieve: function(featureCode) {
@@ -860,7 +898,7 @@ define(function(require){
 				var popup,
 					formattedData = self.featureCodesFormatParkingData(data),
 					template = $(self.getTemplate({
-						name: 'featurecodes-parking-parkandretrieve',
+						name: 'parking-parkandretrieve',
 						submodule: 'featurecodes',
 						data: formattedData
 					}));
@@ -886,7 +924,10 @@ define(function(require){
 							dataToUpdate = self.featureCodesNormalizeData(data, formData);
 
 						self.featureCodeUpdate(dataToUpdate.id, dataToUpdate, function() {
-							toastr.success(self.i18n.active().callflows.featureCodes.parkingParkAndRetrievePopup.successUpdate);
+							monster.ui.toast({
+								type: 'success',
+								message: self.i18n.active().callflows.featureCodes.parkingParkAndRetrievePopup.successUpdate
+							});
 							popup.dialog('close');
 						});
 					}
@@ -905,7 +946,7 @@ define(function(require){
 				var popup,
 					formattedData = self.featureCodesFormatParkingData(data),
 					template = $(self.getTemplate({
-						name: 'featurecodes-parking-valet',
+						name: 'parking-valet',
 						submodule: 'featurecodes',
 						data: formattedData
 					}));
@@ -931,7 +972,10 @@ define(function(require){
 							dataToUpdate = self.featureCodesNormalizeData(data, formData);
 
 						self.featureCodeUpdate(dataToUpdate.id, dataToUpdate, function() {
-							toastr.success(self.i18n.active().callflows.featureCodes.parkingValetPopup.successUpdate);
+							monster.ui.toast({
+								type: 'success',
+								message: self.i18n.active().callflows.featureCodes.parkingValetPopup.successUpdate
+							});
 							popup.dialog('close');
 						});
 					}

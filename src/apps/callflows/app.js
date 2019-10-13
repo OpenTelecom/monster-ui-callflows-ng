@@ -1,28 +1,34 @@
-define(function(require){
+define(function(require) {
 	var $ = require('jquery'),
 		_ = require('lodash'),
 		monster = require('monster');
+	var appSubmodules = [
+		'blacklist',
+		'conference',
+		'device',
+		'directory',
+		'faxbox',
+		'featurecodes',
+		'groups',
+		'media',
+		'menu',
+		'misc',
+		'qubicle',
+		'resource',
+		'temporalset',
+		'timeofday',
+		'user',
+		'vmbox',
+		'callcenter'
+	];
 
-	require([
-		'./submodules/misc/misc',
-		'./submodules/blacklist/blacklist',
-		'./submodules/conference/conference',
-		'./submodules/device/device',
-		'./submodules/directory/directory',
-		'./submodules/faxbox/faxbox',
-		'./submodules/groups/groups',
-		'./submodules/media/media',
-		'./submodules/menu/menu',
-		'./submodules/qubicle/qubicle',
-		'./submodules/resource/resource',
-		'./submodules/timeofday/timeofday',
-		'./submodules/user/user',
-		'./submodules/vmbox/vmbox',
-		'./submodules/featurecodes/featurecodes',
-		'./submodules/temporalset/temporalset',
-		'./submodules/callcenter/callcenter',
+	var appSubmodulesFullPath = _.map(appSubmodules, function(name) {
+		return './submodules/' + name + '/' + name;
+	})
+
+	require(_.merge(appSubmodulesFullPath, [
 		'bootstraptour'
-	]);
+	]));
 
 	var app = {
 		name: 'callflows',
@@ -37,11 +43,9 @@ define(function(require){
 		requests: {},
 
 		// Define the events available for other apps
-		subscribe: {
-			'callflows.fetchActions': 'define_callflow_nodes'
-		},
+		subscribe: {},
 
-		subModules: ['misc', 'blacklist', 'conference', 'device', 'directory', 'faxbox', 'groups', 'media', 'menu', 'qubicle', 'resource', 'timeofday', 'user', 'vmbox', 'featurecodes', 'temporalset', 'callcenter'],
+		subModules: appSubmodules,
 
 		appFlags: {
 			flow: {},
@@ -57,7 +61,7 @@ define(function(require){
 		flow: {},
 
 		// Method used by the Monster-UI Framework, shouldn't be touched unless you're doing some advanced kind of stuff!
-		load: function(callback){
+		load: function(callback) {
 			var self = this;
 
 			self.initApp(function() {
@@ -115,12 +119,11 @@ define(function(require){
 				} else {
 					return options.inverse(this);
 				}
-
 			});
 		},
 
 		// Entry Point of the app
-		render: function(container){
+		render: function(container) {
 			var self = this,
 				parent = _.isEmpty(container) ? $('#monster_content') : container;
 
@@ -129,11 +132,14 @@ define(function(require){
 			self.renderEntityManager(parent);
 		},
 
-		renderCallflows: function(container){
+		renderCallflows: function(container) {
 			var self = this,
-				callflowsTemplate = $(monster.template(self, 'callflow-manager', {
-					canToggleCallflows: (monster.config.hasOwnProperty('developerFlags') && monster.config.developerFlags.showAllCallflows) || monster.apps.auth.originalAccount.superduper_admin,
-					hasAllCallflows: self.appFlags.showAllCallflows
+				callflowsTemplate = $(self.getTemplate({
+					name: 'callflow-manager',
+					data: {
+						canToggleCallflows: (monster.config.hasOwnProperty('developerFlags') && monster.config.developerFlags.showAllCallflows) || monster.apps.auth.originalAccount.superduper_admin,
+						hasAllCallflows: self.appFlags.showAllCallflows
+					}
 				}));
 
 			self.bindCallflowsEvents(callflowsTemplate, container);
@@ -148,9 +154,10 @@ define(function(require){
 						.append(callflowsTemplate);
 
 					container.find('.search-query').focus();
+
 					self.hackResize(callflowsTemplate);
 
-					if($('.js-callflows-list .list-element').length === 0) {
+					if ($('.js-callflows-list .list-element').length === 0) {
 						self.initGuideTour();
 					}
 				}
@@ -161,7 +168,7 @@ define(function(require){
 			var self = this;
 			var i18n = self.i18n.active();
 
-			self.tour = new Tour({
+			self.tour = new Tour ({
 				name: 'callflow-guide',
 				backdrop: true,
 				debug: true,
@@ -184,10 +191,10 @@ define(function(require){
 						element: '.js-callflow-edition .js-list-add',
 						placement: 'right',
 						content: i18n.callflows.guide.addCallflow,
-						onShown: function (tour) {
+						onShown: function() {
 							$('.popover').find('[data-role="prev"]').remove();
 						},
-						onNext: function (tour) {
+						onNext: function() {
 							$('.js-callflow-edition .js-list-add').click();
 						}
 					},
@@ -195,10 +202,10 @@ define(function(require){
 						element: '#ws_callflow .js-add-number',
 						placement: 'bottom',
 						content: i18n.callflows.guide.addNumber,
-						onShown: function (tour) {
+						onShown: function() {
 							$('.popover').find('[data-role="prev"]').remove();
 						},
-						onNext: function (tour) {
+						onNext: function(tour) {
 							$('#ws_callflow .js-add-number').click();
 							tour.end();
 						}
@@ -207,18 +214,18 @@ define(function(require){
 						element: '#ws_cf_tools > div',
 						placement: 'left',
 						content: i18n.callflows.guide.dragAndDropAction,
-						onShown: function (tour) {
+						onShown: function() {
 							$('.popover').find('[data-role="next"],[data-role="prev"]').remove();
 						}
 					}
-				]});
+				] });
 
 			self.tour.init();
-			if(self.tour.ended()) {
+			if (self.tour.ended()) {
 				self.tour.restart();
 			}
 
-			if(self.tour.getCurrentStep() !== 0) {
+			if (self.tour.getCurrentStep() !== 0) {
 				self.tour.goTo(0);
 			}
 		},
@@ -228,7 +235,9 @@ define(function(require){
 				callflowList = template.find('.list-container .list'),
 				isLoading = false,
 				loader = $('<li class="content-centered list-loader"> <i class="fa fa-spinner fa-spin"></i></li>'),
-				searchLink = $(monster.template(self, 'callflowList-searchLink'));
+				searchLink = $(self.getTemplate({
+					name: 'callflowList-searchLink'
+				}));
 
 			template.find('.superadmin-mode #switch_role').on('change', function(e) {
 				self.appFlags.showAllCallflows = $(this).is(':checked');
@@ -239,20 +248,21 @@ define(function(require){
 			// Add Callflow
 			template.find('.list-add').on('click', function() {
 				template.find('.callflow-content')
-						.removeClass('listing-mode')
-						.addClass('edition-mode');
+					.removeClass('listing-mode')
+					.addClass('edition-mode');
+
+				$('.list-element-active').removeClass('list-element-active');
+				$(this).addClass('list-element-active');
 
 				self.editCallflow();
 
-				if($('.js-callflows-list .list-element').length === 0) {
-					if(self.tour.ended()) {
+				if ($('.js-callflows-list .list-element').length === 0) {
+					if (self.tour.ended()) {
 						self.tour.restart();
 					}
-					if(self.tour.getCurrentStep() !== 1) {
+					if (self.tour.getCurrentStep() !== 1) {
 						self.tour.goTo(1);
 					}
-				} else {
-					delete self.tour;
 				}
 			});
 
@@ -261,6 +271,9 @@ define(function(require){
 				var $this = $(this),
 					callflowId = $this.data('id');
 
+				$this.closest('.list').find('.list-element-active').removeClass('list-element-active');
+				$this.addClass('list-element-active');
+
 				template.find('.callflow-content')
 					.removeClass('listing-mode')
 					.addClass('edition-mode');
@@ -268,21 +281,26 @@ define(function(require){
 				self.editCallflow({ id: callflowId });
 			});
 
-
 			callflowList.on('scroll', function() {
-				if(!isLoading && callflowList.data('next-key') && (callflowList.scrollTop() >= (callflowList[0].scrollHeight - callflowList.innerHeight() - 100))) {
+				if (!isLoading && callflowList.data('next-key') && (callflowList.scrollTop() >= (callflowList[0].scrollHeight - callflowList.innerHeight() - 100))) {
 					isLoading = true;
 					callflowList.append(loader);
 
 					self.listData({
 						callback: function(callflowData) {
-							var listCallflows = monster.template(self, 'callflowList', { callflows: callflowData.data });
+							var listCallflows = $(self.getTemplate({
+								name: 'callflowList',
+								data: {
+									callflows: callflowData.data,
+									activeEntityId: callflowData.id
+								}
+							}));
 
 							loader.remove();
 
 							callflowList
-									.append(listCallflows)
-									.data('next-key', callflowData.next_start_key || null);
+								.append(listCallflows)
+								.data('next-key', callflowData.next_start_key || null);
 
 							isLoading = false;
 						},
@@ -297,10 +315,10 @@ define(function(require){
 				var search = $(this).val();
 
 				searchLink.find('.search-value').text(search);
-				if(search) {
+				if (search) {
 					$.each(template.find('.list-element'), function() {
 						var $elem = $(this);
-						if($elem.data('search').toLowerCase().indexOf(search.toLowerCase()) >= 0) {
+						if ($elem.data('search').toLowerCase().indexOf(search.toLowerCase()) >= 0) {
 							$elem.show();
 						} else {
 							$elem.hide();
@@ -314,17 +332,21 @@ define(function(require){
 			});
 
 			callflowList.on('click', '.search-link', function() {
-				if(searchLink.hasClass('active')) {
+				if (searchLink.hasClass('active')) {
 					callflowList.data('search-value', null);
-					searchLink.removeClass('active')
-							  .remove();
-					template.find('.search-query').prop('disabled', false)
-												  .val('');
+					searchLink
+						.removeClass('active')
+						.remove();
+					template
+						.find('.search-query')
+						.prop('disabled', false)
+						.val('');
 					self.repaintList({template: template});
 				} else {
 					var searchValue = searchLink.find('.search-value').text();
-					searchLink.addClass('active')
-							  .remove();
+					searchLink
+						.addClass('active')
+						.remove();
 					callflowList.data('search-value', searchValue);
 
 					template.find('.search-query').prop('disabled', true);
@@ -342,10 +364,21 @@ define(function(require){
 
 		renderEntityManager: function(container) {
 			var self = this,
-				entityActions = _.keyBy(_.filter(self.actions, function(action) {
-					return action.hasOwnProperty('listEntities');
-				}), 'module'),
-				template = $(monster.template(self, 'layout', { actions: entityActions }));
+				entityActions = _
+					.chain(self.actions)
+					.filter('listEntities')
+					.keyBy('module')
+					.value(),
+				template = $(self.getTemplate({
+					name: 'layout',
+					data: {
+						actions: _
+							.chain(entityActions)
+							.map()
+							.sortBy('name')
+							.value()
+					}
+				}));
 
 			self.bindEntityManagerEvents({
 				parent: container,
@@ -360,7 +393,6 @@ define(function(require){
 
 		bindEntityManagerEvents: function(args) {
 			var self = this,
-				parent = args.parent,
 				template = args.template,
 				actions = args.actions,
 				editEntity = function(type, id) {
@@ -398,25 +430,22 @@ define(function(require){
 
 			template.find('.entity-manager .entity-element').on('click', function() {
 				var $this = $(this);
-				if($this.hasClass('callflow-element')) {
+				if ($this.hasClass('callflow-element')) {
 					self.renderCallflows(template.find('.callflow-edition'));
 
 					template.find('.callflow-app-section').hide();
 					template.find('.callflow-edition').show();
-				}
-				else if($this.hasClass('account-element')) {
+				} else if ($this.hasClass('account-element')) {
 					self.renderAccountSettings(template.find('.callflow-edition'));
 
 					template.find('.callflow-app-section').hide();
 					template.find('.callflow-edition').show();
-				}
-				else if($this.hasClass('feature-code-element')) {
+				} else if ($this.hasClass('feature-code-element')) {
 					monster.pub('callflows.featurecode.render', template.find('.callflow-edition'));
 
 					template.find('.callflow-app-section').hide();
 					template.find('.callflow-edition').show();
-				}
-				else {
+				} else {
 					var entityType = $this.data('type');
 					template.find('.entity-edition .entity-header .entity-title').text(actions[entityType].name);
 					self.refreshEntityList({
@@ -456,10 +485,10 @@ define(function(require){
 
 			template.find('.entity-edition .search-query').on('keyup', function() {
 				var search = $(this).val();
-				if(search) {
+				if (search) {
 					$.each(template.find('.entity-edition .list-element'), function() {
 						var $elem = $(this);
-						if($elem.data('search').toLowerCase().indexOf(search.toLowerCase()) >= 0) {
+						if ($elem.data('search').toLowerCase().indexOf(search.toLowerCase()) >= 0) {
 							$elem.show();
 						} else {
 							$elem.hide();
@@ -481,17 +510,20 @@ define(function(require){
 
 			actions[entityType].listEntities(function(entities) {
 				self.formatEntityData(entities, entityType);
-				var listEntities = $(monster.template(self, 'entity-list', {
-					entities: entities,
-					activeEntityId: activeEntityId
+				var listEntities = $(self.getTemplate({
+					name: 'entity-list',
+					data: {
+						entities: entities,
+						activeEntityId: activeEntityId
+					}
 				}));
 
 				monster.ui.tooltips(listEntities);
 
 				template.find('.entity-edition .list-container .list')
-						.empty()
-						.append(listEntities)
-						.data('type', entityType);
+					.empty()
+					.append(listEntities)
+					.data('type', entityType);
 
 				template.find('.callflow-app-section').hide();
 				template.find('.entity-edition').show();
@@ -506,20 +538,16 @@ define(function(require){
 		formatEntityData: function(entities, entityType) {
 			var self = this;
 			_.each(entities, function(entity) {
-				if(entity.first_name && entity.last_name) {
+				if (entity.first_name && entity.last_name) {
 					entity.displayName = entity.first_name + ' ' + entity.last_name;
-				} else if(entity.name) {
+				} else if (entity.name) {
 					entity.displayName = entity.name;
 				} else {
 					entity.displayName = entity.id;
 				}
 
-				switch(entityType) {
-					case 'play': //media
-						if(entity.media_source) {
-							entity.additionalInfo = self.i18n.active().callflows.media.mediaSources[entity.media_source]
-						}
-						break;
+				if (entityType === 'play' && entity.media_source) {
+					entity.additionalInfo = self.i18n.active().callflows.media.mediaSources[entity.media_source];
 				}
 			});
 		},
@@ -529,19 +557,45 @@ define(function(require){
 
 			self.loadAccountSettingsData(function(accountSettingsData) {
 				var formattedData = self.formatAccountSettingsData(accountSettingsData),
-					template = $(monster.template(self, 'accountSettings', formattedData)),
+					template = $(self.getTemplate({
+						name: 'accountSettings',
+						data: _.merge({
+							showPAssertedIdentity: monster.config.whitelabel.showPAssertedIdentity
+						}, formattedData)
+					})),
 					widgetBlacklist = self.renderBlacklists(template, accountSettingsData);
 
 				monster.ui.tooltips(template);
 
-				template.find('.cid-number-select, .preflow-callflows-dropdown').chosen({ search_contains: true, width: '220px' });
+				// Setup input fields
+				monster.ui.chosen(template.find('.cid-number-select, .preflow-callflows-dropdown'));
+				monster.ui.mask(template.find('.phone-number'), 'phoneNumber');
+
+				// Set validation rules
+				monster.ui.validate(template.find('#account_settings_form'), {
+					rules: {
+						'caller_id.asserted.number': {
+							phoneNumber: true
+						},
+						'caller_id.asserted.realm': {
+							realm: true
+						}
+					},
+					messages: {
+						'caller_id.asserted.number': self.i18n.active().callflows.accountSettings.callerId.messages.invalidNumber
+					}
+				});
+
 				container.empty().append(template);
+
 				self.bindAccountSettingsEvents(template, accountSettingsData, widgetBlacklist);
 			});
 		},
 
 		formatAccountSettingsData: function(data) {
 			var formattedData = data;
+
+			formattedData.showMediaUploadDisclosure = monster.config.whitelabel.showMediaUploadDisclosure;
 
 			formattedData.silenceMedia = 'silence_stream://300000';
 
@@ -611,9 +665,9 @@ define(function(require){
 					template.find('.upload-div').slideUp(function() {
 						template.find('.upload-toggle').removeClass('active');
 					});
-					if(newMedia) {
+					if (newMedia) {
 						var mediaSelect = template.find('.media-dropdown');
-						mediaSelect.append('<option value="'+newMedia.id+'">'+newMedia.name+'</option>');
+						mediaSelect.append('<option value="' + newMedia.id + '">' + newMedia.name + '</option>');
 						mediaSelect.val(newMedia.id);
 					}
 				};
@@ -622,15 +676,6 @@ define(function(require){
 				e.preventDefault();
 
 				$(this).tab('show');
-			});
-
-			monster.ui.validate(template.find('#account_settings_form'), {
-				rules: {
-					'extra.shoutcastUrl': {
-						protocol: true,
-						required: true
-					}
-				}
 			});
 
 			template.find('.media-dropdown').on('change', function() {
@@ -647,7 +692,7 @@ define(function(require){
 					mediaToUpload = results[0];
 				},
 				error: function(errors) {
-					if(errors.hasOwnProperty('size') && errors.size.length > 0) {
+					if (errors.hasOwnProperty('size') && errors.size.length > 0) {
 						monster.ui.alert(self.i18n.active().callflows.accountSettings.musicOnHold.fileTooBigAlert);
 					}
 					template.find('.upload-div input').val('');
@@ -656,7 +701,7 @@ define(function(require){
 			});
 
 			template.find('.upload-toggle').on('click', function() {
-				if($(this).hasClass('active')) {
+				if ($(this).hasClass('active')) {
 					template.find('.upload-div').stop(true, true).slideUp();
 				} else {
 					template.find('.upload-div').stop(true, true).slideDown();
@@ -669,7 +714,7 @@ define(function(require){
 
 			template.find('.upload-submit').on('click', function() {
 				template.find('.shoutcast-div').removeClass('active');
-				if(mediaToUpload) {
+				if (mediaToUpload) {
 					self.callApi({
 						resource: 'media.create',
 						data: {
@@ -677,7 +722,7 @@ define(function(require){
 							data: {
 								streamable: true,
 								name: mediaToUpload.name,
-								media_source: "upload",
+								media_source: 'upload',
 								description: mediaToUpload.name
 							}
 						},
@@ -713,50 +758,59 @@ define(function(require){
 			});
 
 			template.find('.account-settings-update').on('click', function() {
-				if (monster.ui.valid(template.find('#account_settings_form'))) {
-					var formData = monster.ui.getFormData('account_settings_form'),
-						newData = $.extend(true, {}, data.account, formData);
-
-					if (formData.music_on_hold.media_id === '') {
-						delete newData.music_on_hold.media_id;
-					} else if (formData.music_on_hold.media_id === 'shoutcast') {
-						newData.music_on_hold.media_id = template.find('.shoutcast-url-input').val();
-					}
-
-					if (formData.caller_id.external.name === '') {
-						delete newData.caller_id.external.name;
-					}
-					if (formData.caller_id.external.number === '') {
-						delete newData.caller_id.external.number;
-					}
-
-					if (formData.preflow.always === '_disabled') {
-						delete newData.preflow.always;
-					}
-
-					if (newData.hasOwnProperty('outbound_flags')) {
-						newData.outbound_flags.dynamic = newData.outbound_flags.dynamic ? newData.outbound_flags.dynamic.split(',') : [];
-						newData.outbound_flags.static = newData.outbound_flags.static ? newData.outbound_flags.static.split(',') : [];
-						_.isEmpty(newData.outbound_flags.dynamic) && delete newData.outbound_flags.dynamic;
-						_.isEmpty(newData.outbound_flags.static) && delete newData.outbound_flags.static;
-						_.isEmpty(newData.outbound_flags) && delete newData.outbound_flags;
-					}
-
-					newData.blacklists = widgetBlacklist.getSelectedItems();
-
-					delete newData.extra;
-
-					self.callApi({
-						resource: 'account.update',
-						data: {
-							accountId: newData.id,
-							data: newData
-						},
-						success: function(data, status) {
-							self.render();
-						}
-					});
+				// Validate form
+				if (!monster.ui.valid(template.find('#account_settings_form'))) {
+					return;
 				}
+
+				// Collect data
+				var formData = monster.ui.getFormData('account_settings_form'),
+					newData = _.merge({}, data.account, formData);
+
+				// Format data
+				if (_.has(newData.caller_id, 'asserted')) {
+					newData.caller_id.asserted.number = monster.util.getFormatPhoneNumber(newData.caller_id.asserted.number).e164Number;
+				}
+
+				// Clean empty data
+				if (formData.music_on_hold.media_id === '') {
+					delete newData.music_on_hold.media_id;
+				} else if (formData.music_on_hold.media_id === 'shoutcast') {
+					newData.music_on_hold.media_id = template.find('.shoutcast-url-input').val();
+				}
+
+				self.compactObject(newData.caller_id);
+
+				if (_.isEmpty(newData.caller_id)) {
+					delete newData.caller_id;
+				}
+
+				if (formData.preflow.always === '_disabled') {
+					delete newData.preflow.always;
+				}
+
+				if (newData.hasOwnProperty('outbound_flags')) {
+					newData.outbound_flags.dynamic = newData.outbound_flags.dynamic ? newData.outbound_flags.dynamic.split(',') : [];
+					newData.outbound_flags.static = newData.outbound_flags.static ? newData.outbound_flags.static.split(',') : [];
+					_.isEmpty(newData.outbound_flags.dynamic) && delete newData.outbound_flags.dynamic;
+					_.isEmpty(newData.outbound_flags.static) && delete newData.outbound_flags.static;
+					_.isEmpty(newData.outbound_flags) && delete newData.outbound_flags;
+				}
+
+				newData.blacklists = widgetBlacklist.getSelectedItems();
+
+				delete newData.extra;
+
+				self.callApi({
+					resource: 'account.update',
+					data: {
+						accountId: newData.id,
+						data: newData
+					},
+					success: function(data, status) {
+						self.render();
+					}
+				});
 			});
 		},
 
@@ -846,7 +900,7 @@ define(function(require){
 					$flowChart = container.find('.flowchart'),
 					contentHeight = window.innerHeight - $('.core-topbar-wrapper').outerHeight(),
 					contentHeightPx = contentHeight + 'px',
-					innerContentHeightPx = (contentHeight-71) + 'px';
+					innerContentHeightPx = (contentHeight - 71) + 'px';
 
 				$listContainer.css('height', window.innerHeight - $listContainer.position().top + 'px');
 				$mainContent.css('height', contentHeightPx);
@@ -864,12 +918,18 @@ define(function(require){
 
 			self.listData({
 				callback: function(callflowData) {
-					var listCallflows = monster.template(self, 'callflowList', { callflows: callflowData.data });
+					var listCallflows = $(self.getTemplate({
+						name: 'callflowList',
+						data: {
+							callflows: callflowData.data,
+							activeEntityId: args.id
+						}
+					}));
 
 					template.find('.list-container .list')
-							.empty()
-							.append(listCallflows)
-							.data('next-key', callflowData.next_start_key || null);
+						.empty()
+						.append(listCallflows)
+						.data('next-key', callflowData.next_start_key || null);
 
 					callback && callback(callflowData.data);
 				},
@@ -887,7 +947,7 @@ define(function(require){
 					accountId: self.accountId
 				};
 
-			if(nextStartKey) {
+			if (nextStartKey) {
 				$.extend(true, apiData, {
 					filters: {
 						'start_key': encodeURIComponent(nextStartKey)
@@ -895,7 +955,7 @@ define(function(require){
 				});
 			}
 
-			if(!self.appFlags.showAllCallflows) {
+			if (!self.appFlags.showAllCallflows) {
 				$.extend(true, apiData, {
 					filters: {
 						'filter_not_ui_metadata.origin': [
@@ -906,7 +966,7 @@ define(function(require){
 				});
 			}
 
-			if(searchValue) {
+			if (searchValue) {
 				apiResource = 'callflow.searchByNameAndNumber';
 				apiData.value = encodeURIComponent(searchValue);
 			}
@@ -946,7 +1006,7 @@ define(function(require){
 				listSpareNumbers = [];
 
 			_.each(numbers, function(numberData, phoneNumber) {
-				if(!numberData.hasOwnProperty('used_by') || numberData.used_by === '') {
+				if (!numberData.hasOwnProperty('used_by') || numberData.used_by === '') {
 					numberData.phoneNumber = phoneNumber;
 					listSpareNumbers.push(numberData);
 				}
@@ -960,7 +1020,9 @@ define(function(require){
 
 			_.each(data.data, function(callflow) {
 				var formattedNumbers = _.map(callflow.numbers || '-', function(number) {
-						return monster.util.formatPhoneNumber(number);
+						return _.startsWith('+', number)
+							? monster.util.formatPhoneNumber(number)
+							: number;
 					}),
 					listNumbers = formattedNumbers.toString(),
 					isFeatureCode = callflow.featurecode !== false && !_.isEmpty(callflow.featurecode);
@@ -992,10 +1054,11 @@ define(function(require){
 			delete self.original_flow; // clear original_flow
 
 			$('.js-callflow-intro').hide();
+			$('#callflow-view .callflow_help').hide();
 
 			self.resetFlow();
 
-			if(data && data.id) {
+			if (data && data.id) {
 				self.callApi({
 					resource: 'callflow.get',
 					data: {
@@ -1013,7 +1076,7 @@ define(function(require){
 						self.flow.contact_list = { exclude: 'contact_list' in callflow ? callflow.contact_list.exclude || false : false };
 						self.flow.caption_map = callflow.metadata;
 
-						if(callflow.flow.module != undefined) {
+						if (callflow.flow.module !== undefined) {
 							self.flow.root = self.buildFlow(callflow.flow, self.flow.root, 0, '_');
 						}
 
@@ -1022,8 +1085,7 @@ define(function(require){
 						self.repaintFlow();
 					}
 				});
-			}
-			else {
+			} else {
 				self.resetFlow();
 				self.dataCallflow = {};
 				self.repaintFlow();
@@ -1035,21 +1097,22 @@ define(function(require){
 
 		renderButtons: function() {
 			var self = this,
-				buttons = $(monster.template(self, 'buttons'));
+				buttons = $(self.getTemplate({
+					name: 'buttons'
+				}));
 
 			$('.buttons').empty();
 
 			$('.save', buttons).click(function() {
-				if(self.flow.numbers && self.flow.numbers.length > 0) {
+				if (self.flow.numbers && self.flow.numbers.length > 0) {
 					self.save();
-				}
-				else {
+				} else {
 					monster.ui.alert(self.i18n.active().oldCallflows.invalid_number + '<br/><br/>' + self.i18n.active().oldCallflows.please_select_valid_number);
 				}
 			});
 
 			$('.delete', buttons).click(function() {
-				if(self.flow.id) {
+				if (self.flow.id) {
 					monster.ui.confirm(self.i18n.active().oldCallflows.are_you_sure, function() {
 						self.callApi({
 							resource: 'callflow.delete',
@@ -1061,7 +1124,7 @@ define(function(require){
 								$('#ws_cf_flow').empty();
 								$('.buttons').empty();
 								$('#ws_cf_tools').empty();
-								$('#hidden_callflow_warning').hide()
+								$('#hidden_callflow_warning').hide();
 
 								self.repaintList();
 								self.resetFlow();
@@ -1070,8 +1133,7 @@ define(function(require){
 
 						self.show_pending_change(false);
 					});
-				}
-				else {
+				} else {
 					monster.ui.alert(self.i18n.active().oldCallflows.this_callflow_has_not_been_created);
 				}
 			});
@@ -1080,21 +1142,22 @@ define(function(require){
 		},
 
 		// Callflow JS code
-		buildFlow: function (json, parent, id, key) {
+		buildFlow: function(json, parent, id, key) {
 			var self = this,
 				branch = self.branch(self.construct_action(json));
 
-			branch.data.data = ('data' in json) ? json.data : {};
+			branch.data.data = _.get(json, 'data', {});
 			branch.id = ++id;
 			branch.key = key;
+			branch.disabled = _.get(json, 'data.skip_module');
 
 			branch.caption = self.actions.hasOwnProperty(branch.actionName) ? self.actions[branch.actionName].caption(branch, self.flow.caption_map) : '';
 
-			if(self.actions.hasOwnProperty(parent.actionName) && self.actions[parent.actionName].hasOwnProperty('key_caption')) {
+			if (self.actions.hasOwnProperty(parent.actionName) && self.actions[parent.actionName].hasOwnProperty('key_caption')) {
 				branch.key_caption = self.actions[parent.actionName].key_caption(branch, self.flow.caption_map);
 			}
 
-			if(json.hasOwnProperty('children')) {
+			if (json.hasOwnProperty('children')) {
 				$.each(json.children, function(key, child) {
 					branch = self.buildFlow(child, branch, id, key);
 				});
@@ -1108,20 +1171,19 @@ define(function(require){
 		construct_action: function(json) {
 			var action = '';
 
-			if('data' in json) {
-				if('id' in json.data) {
+			if ('data' in json) {
+				if ('id' in json.data) {
 					action = 'id=*,';
 				}
 
-				if('action' in json.data) {
+				if ('action' in json.data) {
 					action += 'action=' + json.data.action + ',';
 				}
 			}
 
-			if(action != '') {
+			if (action !== '') {
 				action = '[' + action.replace(/,$/, ']');
-			}
-			else {
+			} else {
 				action = '[]';
 			}
 
@@ -1150,7 +1212,7 @@ define(function(require){
 		branch: function(actionName) {
 			var self = this;
 
-			function branch(actionName) {
+			function Branch(actionName) {
 				var that = this,
 					action = self.actions[actionName] || {};
 
@@ -1169,61 +1231,56 @@ define(function(require){
 				this.potentialChildren = function() {
 					var list = [];
 
-					for(var i in self.actions) {
-						if(self.actions[i].isUsable) {
+					for (var i in self.actions) {
+						if (self.actions[i].isUsable) {
 							list[i] = i;
 						}
 					}
 
-					for(var i in action.rules) {
+					for (var i in action.rules) {
 						var rule = action.rules[i];
 
-						switch (rule.type) {
-							case 'quantity':
-								if(this.children.length >= rule.maxSize) {
-									list = [];
-								}
-								break;
+						if (rule.type === 'quantity' && this.children.length >= rule.maxSize) {
+							list = [];
 						}
 					}
 
 					return list;
-				}
+				};
 
 				this.contains = function(branch) {
 					var toCheck = branch;
 
-					while(toCheck.parent) {
-						if(this.id == toCheck.id) {
+					while (toCheck.parent) {
+						if (this.id === toCheck.id) {
 							return true;
-						}
-						else {
+						} else {
 							toCheck = toCheck.parent;
 						}
 					}
 
 					return false;
-				}
+				};
 
 				this.removeChild = function(branch) {
 					$.each(this.children, function(i, child) {
-						if(child.id == branch.id) {
-							that.children.splice(i,1);
+						if (child.id === branch.id) {
+							that.children.splice(i, 1);
 							return false;
 						}
 					});
-				}
+				};
 
 				this.addChild = function(branch) {
-					if(!(branch.actionName in this.potentialChildren())) {
+					if (!(branch.actionName in this.potentialChildren())) {
 						return false;
 					}
 
-					if(branch.contains(this)) {
+					if (branch.contains(this)) {
 						return false;
 					}
 
-					if(branch.parent) {
+					if (branch.parent) {
 						branch.parent.removeChild(branch);
 					}
 
@@ -1232,43 +1289,43 @@ define(function(require){
 					this.children.push(branch);
 
 					return true;
-				}
+				};
 
-				this.getMetadata = function(key) {
+				this.getMetadata = function(key, defaultValue) {
 					var value;
 
-					if('data' in this.data && key in this.data.data) {
+					if (_.has(this.data, ['data', key])) {
 						value = this.data.data[key];
 
-						return (value == 'null') ? null : value;
+						return (value === 'null') ? null : value;
 					}
 
-					return false;
-				}
+					return _.isUndefined(defaultValue) ? false : defaultValue;
+				};
 
 				this.setMetadata = function(key, value) {
-					if(!('data' in this.data)) {
+					if (!('data' in this.data)) {
 						this.data.data = {};
 					}
 
 					this.data.data[key] = (value == null) ? 'null' : value;
-				}
+				};
 
 				this.deleteMetadata = function(key) {
-					if('data' in this.data && key in this.data.data) {
+					if ('data' in this.data && key in this.data.data) {
 						delete this.data.data[key];
 					}
-				}
+				};
 
-				this.index = function (index) {
+				this.index = function(index) {
 					this.id = index;
 
 					$.each(this.children, function() {
-						index = this.index(index+1);
+						index = this.index(index + 1);
 					});
 
 					return index;
-				}
+				};
 
 				this.nodes = function() {
 					var nodes = {};
@@ -1284,9 +1341,9 @@ define(function(require){
 					});
 
 					return nodes;
-				}
+				};
 
-				this.serialize = function () {
+				this.serialize = function() {
 					var json = $.extend(true, {}, this.data);
 
 					json.module = this.module;
@@ -1298,17 +1355,17 @@ define(function(require){
 					});
 
 					return json;
-				}
+				};
 			}
 
-			return new branch(actionName);
+			return new Branch(actionName);
 		},
 
 		repaintFlow: function() {
 			var self = this;
 
 			// Let it there for now, if we need to save callflows automatically again.
-			/*if('savable' in THIS.flow) {
+			/*if ('savable' in THIS.flow) {
 				THIS.save_callflow_no_loading();
 			}*/
 
@@ -1328,14 +1385,14 @@ define(function(require){
 			}
 
 			var metadata = self.dataCallflow.hasOwnProperty('ui_metadata') ? self.dataCallflow.ui_metadata : false,
-				isHiddenCallflow = metadata && metadata.hasOwnProperty('origin') && _.includes(['voip','migration','mobile', 'callqueues'], metadata.origin);
+				isHiddenCallflow = metadata && metadata.hasOwnProperty('origin') && _.includes(['voip', 'migration', 'mobile', 'callqueues'], metadata.origin);
 
 			isHiddenCallflow ? $('#hidden_callflow_warning').show() : $('#hidden_callflow_warning').hide();
 		},
 
 		show_pending_change: function(pending_change) {
 			var self = this;
-			if(pending_change) {
+			if (pending_change) {
 				$('#pending_change', '#ws_callflow').show();
 				$('.save', '#ws_callflow').addClass('pulse-box');
 			} else {
@@ -1373,13 +1430,13 @@ define(function(require){
 			var self = this,
 				s_flow = flow.id + '|' + (!flow.name ? 'undefined' : flow.name),
 				first_iteration;
-			s_flow += "|NUMBERS";
+			s_flow += '|NUMBERS';
 			$.each(flow.numbers, function(key, value) {
-				s_flow += "|" + value;
+				s_flow += '|' + value;
 			});
-			s_flow += "|NODES";
+			s_flow += '|NODES';
 			$.each(flow.nodes, function(key, value) {
-				s_flow += "|" + key + "::";
+				s_flow += '|' + key + '::';
 				first_iteration = true;
 
 				$.each(value.data.data, function(k, v) {
@@ -1400,6 +1457,88 @@ define(function(require){
 			return s_flow;
 		},
 
+		getCallflowPreview: function(data, callback) {
+			var self = this,
+				layout;
+
+			self.callApi({
+				resource: 'callflow.get',
+				data: {
+					accountId: self.accountId,
+					callflowId: data.id
+				},
+				success: function(callflow) {
+					var callflow = callflow.data,
+						flow = {};
+
+					flow.root = self.branch('root');
+					flow.root.key = 'flow';
+					flow.numbers = [];
+					flow.caption_map = {};
+					flow.root.index(0);
+					flow.nodes = flow.root.nodes();
+
+					flow.id = callflow.id;
+					flow.name = callflow.name;
+					flow.contact_list = { exclude: 'contact_list' in callflow ? callflow.contact_list.exclude || false : false };
+					flow.caption_map = callflow.metadata;
+
+					if (callflow.flow.module !== undefined) {
+						flow.root = self.buildFlow(callflow.flow, flow.root, 0, '_');
+					}
+
+					flow.nodes = flow.root.nodes();
+					flow.numbers = callflow.numbers || [];
+
+					//prepare html from callflow
+
+					layout = self.renderBranch(flow.root);
+					callback && callback(layout);
+
+					$('.node', layout).each(function() {
+						var node = flow.nodes[$(this).attr('id')],
+							$node = $(this),
+							node_html;
+
+						if (node.actionName === 'root') {
+							$node.removeClass('icons_black root');
+							node_html = $(self.getTemplate({
+								name: 'root',
+								data: {
+									name: flow.name || 'Callflow'
+								}
+							}));
+
+							for (var counter, size = flow.numbers.length, j = Math.floor((size) / 2) + 1, i = 0; i < j; i++) {
+								counter = i * 2;
+
+								var numbers = flow.numbers.slice(counter, (counter + 2 < size) ? counter + 2 : size),
+									row = $(self.getTemplate({
+										name: 'rowNumber',
+										data: {
+											numbers: numbers
+										}
+									}));
+
+								node_html
+									.find('.content')
+									.append(row);
+							}
+						} else {
+							node_html = $(self.getTemplate({
+								name: 'node',
+								data: {
+									node: node,
+									callflow: self.actions[node.actionName]
+								}
+							}));
+						}
+						$(this).append(node_html);
+					});
+				}
+			});
+		},
+
 		getUIFlow: function() {
 			var self = this;
 
@@ -1408,41 +1547,46 @@ define(function(require){
 			var layout = self.renderBranch(self.flow.root);
 
 			$('.node', layout).hover(function() {
-					$(this).addClass('over');
-				},
-				function() {
-					$(this).removeClass('over');
-				}
-			);
+				$(this).addClass('over');
+			}, function() {
+				$(this).removeClass('over');
+			});
 
 			$('.node', layout).each(function() {
 				var node = self.flow.nodes[$(this).attr('id')],
 					$node = $(this),
 					node_html;
 
-				if (node.actionName == 'root') {
+				if (node.actionName === 'root') {
 					$node.removeClass('icons_black root');
-					node_html = $(monster.template(self, 'root', { name: self.flow.name || 'Callflow' }));
+					node_html = $(self.getTemplate({
+						name: 'root',
+						data: {
+							name: self.flow.name || 'Callflow'
+						}
+					}));
 
 					$('.edit_icon', node_html).click(function() {
-						self.flow = $.extend(true, { contact_list: { exclude: false }} , self.flow);
+						self.flow = $.extend(true, { contact_list: { exclude: false } }, self.flow);
 
-						var dialogTemplate = monster.template(self, 'editName', {
-								name: self.flow.name,
-								exclude: self.flow.contact_list.exclude,
-								ui_is_main_number_cf: self.dataCallflow.hasOwnProperty('ui_is_main_number_cf') ? self.dataCallflow.ui_is_main_number_cf : false
-							}),
+						var dialogTemplate = $(self.getTemplate({
+								name: 'editName',
+								data: {
+									name: self.flow.name,
+									exclude: self.flow.contact_list.exclude,
+									ui_is_main_number_cf: self.dataCallflow.hasOwnProperty('ui_is_main_number_cf') ? self.dataCallflow.ui_is_main_number_cf : false
+								}
+							})),
 							popup = monster.ui.dialog(dialogTemplate, {
-							title: self.i18n.active().oldCallflows.popup_title
-						});
+								title: self.i18n.active().oldCallflows.popup_title
+							});
 
 						$('#add', popup).click(function() {
 							var $callflow_name = $('#callflow_name', popup);
-							if($callflow_name.val() != '') {
+							if ($callflow_name.val() !== '') {
 								self.flow.name = $callflow_name.val();
 								$('.root .top_bar .name', layout).html(self.flow.name);
-							}
-							else {
+							} else {
 								self.flow.name = '';
 								$('.root .top_bar .name', layout).html('Callflow');
 							}
@@ -1456,59 +1600,71 @@ define(function(require){
 						});
 					});
 
-					$('.tooltip', node_html).click(function() {
-						monster.ui.dialog(monster.template(self, 'help_callflow'));
-					});
+					for (var counter, size = self.flow.numbers.length, j = Math.floor((size) / 2) + 1, i = 0; i < j; i++) {
+						counter = i * 2;
 
-					for(var x, size = self.flow.numbers.length, j = Math.floor((size) / 2) + 1, i = 0; i < j; i++) {
-						x = i * 2;
+						var numbers = self.flow.numbers.slice(counter, (counter + 2 < size) ? counter + 2 : size),
+							row = $(self.getTemplate({
+								name: 'rowNumber',
+								data: {
+									numbers: _.map(numbers, function(number) {
+										return _.startsWith('+', number)
+											? monster.util.formatPhoneNumber(number)
+											: number;
+									})
+								}
+							}));
 
-						var numbers = self.flow.numbers.slice(x, (x + 2 < size) ? x + 2 : size),
-							row = monster.template(self, 'rowNumber', { numbers: numbers });
-
-						node_html.find('.content')
-								 .append(row);
+						node_html
+							.find('.content')
+							.append(row);
 					}
 
 					$('.number_column.empty', node_html).click(function() {
-						if(self.tour) {
+						if (self.tour) {
 							self.tour.end();
 						}
 						self.listNumbers(function(phoneNumbers) {
 							var parsedNumbers = [];
 
 							_.each(phoneNumbers, function(number) {
-								if($.inArray(number.phoneNumber,self.flow.numbers) < 0) {
+								if ($.inArray(number.phoneNumber, self.flow.numbers) < 0) {
 									parsedNumbers.push(number);
 								}
 							});
 
-							var	popup_html = $(monster.template(self, 'addNumber', { phoneNumbers: parsedNumbers })),
+							var popup_html = $(self.getTemplate({
+									name: 'addNumber',
+									data: {
+										phoneNumbers: parsedNumbers
+									}
+								})),
 								popup = monster.ui.dialog(popup_html, {
 									title: self.i18n.active().oldCallflows.add_number
 								});
 
-							popup_html.find('#list_numbers').chosen({ search_contains: true, width: '160px' });
+							monster.ui.chosen(popup_html.find('#list_numbers'), {
+								width: '160px'
+							});
 							// Have to do that so that the chosen dropdown isn't hidden.
 							popup_html.parent().css('overflow', 'visible');
 
-							if(parsedNumbers.length === 0) {
+							if (parsedNumbers.length === 0) {
 								$('#list_numbers', popup_html).attr('disabled', 'disabled');
 								$('<option value="select_none">' + self.i18n.active().oldCallflows.no_phone_numbers + '</option>').appendTo($('#list_numbers', popup_html));
 							}
 
 							var refresh_numbers = function() {
-								 self.listNumbers(function(refreshedNumbers) {
+								self.listNumbers(function(refreshedNumbers) {
 									$('#list_numbers', popup).empty();
 
-									if(refreshedNumbers.length === 0) {
+									if (refreshedNumbers.length === 0) {
 										$('#list_numbers', popup).attr('disabled', 'disabled');
 										$('<option value="select_none">' + self.i18n.active().oldCallflows.no_phone_numbers + '</option>').appendTo($('#list_numbers', popup));
-									}
-									else {
+									} else {
 										$('#list_numbers', popup).removeAttr('disabled');
 										$.each(refreshedNumbers, function(k, v) {
-											$('<option value="'+v+'">'+v+'</option>').appendTo($('#list_numbers', popup));
+											$('<option value="' + v + '">' + v + '</option>').appendTo($('#list_numbers', popup));
 										});
 									}
 								});
@@ -1517,11 +1673,10 @@ define(function(require){
 							$('.extensions_content', popup).hide();
 
 							$('input[name="number_type"]', popup).click(function() {
-								if($(this).val() === 'your_numbers') {
+								if ($(this).val() === 'your_numbers') {
 									$('.list_numbers_content', popup).show();
 									$('.extensions_content', popup).hide();
-								}
-								else {
+								} else {
 									$('.extensions_content', popup).show();
 									$('.list_numbers_content', popup).hide();
 								}
@@ -1558,23 +1713,22 @@ define(function(require){
 								event.preventDefault();
 								var number = $('input[name="number_type"]:checked', popup).val() === 'your_numbers' ? $('#list_numbers option:selected', popup).val() : $('#add_number_text', popup).val();
 
-								if(number !== 'select_none' && number !== '') {
+								if (number !== 'select_none' && number !== '') {
 									self.flow.numbers.push(number);
 									popup.dialog('close');
 
 									self.repaintFlow();
 
-									if(self.tour
+									if (self.tour
 										&& $('#ws_callflow .number_column').not('.js-add-number').length === 1) {
-										if(self.tour.ended()) {
+										if (self.tour.ended()) {
 											self.tour.restart();
 										}
-										if(self.tour.getCurrentStep() !== 2) {
+										if (self.tour.getCurrentStep() !== 2) {
 											self.tour.goTo(2);
 										}
 									}
-								}
-								else {
+								} else {
 									monster.ui.alert(self.i18n.active().oldCallflows.you_didnt_select);
 								}
 							});
@@ -1585,53 +1739,104 @@ define(function(require){
 						var number = $(this).parent('.number_column').data('number') + '',
 							index = $.inArray(number, self.flow.numbers);
 
-						if(index >= 0) {
+						if (index >= 0) {
 							self.flow.numbers.splice(index, 1);
 						}
 
 						self.repaintFlow();
 					});
-
-				}
-				else {
-					node_html = $(monster.template(self, 'node', {
-						node: node,
-						callflow: self.actions[node.actionName]
+				} else {
+					node_html = $(self.getTemplate({
+						name: 'node',
+						data: {
+							node: node,
+							callflow: self.actions[node.actionName]
+						}
 					}));
 
 					// If an API request takes some time, the user can try to re-click on the element, we do not want to let that re-fire a request to the back-end.
-					// So we set a 500ms timer that will prevent any other interaction with the callflow element.
-					var isAlreadyClicked = false;
+					// So we set a 500ms debounce wait that will prevent any other interaction with the callflow element.
+					node_html.find('.module').on('click', _.debounce(function() {
+						monster.waterfall([
+							function(waterfallCallback) {
+								if (node.disabled) {
+									monster.ui.confirm(self.i18n.active().callflowsApp.editor.confirmDialog.enableModule.text,
+										function() {
+											waterfallCallback(null, false);
+										},
+										function() {
+											waterfallCallback(null, true);
+										}, {
+											cancelButtonText: self.i18n.active().callflowsApp.editor.confirmDialog.enableModule.cancel,
+											confirmButtonText: self.i18n.active().callflowsApp.editor.confirmDialog.enableModule.ok
+										});
+								} else {
+									waterfallCallback(null, null);
+								}
+							}
+						], function(err, disabled) {
+							if (!_.isNull(disabled)) {
+								node.disabled = disabled;
+								if (_.has(node, 'data.data.skip_module')) {
+									node.data.data.skip_module = disabled;
+								}
 
-					node_html.find('.module').on('click', function() {
-						if(!isAlreadyClicked) {
+								if (!disabled) {
+									node_html.closest('.node').removeClass('disabled');
+								}
+							}
+
 							self.actions[node.actionName].edit(node, function() {
 								self.repaintFlow();
 							});
-
-							isAlreadyClicked = true;
-
-							setTimeout(function() {
-								isAlreadyClicked = false;
-							}, 500);
-						}
-					});
+						});
+					}, 500, {
+						leading: true,
+						trailing: false
+					}));
 				}
+
+				//make names of callflow nodes clickable
+				$('.details a', node_html).click(function(event) {
+					event.stopPropagation();
+					var previewCallflowId = self.flow.nodes[$(node_html).find('.delete').attr('id')].data.data.id,
+						dialogTemplate = $(self.getTemplate({
+							name: 'callflows-callflowElementDetails',
+							data: {
+								id: previewCallflowId
+							}
+						})),
+						popup;
+					self.getCallflowPreview({id: previewCallflowId}, function(callflowPreview) {
+						popup = monster.ui.dialog(dialogTemplate, {
+							position: ['top', 20], // put preview near top of screen to have lots of space for it
+							title: self.i18n.active().oldCallflows.callflow_preview_title,
+							width: '650px'
+						});
+						popup.find('.callflow-preview-section.callflow').append(callflowPreview);
+						$('#callflow_jump').click(function() {
+							self.editCallflow({id: previewCallflowId});
+							popup.dialog('close').remove();
+						});
+					});
+				});
 
 				$(this).append(node_html);
 
 				$(this).droppable({
-					drop: function (event, ui) {
+					drop: function(event, ui) {
 						var target = self.flow.nodes[$(this).attr('id')],
-							action;
+							action,
+							branch;
 
 						if (ui.draggable.hasClass('action')) {
 							action = ui.draggable.attr('name');
+
 							branch = self.branch(action);
 							branch.caption = self.actions[action].caption(branch, self.flow.caption_map);
 
 							if (target.addChild(branch)) {
-								if(branch.parent && ('key_caption' in self.actions[branch.parent.actionName])) {
+								if (branch.parent && ('key_caption' in self.actions[branch.parent.actionName])) {
 									branch.key_caption = self.actions[branch.parent.actionName].key_caption(branch, self.flow.caption_map);
 
 									self.actions[branch.parent.actionName].key_edit(branch, function() {
@@ -1639,8 +1844,7 @@ define(function(require){
 											self.repaintFlow();
 										});
 									});
-								}
-								else {
+								} else {
 									self.actions[action].edit(branch, function() {
 										self.repaintFlow();
 									});
@@ -1658,7 +1862,7 @@ define(function(require){
 								// If we move a node, destroy its key
 								branch.key = '_';
 
-								if(branch.parent && ('key_caption' in self.actions[branch.parent.actionName])) {
+								if (branch.parent && ('key_caption' in self.actions[branch.parent.actionName])) {
 									branch.key_caption = self.actions[branch.parent.actionName].key_caption(branch, self.flow.caption_map);
 								}
 
@@ -1670,25 +1874,25 @@ define(function(require){
 				});
 
 				// dragging the whole branch
-				if($(this).attr('name') != 'root') {
+				if ($(this).attr('name') !== 'root') {
 					$(this).draggable({
-						start: function () {
+						start: function() {
 							var children = $(this).next(),
-								t = children.offset().top - $(this).offset().top,
-								l = children.offset().left - $(this).offset().left;
+								top = children.offset().top - $(this).offset().top,
+								left = children.offset().left - $(this).offset().left;
 
 							self.enableDestinations($(this));
 
-							$(this).attr('t', t); $(this).attr('l', l);
+							$(this).attr('t', top); $(this).attr('l', left);
 						},
-						drag: function () {
+						drag: function() {
 							var children = $(this).next(),
-								t = $(this).offset().top + parseInt($(this).attr('t')),
-								l = $(this).offset().left + parseInt($(this).attr('l'));
+								top = $(this).offset().top + parseInt($(this).attr('t')),
+								left = $(this).offset().left + parseInt($(this).attr('l'));
 
-							children.offset({ top: t, left: l });
+							children.offset({ top: top, left: left });
 						},
-						stop: function () {
+						stop: function() {
 							self.disableDestinations();
 
 							self.repaintFlow();
@@ -1708,24 +1912,26 @@ define(function(require){
 			});
 
 			$('.node-options .jump', layout).click(function() {
-
-                                var $this = $(this),
-                                        callflowId = $this.attr('id');
-                                self.editCallflow({ id: callflowId });
-                        });
+                var $this = $(this),
+                    callflowId = $this.attr('id');
+                self.editCallflow({ id: callflowId });
+            });
 
 			return layout;
 		},
 
 		renderBranch: function(branch) {
 			var self = this,
-				flow = $(monster.template(self, 'branch', {
-					node: branch,
-					display_key: branch.parent && ('key_caption' in self.actions[branch.parent.actionName])
+				flow = $(self.getTemplate({
+					name: 'branch',
+					data: {
+						node: branch,
+						display_key: branch.parent && ('key_caption' in self.actions[branch.parent.actionName])
+					}
 				})),
 				children;
 
-			if(branch.parent && ('key_edit' in self.actions[branch.parent.actionName])) {
+			if (branch.parent && ('key_edit' in self.actions[branch.parent.actionName])) {
 				$('.div_option', flow).click(function() {
 					self.actions[branch.parent.actionName].key_edit(branch, function() {
 						self.repaintFlow();
@@ -1756,7 +1962,7 @@ define(function(require){
 			categories[advanced_cat] = [];
 
 			$.each(self.actions, function(i, data) {
-				if('category' in data && (!data.hasOwnProperty('isListed') || data.isListed)) {
+				if ('category' in data && (!data.hasOwnProperty('isListed') || data.isListed)) {
 					data.category in categories ? true : categories[data.category] = [];
 					data.key = i;
 					categories[data.category].push(data);
@@ -1769,45 +1975,44 @@ define(function(require){
 				}
 			});
 
-			dataTemplate.categories.sort(function(a, b){
+			dataTemplate.categories.sort(function(a, b) {
 				return a.key < b.key ? 1 : -1;
 			});
 
 			dataTemplate.categories.unshift({
-					key: basic_cat,
-					actions: categories[basic_cat]
-				},
-				{
-					key: advanced_cat,
-					actions: categories[advanced_cat]
-				}
-			);
+				key: basic_cat,
+				actions: categories[basic_cat]
+			}, {
+				key: advanced_cat,
+				actions: categories[advanced_cat]
+			});
 
 			$.each(categories, function(idx, val) {
-				val.sort(function(a, b){
+				val.sort(function(a, b) {
 					if (a.hasOwnProperty('weight')) {
 						return a.weight > b.weight ? 1 : -1;
 					}
 				});
 			});
 
-			tools = $(monster.template(self, 'tools', dataTemplate));
-
-			$('.tooltip', tools).click(function() {
-				monster.ui.dialog(monster.template(self, 'help_callflow'));
-			});
+			tools = $(self.getTemplate({
+				name: 'tools',
+				data: dataTemplate
+			}));
 
 			// Set the basic drawer to open
 			$('#Basic', tools).removeClass('inactive').addClass('active');
 
-			$('.category .open', tools).click(function () {
-				tools.find('.category')
-					 .removeClass('active')
-					 .addClass('inactive');
+			$('.category .open', tools).click(function() {
+				tools
+					.find('.category')
+					.removeClass('active')
+					.addClass('inactive');
 
-				$(this).parent('.category')
-					 .removeClass('inactive')
-					 .addClass('active');
+				$(this)
+					.parent('.category')
+					.removeClass('inactive')
+					.addClass('active');
 			});
 
 			var help_box = $('.callflow_helpbox_wrapper', '#callflow-view').first(),
@@ -1854,24 +2059,24 @@ define(function(require){
 						tools.find('.callflow_helpbox_wrapper').css('top', $this.offset().top).css('left', $('#ws_cf_tools').offset().left - 162).show();
 					}
 				},
-				function () {
+				function() {
 					tools.find('.callflow_helpbox_wrapper').hide();
 				}
 			);
 
-			function action (el) {
+			function action(el) {
 				el.draggable({
-					start: function () {
+					start: function() {
 						self.enableDestinations($(this));
 						$(this).addClass('inactive');
 					},
-					drag: function () {
-						if(self.tour) {
+					drag: function() {
+						if (self.tour) {
 							self.tour.end();
 						}
 						$('.callflow_helpbox_wrapper', '#callflow-view').hide();
 					},
-					stop: function () {
+					stop: function() {
 						self.disableDestinations();
 						$(this).removeClass('inactive');
 					},
@@ -1879,8 +2084,6 @@ define(function(require){
 					helper: 'clone'
 				});
 			}
-
-
 
 			$('.action', tools).each(function() {
 				action($(this));
@@ -1895,7 +2098,7 @@ define(function(require){
 		enableDestinations: function(el) {
 			var self = this;
 
-			$('.node').each(function () {
+			$('.node').each(function() {
 				var activate = true,
 					target = self.flow.nodes[$(this).attr('id')];
 
@@ -1903,15 +2106,13 @@ define(function(require){
 					if (el.hasClass('node') && self.flow.nodes[el.attr('id')].contains(target)) {
 						activate = false;
 					}
-				}
-				else {
+				} else {
 					activate = false;
 				}
 
 				if (activate) {
 					$(this).addClass('active');
-				}
-				else {
+				} else {
 					$(this).addClass('inactive');
 					$(this).droppable('disable');
 				}
@@ -1919,7 +2120,7 @@ define(function(require){
 		},
 
 		disableDestinations: function() {
-			$('.node').each(function () {
+			$('.node').each(function() {
 				$(this).removeClass('active');
 				$(this).removeClass('inactive');
 				$(this).droppable('enable');
@@ -1931,21 +2132,20 @@ define(function(require){
 		save: function() {
 			var self = this;
 
-			if(self.flow.numbers && self.flow.numbers.length > 0) {
+			if (self.flow.numbers && self.flow.numbers.length > 0) {
 				var data_request = {
-						numbers: self.flow.numbers,
-						flow: (self.flow.root.children[0] == undefined) ? {} : self.flow.root.children[0].serialize()
-					};
+					numbers: self.flow.numbers,
+					flow: (self.flow.root.children[0] === undefined) ? {} : self.flow.root.children[0].serialize()
+				};
 
-				if(self.flow.name !== '') {
+				if (self.flow.name !== '') {
 					data_request.name = self.flow.name;
-				}
-				else {
+				} else {
 					delete data_request.name;
 					delete self.dataCallflow.name;
 				}
 
-				if('contact_list' in self.flow) {
+				if ('contact_list' in self.flow) {
 					data_request.contact_list = { exclude: self.flow.contact_list.exclude || false };
 				}
 
@@ -1955,7 +2155,7 @@ define(function(require){
 				data_request = $.extend(true, {}, self.dataCallflow, data_request);
 				delete data_request.metadata;
 
-				if(self.flow.id) {
+				if (self.flow.id) {
 					self.callApi({
 						resource: 'callflow.update',
 						data: {
@@ -1964,12 +2164,11 @@ define(function(require){
 							data: data_request
 						},
 						success: function(json) {
-							self.repaintList();
-							self.editCallflow({id: json.data.id});
+							self.repaintList({ id: json.data.id });
+							self.editCallflow({ id: json.data.id });
 						}
 					});
-				}
-				else {
+				} else {
 					self.callApi({
 						resource: 'callflow.create',
 						data: {
@@ -1977,13 +2176,12 @@ define(function(require){
 							data: data_request
 						},
 						success: function(json) {
-							self.repaintList();
-							self.editCallflow({id: json.data.id});
+							self.repaintList({ id: json.data.id });
+							self.editCallflow({ id: json.data.id });
 						}
 					});
 				}
-			}
-			else {
+			} else {
 				monster.ui.alert(self.i18n.active().oldCallflows.you_need_to_select_a_number);
 			}
 		},
@@ -1992,26 +2190,26 @@ define(function(require){
 			var buttons = template.find('.view-buttons'),
 				tabs = template.find('.tabs');
 
-			if(advanced) {
+			if (advanced) {
 				buttons.find('.btn').removeClass('activate');
 				buttons.find('.advanced').addClass('activate');
 			} else {
-				if(monster.config.advancedView) {
+				if (monster.config.advancedView) {
 					buttons.find('.btn').removeClass('activate');
 					buttons.find('.advanced').addClass('activate');
 				} else {
-					 tabs.hide('blind');
+					tabs.hide('blind');
 				}
 			}
 
-			if(tabs.find('li').length < 2){
+			if (tabs.find('li').length < 2) {
 				buttons.hide();
 			}
 
-			buttons.find('.basic').on('click', function(){
+			buttons.find('.basic').on('click', function() {
 				var $this = $(this);
 
-				if(!$this.hasClass('activate')){
+				if (!$this.hasClass('activate')) {
 					buttons.find('.btn').removeClass('activate');
 					$this.addClass('activate');
 					tabs.find('li:first-child > a').trigger('click');
@@ -2019,10 +2217,10 @@ define(function(require){
 				}
 			});
 
-			buttons.find('.advanced').click(function(){
+			buttons.find('.advanced').click(function() {
 				var $this = $(this);
 
-				if(!$this.hasClass('activate')){
+				if (!$this.hasClass('activate')) {
 					buttons.find('.btn').removeClass('activate');
 					$this.addClass('activate');
 					tabs.show('blind');
@@ -2052,26 +2250,25 @@ define(function(require){
 					id = input.attr('id'),
 					input_fields = $('input[name="' + name + '"]', html);
 
-				if(input_fields.size() > 1) {
-					if(type == 'checkbox'){
-						input_fields = input_fields.filter('[value='+value+']');
+				if (input_fields.size() > 1) {
+					if (type === 'checkbox') {
+						input_fields = input_fields.filter('[value=' + value + ']');
 						(input.attr('checked')) ? input_fields.attr('checked', 'checked') : input_fields.removeAttr('checked');
-					}
-					else {
+					} else {
 						$.each(input_fields, function(k, v) {
 							var element = $(v);
 
-							if(element.attr('id') !== id) {
+							if (element.attr('id') !== id) {
 								element.val(value);
 							}
 						});
 					}
-				}
-				else {
+				} else {
 					input.unbind('.link');
 				}
 			});
 		},
+
 		getAll: function(callApiData, startKey, continueData) {
 			// Warning! Method works for listed data only!
 			// -- Usage:
@@ -2087,7 +2284,7 @@ define(function(require){
 			continueData = continueData || { data:[] };
 			var self = this;
 
-			if(typeof(callApiData.resource) === 'undefined') {
+			if (typeof (callApiData.resource) === 'undefined') {
 				self.log('Error! Api keyword is undefined');
 				return;
 			}
@@ -2097,32 +2294,48 @@ define(function(require){
 				generateError: false
 			}, callApiData.data || {});
 
-			if(typeof(startKey) !== 'undefined') {
+			if (typeof (startKey) !== 'undefined') {
 				requestData.startKey = startKey;
 			}
 
 			var newRequestData = {
 				resource: callApiData.resource,
 				data: requestData,
-				success: function(response){
+				success: function(response) {
 					response.data = $.merge(continueData.data, response.data);
-					if(response.next_start_key && startKey !== response.next_start_key) {
+					if (response.next_start_key && startKey !== response.next_start_key) {
 						self.getAll(callApiData, response.next_start_key, response);
 						return;
 					}
 
-					if(typeof(callApiData.success) === 'function') {
+					if (typeof (callApiData.success) === 'function') {
 						callApiData.success(response);
 					}
 				},
-				error: callApiData.error || function(){}
+				error: callApiData.error || function() {}
 			};
 
-			if(self.requests.hasOwnProperty(callApiData.resource)) {
+			if (self.requests.hasOwnProperty(callApiData.resource)) {
 				monster.request(newRequestData);
 			} else {
 				self.callApi(newRequestData);
 			}
+		},
+
+		/**
+		 * Recursively unsets `obj`'s empty properties by mutating it
+		 * @param  {Object} obj  Object to compact
+		 */
+		compactObject: function(obj) {
+			var self = this;
+			_.each(obj, function(value, key) {
+				if (_.isPlainObject(value)) {
+					self.compactObject(value);
+				}
+				if (_.isEmpty(value)) {
+					_.unset(obj, key);
+				}
+			});
 		}
 	};
 

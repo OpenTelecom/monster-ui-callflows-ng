@@ -1,18 +1,19 @@
 <div class="node-options">
-	<div id="{{ node.id }}" class="delete"/>
+	<div id="{{ node.id }}" class="delete"></div>
 	<div class="module">
 		<div class="div_icon">
-			<i class="fa fa-{{ callflow.icon }}"/>
+			<i class="fa fa-{{ callflow.icon }}"></i>
 			<span class="module_name">{{ callflow.name }}</span>
 		</div>
 	</div>
-        <div class="details">
-                        {{#compare node.module "===" "callflow"}}
-                                   <div id="{{ node.data.data.id }}" class="jump"><a class="inline_action" data-action="edit" href="#">{{ node.caption }}</a></div>
-                           </div>
-                        {{else}}
-                                {{ node.caption }}
-                        {{/compare}}
+    <div class="details">
+		{{#compare callflow.name '===' "Callflow"}}
+		    <div id="{{ node.data.data.id }}" class="details jump">
+				<a class="inline_action" data-action="edit" href="#">{{ node.caption }}</a>
+			</div>
+		{{else}}
+		    <div class="details">{{ node.caption }}</div>
+		{{/compare}}
 	</div>
-	<div class="clear"/>
+	<div class="clear"></div>
 </div>

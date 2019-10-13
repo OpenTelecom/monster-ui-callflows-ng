@@ -1,4 +1,4 @@
-define(function(require){
+define(function(require) {
 	var $ = require('jquery'),
 		_ = require('lodash'),
 		monster = require('monster');
@@ -11,9 +11,13 @@ define(function(require){
 			'callflows.directory.edit': '_directoryEdit'
 		},
 
-		directoryRender: function(data, target, callbacks){
+		directoryRender: function(data, target, callbacks) {
 			var self = this,
-				directory_html = $(monster.template(self, 'directory-edit', data)),
+				directory_html = $(self.getTemplate({
+					name: 'edit',
+					data: data,
+					submodule: 'directory'
+				})),
 				directoryForm = directory_html.find('#directory-form');
 
 			self.directoryRenderUserList(data, directory_html);
@@ -83,31 +87,35 @@ define(function(require){
 				var $user = $('#select_user_id', directory_html);
 				var $callflow = $('#callflow_id', directory_html);
 
-				if($user.val() != 'empty_option_user' && $callflow.val() != 'empty_option_callflow') {
+				if ($user.val() !== 'empty_option_user' && $callflow.val() !== 'empty_option_callflow') {
 					var user_id = $user.val(),
 						user_data = {
 							user_id: user_id,
-							user_name: $('#option_user_'+user_id, directory_html).text(),
+							user_name: $('#option_user_' + user_id, directory_html).text(),
 							callflow_id: $callflow.val(),
 							field_data: {
 								callflows: data.field_data.callflows
 							},
-							_t: function(param){
-								return window.translate['directory'][param];
+							_t: function(param) {
+								return window.translate.directory[param];
 							}
 						};
 
-					if($('#row_no_data', directory_html).size() > 0) {
+					if ($('#row_no_data', directory_html).size() > 0) {
 						$('#row_no_data', directory_html).remove();
 					}
 
-					$('.rows', directory_html).prepend(monster.template(self, 'directory-userRow', user_data));
-					$('#option_user_'+user_id, directory_html).hide();
+					$('.rows', directory_html)
+						.prepend($(self.getTemplate({
+							name: 'userRow',
+							data: user_data,
+							submodule: 'directory'
+						})));
+					$('#option_user_' + user_id, directory_html).hide();
 
 					$user.val('empty_option_user');
 					$callflow.val('empty_option_callflow');
-				}
-				else {
+				} else {
 					monster.ui.alert('warning', self.i18n.active().callflows.directory.noDataSelected);
 				}
 			});
@@ -115,12 +123,16 @@ define(function(require){
 			$(directory_html).delegate('.action_user.delete', 'click', function() {
 				var user_id = $(this).data('id');
 				//removes it from the grid
-				$('#row_user_'+user_id, directory_html).remove();
+				$('#row_user_' + user_id, directory_html).remove();
 				//re-add it to the dropdown
-				$('#option_user_'+user_id, directory_html).show();
+				$('#option_user_' + user_id, directory_html).show();
 				//if grid empty, add no data line
-				if($('.rows .row', directory_html).size() == 0) {
-					$('.rows', directory_html).append(monster.template(self, 'directory-userRow'));
+				if ($('.rows .row', directory_html).size() === 0) {
+					$('.rows', directory_html)
+						.append($(self.getTemplate({
+							name: 'userRow',
+							submodule: 'directory'
+						})));
 				}
 			});
 
@@ -132,11 +144,11 @@ define(function(require){
 		directoryRenderUserList: function(data, parent) {
 			var self = this;
 
-			if(data.data.id) {
-				if('users' in data.data && data.data.users.length > 0) {
+			if (data.data.id) {
+				if ('users' in data.data && data.data.users.length > 0) {
 					var user_item;
 					$.each(data.field_data.users, function(k, v) {
-						if(v.id in data.field_data.old_list) {
+						if (v.id in data.field_data.old_list) {
 							user_item = {
 								user_id: v.id,
 								user_name: v.first_name + ' ' + v.last_name,
@@ -146,19 +158,30 @@ define(function(require){
 								}
 							};
 
-							$('.rows', parent).append(monster.template(self, 'directory-userRow', user_item));
-							$('#option_user_'+v.id, parent).hide();
+							$('.rows', parent)
+								.append($(self.getTemplate({
+									name: 'userRow',
+									data: user_item,
+									submodule: 'directory'
+								})));
+							$('#option_user_' + v.id, parent).hide();
 						}
 					});
+				} else {
+					$('.rows', parent)
+						.empty()
+						.append($(self.getTemplate({
+							name: 'userRow',
+							submodule: 'directory'
+						})));
 				}
-				else {
-					$('.rows', parent).empty()
-									  .append(monster.template(self, 'directory-userRow'));
-				}
-			}
-			else {
-				$('.rows', parent).empty()
-								  .append(monster.template(self,'directory-userRow'));
+			} else {
+				$('.rows', parent)
+					.empty()
+					.append($(self.getTemplate({
+						name: 'userRow',
+						submodule: 'directory'
+					})));
 			}
 		},
 
@@ -168,7 +191,7 @@ define(function(require){
 			self.directoryEdit(args.data, args.parent, args.target, args.callbacks, args.data_defaults);
 		},
 
-		directoryEdit: function(data, _parent, _target, _callbacks, data_defaults){
+		directoryEdit: function(data, _parent, _target, _callbacks, data_defaults) {
 			var self = this,
 				parent = _parent || $('#directory-content'),
 				target = _target || $('#directory-view', parent),
@@ -196,93 +219,89 @@ define(function(require){
 				};
 
 			monster.parallel({
-					callflow_list: function(callback) {
-						self.callApi({
-							resource: 'callflow.list',
-							data: {
-								accountId: self.accountId,
-								filters: {
-									paginate: 'false'
-								}
-							},
-							success: function(callflows) {
-								var list_callflows = [];
-								$.each(callflows.data, function() {
-									if(this.featurecode == false) {
-										list_callflows.push(this);
-									}
-								});
-
-								list_callflows.sort(function(a, b) {
-									var aName = (a.name || (a.numbers[0] + '')).toLowerCase(),
-										bName = (b.name || (b.numbers[0] + '')).toLowerCase();
-
-									return aName > bName ? 1 : -1;
-								});
-
-								defaults.field_data.callflows = list_callflows;
-
-								callback(null, callflows);
+				callflow_list: function(callback) {
+					self.callApi({
+						resource: 'callflow.list',
+						data: {
+							accountId: self.accountId,
+							filters: {
+								paginate: 'false'
 							}
-						});
-					},
-					user_list: function(callback) {
-						self.callApi({
-							resource: 'user.list',
-							data: {
-								accountId: self.accountId,
-								filters: {
-									paginate: 'false'
+						},
+						success: function(callflows) {
+							var list_callflows = [];
+							$.each(callflows.data, function() {
+								if (this.featurecode === false) {
+									list_callflows.push(this);
 								}
-							},
-							success: function(users) {
-								users.data.sort(function(a,b) {
-									var aName = (a.first_name + ' ' + a.last_name).toLowerCase(),
-										bName = (b.first_name + ' ' + b.last_name).toLowerCase();
+							});
 
-									return aName > bName ? 1 : -1;
-								});
+							list_callflows.sort(function(a, b) {
+								var aName = (a.name || (a.numbers[0] + '')).toLowerCase(),
+									bName = (b.name || (b.numbers[0] + '')).toLowerCase();
 
-								defaults.field_data.users = users.data;
+								return aName > bName ? 1 : -1;
+							});
 
-								callback(null, users);
-							}
-						});
-					},
-					directory_get: function(callback) {
-						if(typeof data === 'object' && data.id) {
-							self.directoryGet(data.id, function(directory, status) {
-									defaults.field_data.old_list = {};
+							defaults.field_data.callflows = list_callflows;
 
-									if('users' in directory) {
-										$.each(directory.users, function(k, v) {
-											defaults.field_data.old_list[v.user_id] = v.callflow_id;
-										});
-									}
-
-									callback(null, directory);
-								}
-							);
+							callback(null, callflows);
 						}
-						else {
-							callback(null, {});
-						}
-					}
+					});
 				},
-				function(err, results) {
-					var render_data = defaults;
+				user_list: function(callback) {
+					self.callApi({
+						resource: 'user.list',
+						data: {
+							accountId: self.accountId,
+							filters: {
+								paginate: 'false'
+							}
+						},
+						success: function(users) {
+							users.data.sort(function(a, b) {
+								var aName = (a.first_name + ' ' + a.last_name).toLowerCase(),
+									bName = (b.first_name + ' ' + b.last_name).toLowerCase();
 
-					if(typeof data === 'object' && data.id) {
-						render_data = $.extend(true, defaults, { data: results.directory_get });
-					}
+								return aName > bName ? 1 : -1;
+							});
 
-					self.directoryRender(render_data, target, callbacks);
+							defaults.field_data.users = users.data;
 
-					if(typeof callbacks.after_render == 'function') {
-						callbacks.after_render();
+							callback(null, users);
+						}
+					});
+				},
+				directory_get: function(callback) {
+					if (typeof data === 'object' && data.id) {
+						self.directoryGet(data.id, function(directory, status) {
+							defaults.field_data.old_list = {};
+
+							if ('users' in directory) {
+								$.each(directory.users, function(k, v) {
+									defaults.field_data.old_list[v.user_id] = v.callflow_id;
+								});
+							}
+
+							callback(null, directory);
+						});
+					} else {
+						callback(null, {});
 					}
 				}
-			);
+			}, function(err, results) {
+				var render_data = defaults;
+
+				if (typeof data === 'object' && data.id) {
+					render_data = $.extend(true, defaults, { data: results.directory_get });
+				}
+
+				self.directoryRender(render_data, target, callbacks);
+
+				if (typeof callbacks.after_render === 'function') {
+					callbacks.after_render();
+				}
+			});
 		},
 
 		directoryPopupEdit: function(args) {
@@ -299,14 +318,14 @@ define(function(require){
 				save_success: function(_data) {
 					popup.dialog('close');
 
-					if(typeof callback == 'function') {
+					if (typeof callback === 'function') {
 						callback(_data);
 					}
 				},
 				delete_success: function() {
 					popup.dialog('close');
 
-					if(typeof callback == 'function') {
+					if (typeof callback === 'function') {
 						callback({ data: {} });
 					}
 				},
@@ -324,7 +343,7 @@ define(function(require){
 		},
 
 		directoryCleanFormData: function(form_data) {
-			if(!(form_data.max_dtmf > 0)) {
+			if (!(form_data.max_dtmf > 0)) {
 				delete form_data.max_dtmf;
 			}
 
@@ -337,14 +356,13 @@ define(function(require){
 			var self = this,
 				normalized_data = self.directoryNormalizeData($.extend(true, {}, data.data, form_data));
 
-			if (typeof data.data == 'object' && data.data.id) {
+			if (typeof data.data === 'object' && data.data.id) {
 				self.directoryUpdate(normalized_data, function(_data, status) {
 					self.directoryUpdateUsers(data.field_data.user_list, _data.id, function() {
 						success && success(_data, status, 'update');
 					});
-				})
-			}
-			else {
+				});
+			} else {
 				self.directoryCreate(normalized_data, function(_data, status) {
 					self.directoryUpdateUsers(data.field_data.user_list, _data.id, function() {
 						success && success(_data, status, 'create');
@@ -363,13 +381,12 @@ define(function(require){
 					userId: user_id
 				},
 				success: function(_data, status) {
-					if(callflow_id) {
-						if(!_data.data.directories || $.isArray(_data.data.directories)) {
+					if (callflow_id) {
+						if (!_data.data.directories || $.isArray(_data.data.directories)) {
 							_data.data.directories = {};
 						}
 						_data.data.directories[directory_id] = callflow_id;
-					}
-					else {
+					} else {
 						delete _data.data.directories[directory_id];
 					}
 
@@ -394,14 +411,14 @@ define(function(require){
 				users_count = 0,
 				callback = function() {
 					users_updated_count++;
-					if(users_updated_count >= users_count) {
+					if (users_updated_count >= users_count) {
 						success();
 					}
 				};
 
-			if(old_directory_user_list) {
-				$.each(old_directory_user_list, function(k, v) {
-					if(!(k in new_directory_user_list)) {
+			if (old_directory_user_list) {
+				$.each(old_directory_user_list, function(k) {
+					if (!(k in new_directory_user_list)) {
 						//Request to update user without this directory.
 						users_count++;
 						self.directoryUpdateSingleUser(k, directory_id, undefined, callback);
@@ -409,22 +426,20 @@ define(function(require){
 				});
 
 				$.each(new_directory_user_list, function(k, v) {
-					if(k in old_directory_user_list) {
-						if(old_directory_user_list[k] != v) {
+					if (k in old_directory_user_list) {
+						if (old_directory_user_list[k] !== v) {
 							//Request to update user
 							users_count++;
 							self.directoryUpdateSingleUser(k, directory_id, v, callback);
 						}
 						//else it has not been updated
-					}
-					else {
+					} else {
 						users_count++;
 						self.directoryUpdateSingleUser(k, directory_id, v, callback);
 					}
 				});
-			}
-			else {
-				if(new_directory_user_list) {
+			} else {
+				if (new_directory_user_list) {
 					$.each(new_directory_user_list, function(k, v) {
 						users_count++;
 						self.directoryUpdateSingleUser(k, directory_id, v, callback);
@@ -432,7 +447,7 @@ define(function(require){
 				}
 			}
 
-			if(users_count === 0) {
+			if (users_count === 0) {
 				success();
 			}
 		},
@@ -463,7 +478,7 @@ define(function(require){
 						var id = node.getMetadata('id'),
 							returned_value = '';
 
-						if(id in caption_map) {
+						if (id in caption_map) {
 							returned_value = caption_map[id].name;
 						}
 
@@ -475,18 +490,21 @@ define(function(require){
 						self.directoryList(function(directories) {
 							var popup, popup_html;
 
-							popup_html = $(monster.template(self, 'directory-callflowEdit', {
-								items: _.sortBy(directories, 'name'),
-								selected: node.getMetadata('id') || ''
+							popup_html = $(self.getTemplate({
+								name: 'callflowEdit',
+								data: {
+									items: _.sortBy(directories, 'name'),
+									selected: node.getMetadata('id') || ''
+								},
+								submodule: 'directory'
 							}));
 
-							if($('#directory_selector option:selected', popup_html).val() == undefined) {
+							if ($('#directory_selector option:selected', popup_html).val() === undefined) {
 								$('#edit_link', popup_html).hide();
 							}
 
 							$('.inline_action', popup_html).click(function(ev) {
-								var _data = ($(this).data('action') == 'edit') ?
-												{ id: $('#directory_selector', popup_html).val() } : {};
+								var _data = ($(this).data('action') === 'edit') ? { id: $('#directory_selector', popup_html).val() } : {};
 
 								ev.preventDefault();
 
@@ -513,7 +531,7 @@ define(function(require){
 							popup = monster.ui.dialog(popup_html, {
 								title: self.i18n.active().callflows.directory.directory_title,
 								beforeClose: function() {
-									if(typeof callback == 'function') {
+									if (typeof callback === 'function') {
 										callback();
 									}
 								}
@@ -525,7 +543,9 @@ define(function(require){
 							resource: 'directory.list',
 							data: {
 								accountId: self.accountId,
-								filters: { paginate:false }
+								filters: {
+									paginate: false
+								}
 							},
 							success: function(data, status) {
 								callback && callback(data.data);
@@ -544,7 +564,9 @@ define(function(require){
 				resource: 'directory.list',
 				data: {
 					accountId: self.accountId,
-					filters: { paginate:false }
+					filters: {
+						paginate: false
+					}
 				},
 				success: function(data) {
 					callback && callback(data.data);
@@ -559,7 +581,10 @@ define(function(require){
 				resource: 'directory.get',
 				data: {
 					accountId: self.accountId,
-					directoryId: directoryId
+					directoryId: directoryId,
+					filters: {
+						paginate: false
+					}
 				},
 				success: function(data) {
 					callback && callback(data.data);

@@ -1,4 +1,4 @@
-define(function(require){
+define(function(require) {
 	var $ = require('jquery'),
 		_ = require('lodash'),
 		monster = require('monster'),
@@ -37,7 +37,7 @@ define(function(require){
 						var id = node.getMetadata('id'),
 							returned_value = '';
 
-						if(id in caption_map) {
+						if (id in caption_map) {
 							returned_value = caption_map[id].name;
 						}
 
@@ -47,19 +47,22 @@ define(function(require){
 						var _this = this;
 
 						self.faxboxList(function(data, status) {
-							var popup_html = $(monster.template(self, 'faxbox-callflowEdit', {
-									items: _.sortBy(data, 'name'),
-									selected: node.getMetadata('id') || ''
+							var popup_html = $(self.getTemplate({
+									name: 'callflowEdit',
+									data: {
+										items: _.sortBy(data, 'name'),
+										selected: node.getMetadata('id') || ''
+									},
+									submodule: 'faxbox'
 								})),
 								popup;
 
-							if($('#faxbox_selector option:selected', popup_html).val() == undefined) {
+							if ($('#faxbox_selector option:selected', popup_html).val() === undefined) {
 								$('#edit_link', popup_html).hide();
 							}
 
 							$('.inline_action', popup_html).click(function(ev) {
-								var _data = ($(this).data('action') == 'edit') ?
-												{ id: $('#faxbox_selector', popup_html).val() } : {};
+								var _data = ($(this).data('action') === 'edit') ? { id: $('#faxbox_selector', popup_html).val() } : {};
 
 								ev.preventDefault();
 
@@ -87,7 +90,7 @@ define(function(require){
 								title: self.i18n.active().callflows.faxbox.voicemail_title,
 								minHeight: '0',
 								beforeClose: function() {
-									if(typeof callback == 'function') {
+									if (typeof callback === 'function') {
 										callback();
 									}
 								}
@@ -99,7 +102,9 @@ define(function(require){
 							resource: 'faxbox.list',
 							data: {
 								accountId: self.accountId,
-								filters: { paginate:false }
+								filters: {
+									paginate: false
+								}
 							},
 							success: function(data, status) {
 								callback && callback(data.data);
@@ -123,14 +128,14 @@ define(function(require){
 				save_success: function(_data) {
 					popup.dialog('close');
 
-					if ( typeof callback == 'function' ) {
+					if (typeof callback === 'function') {
 						callback(_data);
 					}
 				},
 				delete_success: function() {
 					popup.dialog('close');
 
-					if ( typeof callback == 'function' ) {
+					if (typeof callback === 'function') {
 						callback({ data: {} });
 					}
 				},
@@ -155,9 +160,9 @@ define(function(require){
 				_callbacks = _callbacks || {},
 				callbacks = {
 					save_success: _callbacks.save_success || function(_data) {
-							self.faxboxRenderList(parent);
+						self.faxboxRenderList(parent);
 
-							self.faxboxEdit({ id: _data.id }, parent, target, callbacks);
+						self.faxboxEdit({ id: _data.id }, parent, target, callbacks);
 					},
 					delete_success: _callbacks.delete_success || function() {
 						target.empty();
@@ -169,84 +174,114 @@ define(function(require){
 				};
 
 			monster.parallel({
-					faxbox: function(callback) {
-						if (typeof data === 'object' && data.id) {
-							self.faxboxGet(data.id, function(_data, status) {
-								_data.id = data.id;
+				faxbox: function(callback) {
+					if (typeof data === 'object' && data.id) {
+						self.faxboxGet(data.id, function(_data, status) {
+							_data.id = data.id;
 
-								callback(null, _data);
-							});
-						} else {
-							callback(null, {});
-						}
-					},
-					user_list: function(callback) {
-						self.callApi({
-							resource: 'user.list',
-							data: {
-								accountId: self.accountId,
-								filters: { paginate:false }
-							},
-							success: function(_data, status) {
-								_data.data.sort(function(a, b){
-									if(a.hasOwnProperty('first_name') && a.hasOwnProperty('last_name') && b.hasOwnProperty('first_name') && b.hasOwnProperty('last_name')) {
-										return a.first_name.concat(' ', a.last_name).toLowerCase() > b.first_name.concat(' ', b.last_name).toLowerCase() ? 1 : -1;
-									}
-									else {
-										return 1;
-									}
-								});
-
-								_data.data.unshift({
-									id: '',
-									first_name: self.i18n.active().callflows.faxbox.no,
-									last_name: self.i18n.active().callflows.faxbox.owner
-								});
-
-								callback(null, _data.data);
-							}
+							callback(null, _data);
 						});
-					},
-					current_user: function(callback) {
-						if (!monster.util.isMasquerading()) {
-							self.faxboxGetUser(self.userId, function(_data, status) {
-								callback(null, _data);
-							});
-						}
-						else {
-							callback(null, {});
-						}
+					} else {
+						callback(null, {});
 					}
 				},
-				function(err, results) {
-					if (!data.hasOwnProperty('id')) {
-						if (_.size(results.current_user) === 0) {
-							results.faxbox = $.extend(true, self.faxboxGetDefaultSettings(), results.faxbox);
+				user_list: function(callback) {
+					self.callApi({
+						resource: 'user.list',
+						data: {
+							accountId: self.accountId,
+							filters: {
+								paginate: false
+							}
+						},
+						success: function(_data, status) {
+							_data.data.sort(function(a, b) {
+								if (a.hasOwnProperty('first_name') && a.hasOwnProperty('last_name') && b.hasOwnProperty('first_name') && b.hasOwnProperty('last_name')) {
+									return a.first_name.concat(' ', a.last_name).toLowerCase() > b.first_name.concat(' ', b.last_name).toLowerCase() ? 1 : -1;
+								} else {
+									return 1;
+								}
+							});
+
+							_data.data.unshift({
+								id: '',
+								first_name: self.i18n.active().callflows.faxbox.no,
+								last_name: self.i18n.active().callflows.faxbox.owner
+							});
+
+							callback(null, _data.data);
 						}
-						else {
-							results.faxbox = $.extend(true, self.faxboxGetDefaultSettings(results.current_user), results.faxbox);
-						}
+					});
+				},
+				current_user: function(callback) {
+					if (!monster.util.isMasquerading()) {
+						self.faxboxGetUser(self.userId, function(_data, status) {
+							callback(null, _data);
+						});
+					} else {
+						callback(null, {});
 					}
+				},
+				phone_numbers: function(callback) {
+					self.callApi({
+						resource: 'numbers.list',
+						data: {
+							accountId: self.accountId,
+							filters: {
+								paginate: false
+							}
+						},
+						success: function(_data) {
+							_data.numbers = _.chain(_data)
+								.get('data.numbers', {})
+								.keys()
+								.sortBy()
+								.value();
 
-					delete results.current_user;
-
-					self.faxboxRender(results, target, callbacks);
-
-					if (typeof callbacks.after_render === 'function') {
-						callbacks.after_render();
+							callback(null, _data.numbers);
+						}
+					});
+				}
+			}, function(err, results) {
+				if (!data.hasOwnProperty('id')) {
+					if (_.size(results.current_user) === 0) {
+						results.faxbox = $.extend(true, self.faxboxGetDefaultSettings(), results.faxbox);
+					} else {
+						results.faxbox = $.extend(true, self.faxboxGetDefaultSettings(results.current_user), results.faxbox);
 					}
 				}
-			);
+
+				delete results.current_user;
+
+				var invalidCallerID = _.find(results.phone_numbers, _.get(results.faxbox, 'caller_id', null));
+
+				if (!invalidCallerID) {
+					results.phone_numbers.unshift(results.faxbox.caller_id);
+				}
+
+				self.faxboxRender(results, target, callbacks);
+
+				if (typeof callbacks.after_render === 'function') {
+					callbacks.after_render();
+				}
+			});
 		},
 
 		faxboxRender: function(data, target, callbacks) {
 			var self = this,
-				faxbox_html = $(monster.template(self, 'faxbox-edit', {
-					faxbox: self.faxboxNormalizedData(data.faxbox),
-					users: data.user_list
+				faxbox_html = $(self.getTemplate({
+					name: 'edit',
+					data: {
+						faxbox: self.faxboxNormalizedData(data.faxbox),
+						users: data.user_list,
+						phone_numbers: data.phone_numbers
+					},
+					submodule: 'faxbox'
 				}));
 
-			timezone.populateDropdown($('#fax_timezone', faxbox_html), data.faxbox.fax_timezone||'inherit', {inherit: self.i18n.active().defaultTimezone});
+			monster.ui.chosen(faxbox_html.find('.callflows-caller-id-dropdown'));
+
+			timezone.populateDropdown($('#fax_timezone', faxbox_html), data.faxbox.fax_timezone || 'inherit', {inherit: self.i18n.active().defaultTimezone});
 
 			$('*[rel=popover]:not([type="text"])', faxbox_html).popover({
 				trigger: 'hover'
@@ -261,7 +296,7 @@ define(function(require){
 			if (!data.faxbox.hasOwnProperty('id')) {
 				$('#owner_id', faxbox_html).change(function(ev) {
 					if ($(this).val()) {
-						self.faxboxGetUser($(this).val(),function(_data, status) {
+						self.faxboxGetUser($(this).val(), function(_data, status) {
 							data.faxbox = self.faxboxGetDefaultSettings(_data);
 							$('#edit_link', faxbox_html).show();
 							self.faxboxRender(data, target, callbacks);
@@ -272,8 +307,7 @@ define(function(require){
 						self.faxboxRender(data, target, callbacks);
 					}
 				});
-			}
-			else {
+			} else {
 				$('#owner_id', faxbox_html).change(function(ev) {
 					var currentFaxbox = monster.ui.getFormData('faxbox_form');
 
@@ -302,8 +336,7 @@ define(function(require){
 							$('#edit_link', faxbox_html).hide();
 							self.faxboxRender(data, target, callbacks);
 						});
-					}
-					else {
+					} else {
 						$('[id$="bound_notification_email"]', faxbox_html).each(function(idx, el) {
 							$(el).attr('disabled', false);
 						});
@@ -311,30 +344,28 @@ define(function(require){
 				});
 			}
 
-			if(!$('#owner_id', faxbox_html).val()) {
+			if (!$('#owner_id', faxbox_html).val()) {
 				$('#edit_link', faxbox_html).hide();
 			}
 
 			$('.inline-action', faxbox_html).click(function(ev) {
-				var _data = $(this).data('action') == 'edit' ? { id: $('#owner_id', faxbox_html).val() } : {},
+				var _data = $(this).data('action') === 'edit' ? { id: $('#owner_id', faxbox_html).val() } : {},
 					_id = _data.id;
 
 				monster.pub('callflows.user.popupEdit', {
 					data: _data,
 					callflow: function(_data) {
 						/* Create */
-						if(!_id) {
-							$('#owner_id', faxbox_html).append('<option id="'+ _data.id  +'" value="'+ _data.id +'">'+ _data.first_name + ' ' + _data.last_name  +'</option>')
+						if (!_id) {
+							$('#owner_id', faxbox_html).append('<option id="' + _data.id + '" value="' + _data.id + '">' + _data.first_name + ' ' + _data.last_name + '</option>');
 							$('#owner_id', faxbox_html).val(_data.id);
-						}
-						else {
+						} else {
 							/* Update */
-							if('id' in _data) {
-								$('#owner_id #'+_data.id, faxbox_html).text(_data.first_name + ' ' + _data.last_name);
-							}
+							if ('id' in _data) {
+								$('#owner_id #' + _data.id, faxbox_html).text(_data.first_name + ' ' + _data.last_name);
 							/* Delete */
-							else {
-								$('#owner_id #'+_id, faxbox_html).remove();
+							} else {
+								$('#owner_id #' + _id, faxbox_html).remove();
 							}
 						}
 					}
@@ -350,7 +381,7 @@ define(function(require){
 						fax_identity.val(number.replace(/^\+1([0-9]{3})([0-9]{3})([0-9]{4})$/, '+1 ($1) $2-$3'));
 					} else if (/^1([0-9]{10})$/.test(number)) {
 						fax_identity.val(number.replace(/^1([0-9]{3})([0-9]{3})([0-9]{4})$/, '+1 ($1) $2-$3'));
-					} else  {
+					} else {
 						fax_identity.val(number.replace(/^([0-9]{3})([0-9]{3})([0-9]{4})$/, '+1 ($1) $2-$3'));
 					}
 				} else {
@@ -363,7 +394,7 @@ define(function(require){
 
 				var form_html = $('#faxbox_form', faxbox_html),
 					form_data = monster.ui.getFormData('faxbox_form'),
-					word_reg = /^[\w\s'-]+/
+					word_reg = /^[\w\s'-]+/;
 
 				monster.ui.validate(form_html, {
 					rules: {
@@ -395,7 +426,7 @@ define(function(require){
 
 				var $this = $(this);
 
-				if(!$this.hasClass('disabled')) {
+				if (!$this.hasClass('disabled')) {
 					$this.addClass('disabled');
 
 					if (monster.ui.valid(form_html)) {
@@ -405,8 +436,7 @@ define(function(require){
 						}, function(data) {
 							$this.removeClass('disabled');
 						});
-					}
-					else {
+					} else {
 						$this.removeClass('disabled');
 					}
 				}
@@ -432,7 +462,7 @@ define(function(require){
 				var map_crossbar_data = function(data) {
 					var new_list = [];
 
-					if(data.length > 0) {
+					if (data.length > 0) {
 						$.each(data, function(key, val) {
 							new_list.push({
 								id: val.id,
@@ -457,7 +487,7 @@ define(function(require){
 					caller_name: '',
 					fax_header: '',
 					fax_timezone: 'inherit',
-					retries: 1,
+					retries: 3,
 					notifications: {
 						inbound: {
 							email: {
@@ -476,24 +506,23 @@ define(function(require){
 				return default_faxbox;
 			} else {
 				return $.extend(true, {}, default_faxbox, {
-							name: user.first_name.concat(' ', user.last_name, self.i18n.active().callflows.faxbox.default_settings_name_extension),
-							caller_name: user.first_name.concat(' ', user.last_name),
-							fax_header: monster.config.whitelabel.companyName.concat(self.i18n.active().callflows.faxbox.default_settings_header_extension),
-							owner_id: user.id,
-							notifications: {
-								inbound: {
-									email: {
-										send_to: user.email || user.username
-									}
-								},
-								outbound: {
-									email: {
-										send_to: user.email || user.username
-									}
-								}
+					name: user.first_name.concat(' ', user.last_name, self.i18n.active().callflows.faxbox.default_settings_name_extension),
+					caller_name: user.first_name.concat(' ', user.last_name),
+					fax_header: monster.config.whitelabel.companyName.concat(self.i18n.active().callflows.faxbox.default_settings_header_extension),
+					owner_id: user.id,
+					notifications: {
+						inbound: {
+							email: {
+								send_to: user.email || user.username
+							}
+						},
+						outbound: {
+							email: {
+								send_to: user.email || user.username
 							}
 						}
-					);
+					}
+				});
 			}
 		},
 
@@ -501,47 +530,47 @@ define(function(require){
 			var self = this,
 				normalized_data = self.faxboxNormalizedData($.extend(true, {}, data, form_data));
 
-			if(typeof data == 'object' && data.id) {
+			if (typeof data === 'object' && data.id) {
 				self.faxboxUpdate(normalized_data, function(_data, status) {
-						if(typeof success == 'function') {
-							success(_data, status, 'update');
-						}
-					},
-					function(_data, status) {
-						if(typeof error == 'function') {
-							error(_data, status, 'update');
-						}
+					if (typeof success === 'function') {
+						success(_data, status, 'update');
 					}
-				);
+				}, function(_data, status) {
+					if (typeof error === 'function') {
+						error(_data, status, 'update');
+					}
+				});
 			} else {
 				self.faxboxCreate(normalized_data, function(_data, status) {
-						if(typeof success == 'function') {
-							success(_data, status, 'create');
-						}
-					},
-					function(_data, status) {
-						if(typeof error == 'function') {
-							error(_data, status, 'create');
-						}
+					if (typeof success === 'function') {
+						success(_data, status, 'create');
 					}
-				);
+				}, function(_data, status) {
+					if (typeof error === 'function') {
+						error(_data, status, 'create');
+					}
+				});
 			}
 		},
 
 		faxboxNormalizedData: function(form_data) {
 			if (form_data.hasOwnProperty('notifications')) {
-				if (form_data.notifications.hasOwnProperty('inbound') && form_data.notifications.inbound.hasOwnProperty('email') && form_data.notifications.inbound.email.hasOwnProperty('send_to') && form_data.notifications.inbound.email.send_to.length) {
-					var inbound = form_data.notifications.inbound.email.send_to;
-					form_data.notifications.inbound.email.send_to = inbound instanceof Array ? inbound.join(',') : inbound.replace(/\s/g, '').split(',');
-				} else {
-					delete form_data.notifications.inbound.email.send_to;
+				if (form_data.notifications.hasOwnProperty('inbound') && form_data.notifications.inbound.hasOwnProperty('email') && form_data.notifications.inbound.email.hasOwnProperty('send_to')) {
+					if (form_data.notifications.inbound.email.send_to.length) {
+						var inbound = form_data.notifications.inbound.email.send_to;
+						form_data.notifications.inbound.email.send_to = inbound instanceof Array ? inbound.join(',') : inbound.replace(/\s/g, '').split(',');
+					} else {
+						delete form_data.notifications.inbound.email.send_to;
+					}
 				}
 
-				if (form_data.notifications.hasOwnProperty('outbound') && form_data.notifications.outbound.hasOwnProperty('email') && form_data.notifications.outbound.email.hasOwnProperty('send_to') && form_data.notifications.outbound.email.send_to.length) {
-					var outbound = form_data.notifications.outbound.email.send_to;
-					form_data.notifications.outbound.email.send_to = outbound instanceof Array ? outbound.join(',') : outbound.replace(/\s/g, '').split(',');
-				} else {
-					delete form_data.notifications.outbound.email.send_to;
+				if (form_data.notifications.hasOwnProperty('outbound') && form_data.notifications.outbound.hasOwnProperty('email') && form_data.notifications.outbound.email.hasOwnProperty('send_to')) {
+					if (form_data.notifications.outbound.email.send_to.length) {
+						var outbound = form_data.notifications.outbound.email.send_to;
+						form_data.notifications.outbound.email.send_to = outbound instanceof Array ? outbound.join(',') : outbound.replace(/\s/g, '').split(',');
+					} else {
+						delete form_data.notifications.outbound.email.send_to;
+					}
 				}
 			}
 
@@ -551,7 +580,7 @@ define(function(require){
 				} else {
 					var list = form_data.smtp_permission_list;
 
-					form_data.smtp_permission_list  = list instanceof Array ? list.join(',') : list.replace(/\s/g, '').split(',');
+					form_data.smtp_permission_list = list instanceof Array ? list.join(',') : list.replace(/\s/g, '').split(',');
 				}
 			}
 
@@ -563,8 +592,12 @@ define(function(require){
 				delete form_data.owner_id;
 			}
 
-			if(form_data.fax_timezone && form_data.fax_timezone === 'inherit') {
+			if (form_data.fax_timezone && form_data.fax_timezone === 'inherit') {
 				delete form_data.fax_timezone;
+			}
+
+			if (form_data.caller_id === '_disabled') {
+				delete form_data.caller_id;
 			}
 
 			return form_data;
@@ -577,7 +610,9 @@ define(function(require){
 				resource: 'faxbox.list',
 				data: {
 					accountId: self.accountId,
-					filters: { paginate:false }
+					filters: {
+						paginate: false
+					}
 				},
 				success: function(data) {
 					callback && callback(data.data);

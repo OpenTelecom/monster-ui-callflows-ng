@@ -1,9 +1,8 @@
-define(function(require){
+define(function(require) {
 	var $ = require('jquery'),
 		_ = require('lodash'),
 		toastr = require('toastr'),
-		monster = require('monster'),
-		timezone = require('monster-timezone');
+		monster = require('monster');
 
 	var app = {
 		requests: {
@@ -87,7 +86,7 @@ define(function(require){
 
 		callcenterDefineActions: function(args) {
 			var self = this,
-				callflow_nodes= args.actions,
+				callflow_nodes = args.actions,
 				i18nApp = self.i18n.active().callflows.callcenter;
 
 			$.extend(callflow_nodes, {
@@ -112,7 +111,7 @@ define(function(require){
 						var id = node.getMetadata('id'),
 							returned_value = '';
 
-						if(id in caption_map) {
+						if (id in caption_map) {
 							returned_value = caption_map[id].name;
 						}
 
@@ -122,21 +121,24 @@ define(function(require){
 						self.getQueuesList(function(queues) {
 							var popup, popup_html;
 
-							popup_html = $(monster.template(self, 'callcenter-queue-callflow' , {
-								i18n: self.i18n.active(),
-								objects: {
-									items: queues,
-									selected: node.getMetadata('id') || ''
-								}
+							popup_html = $(self.getTemplate({
+								name: 'queue-callflow',
+								data: {
+									i18n: self.i18n.active(),
+									objects: {
+										items: queues,
+										selected: node.getMetadata('id') || ''
+									}
+								},
+								submodule: 'callcenter'
 							}));
 
-							if($('#queue_selector option:selected', popup_html).val() == undefined) {
+							if ($('#queue_selector option:selected', popup_html).val() === undefined) {
 								$('#edit_link', popup_html).hide();
 							}
 
 							$('.inline_action', popup_html).click(function(ev) {
-								var _data = ($(this).data('action') == 'edit') ?
-												{ id: $('#queue_selector', popup_html).val() } : {};
+								var _data = ($(this).data('action') === 'edit') ? { id: $('#queue_selector', popup_html).val() } : {};
 
 								ev.preventDefault();
 
@@ -155,14 +157,13 @@ define(function(require){
 								node.setMetadata('id', $('#queue_selector', popup).val());
 								node.caption = $('#queue_selector option:selected', popup).text();
 								popup.dialog('close');
-
 							});
 
 							popup = monster.ui.dialog(popup_html, {
 								title: self.i18n.active().callflows.callcenter.selectQueue,
 								minHeight: '0',
 								beforeClose: function() {
-									if(typeof callback == 'function') {
+									if (typeof callback === 'function') {
 										callback();
 									}
 								}
@@ -203,7 +204,7 @@ define(function(require){
 						return '';
 					},
 					edit: function(node, callback) {
-						if(typeof callback == 'function') {
+						if (typeof callback === 'function') {
 							callback();
 						}
 					}
@@ -229,7 +230,7 @@ define(function(require){
 						return '';
 					},
 					edit: function(node, callback) {
-						if(typeof callback == 'function') {
+						if (typeof callback === 'function') {
 							callback();
 						}
 					}
@@ -255,7 +256,7 @@ define(function(require){
 						return '';
 					},
 					edit: function(node, callback) {
-						if(typeof callback == 'function') {
+						if (typeof callback === 'function') {
 							callback();
 						}
 					}
@@ -281,7 +282,7 @@ define(function(require){
 						return '';
 					},
 					edit: function(node, callback) {
-						if(typeof callback == 'function') {
+						if (typeof callback === 'function') {
 							callback();
 						}
 					}
@@ -307,7 +308,7 @@ define(function(require){
 						return '';
 					},
 					edit: function(node, callback) {
-						if(typeof callback == 'function') {
+						if (typeof callback === 'function') {
 							callback();
 						}
 					}
@@ -336,14 +337,14 @@ define(function(require){
 					save_success: function(_data) {
 						popup.dialog('close');
 
-						if(typeof callback == 'function') {
+						if (typeof callback === 'function') {
 							callback(_data);
 						}
 					},
 					delete_success: function() {
 						popup.dialog('close');
 
-						if(typeof callback == 'function') {
+						if (typeof callback === 'function') {
 							callback({ data: {} });
 						}
 					},
@@ -406,24 +407,24 @@ define(function(require){
 			self.getUsersList(function(users) {
 				defaults.field_data.users = users;
 
-				if(typeof data == 'object' && data.id) {
-					self.queueGet(data.id, function (queueData) {
+				if (typeof data === 'object' && data.id) {
+					self.queueGet(data.id, function(queueData) {
 						var render_data = $.extend(true, defaults, queueData);
 
 						render_data.field_data.old_list = [];
-						if('agents' in queueData.data) {
+						if ('agents' in queueData.data) {
 							render_data.field_data.old_list = queueData.data.agents;
 						}
 						self.queueRender(render_data, target, callbacks);
 
-						if(typeof(callbacks.after_render) === 'function') {
+						if (typeof (callbacks.after_render) === 'function') {
 							callbacks.after_render();
 						}
 					});
 				} else {
 					self.queueRender(defaults, target, callbacks);
 
-					if(typeof(callbacks.after_render) === 'function') {
+					if (typeof (callbacks.after_render) === 'function') {
 						callbacks.after_render();
 					}
 				}
@@ -447,7 +448,7 @@ define(function(require){
 			});
 		},
 
-		queueRenderList: function(_parent, callback){
+		queueRenderList: function(_parent, callback) {
 			var self = this,
 				parent = _parent || $('#queue-content'),
 				i18nApp = self.i18n.active().callflows.callcenter;
@@ -456,7 +457,7 @@ define(function(require){
 				var map_crossbar_data = function(data) {
 					var new_list = [];
 
-					if(data.length > 0) {
+					if (data.length > 0) {
 						$.each(data, function(key, val) {
 							new_list.push({
 								id: val.id,
@@ -484,7 +485,7 @@ define(function(require){
 					accountId: self.accountId,
 					generateError: false
 				},
-				success: function (data) {
+				success: function(data) {
 					callback && callback(data.data);
 				}
 			});
@@ -499,19 +500,22 @@ define(function(require){
 					queuesId: queueId,
 					generateError: false
 				},
-				success: function (_data) {
-					if(typeof(callback) === 'function') {
+				success: function(_data) {
+					if (typeof (callback) === 'function') {
 						callback(_data);
 					}
 				}
 			});
 		},
 
-
 		queueRender: function(data, target, callbacks) {
 			var self = this;
 			data.i18nApp = self.i18n.active().callflows.callcenter;
-			var queue_html = $(monster.template(self, 'callcenter-queue-edit' , data));
+			var queue_html = $(self.getTemplate({
+				name: 'queue-edit',
+				data: data,
+				submodule: 'callcenter'
+			}));
 
 			self.userListRender(data, queue_html);
 
@@ -528,7 +532,7 @@ define(function(require){
 			$('.queue-save', queue_html).click(function(ev) {
 				ev.preventDefault();
 
-				if(monster.ui.valid($form)) {
+				if (monster.ui.valid($form)) {
 					var form_data = monster.ui.getFormData($form[0]);
 
 					var agentsList = [];
@@ -543,7 +547,6 @@ define(function(require){
 					};
 
 					self.queueSave(form_data, data, callbacks.save_success, callbacks.save_error);
-
 				} else {
 					toastr.error(self.i18n.active().callflows.callcenter.formHasErrorsMessage);
 				}
@@ -551,7 +554,6 @@ define(function(require){
 
 			$('.queue-delete', queue_html).click(function(ev) {
 				ev.preventDefault();
-
 
 				monster.ui.confirm(self.i18n.active().callflows.callcenter.deleteConfirmMessage, function() {
 					self.queueDelete(data, callbacks.delete_success, callbacks.delete_error);
@@ -563,19 +565,25 @@ define(function(require){
 
 				var $userSelect = $('#users-list', queue_html);
 
-				if($userSelect.val() != 'empty_option_user') {
+				if ($userSelect.val() !== 'empty_option_user') {
 					var user_id = $userSelect.val(),
 						user_data = {
 							user_id: user_id,
 							user_name: $('#option_user_' + user_id, queue_html).text()
 						};
 
-					if($('#row_no_data', queue_html).size() > 0) {
+					if ($('#row_no_data', queue_html).size() > 0) {
 						$('#row_no_data', queue_html).remove();
 					}
 
-					$('.js-user-table-body', queue_html).prepend($(monster.template(self, 'callcenter-user-row' , user_data)));
-					$('#option_user_'+user_id, queue_html).hide();
+					$('.js-user-table-body', queue_html).prepend(
+						$(self.getTemplate({
+							name: 'user-row',
+							data: user_data,
+							submodule: 'callcenter'
+						}))
+					);
+					$('#option_user_' + user_id, queue_html).hide();
 
 					$userSelect.val('empty_option_user');
 				}
@@ -602,11 +610,17 @@ define(function(require){
 				$('#row_user_' + user_id, queue_html).remove();
 
 				//re-add it to the dropdown
-				$('#option_user_'+user_id, queue_html).show();
+				$('#option_user_' + user_id, queue_html).show();
 
 				//if grid empty, add no data line
-				if($('.js-user-table-body .js-user-table-item', queue_html).size() == 0) {
-					$('.js-user-table-body', queue_html).append($(monster.template(self, 'callcenter-user-row')));
+				if ($('.js-user-table-body .js-user-table-item', queue_html).size() === 0) {
+					$('.js-user-table-body', queue_html).append(
+						$(self.getTemplate({
+							name: 'user-row',
+							data: {},
+							submodule: 'callcenter'
+						}))
+					);
 				}
 			});
 
@@ -625,7 +639,7 @@ define(function(require){
 					data: agentsIdList
 				},
 				success: function(data) {
-					if(typeof(callback) === 'function' && data.data) {
+					if (typeof (callback) === 'function' && data.data) {
 						callback(data.data);
 					}
 				}
@@ -635,7 +649,7 @@ define(function(require){
 		queueDelete: function(data, success, error) {
 			var self = this;
 
-			if(typeof data.data == 'object' && data.data.id) {
+			if (typeof data.data === 'object' && data.data.id) {
 				monster.request({
 					resource: 'callcenter.queues.delete',
 					data: {
@@ -644,12 +658,12 @@ define(function(require){
 						generateError: false
 					},
 					success: function(_data, status) {
-						if(typeof success == 'function') {
+						if (typeof success === 'function') {
 							success(_data, status);
 						}
 					},
 					error: function(_data, status) {
-						if(typeof error == 'function') {
+						if (typeof error === 'function') {
 							error(_data, status);
 						}
 					}
@@ -660,14 +674,18 @@ define(function(require){
 		userListRender: function(data, parent) {
 			var self = this;
 
-			if(data.data.id) {
-				if('agents' in data.data && data.data.agents.length > 0) {
+			if (data.data.id) {
+				if ('agents' in data.data && data.data.agents.length > 0) {
 					var user_item;
 					$.each(data.field_data.users, function(k, v) {
-						if(data.data.agents.indexOf(v.id) >= 0) {
-							var html = $(monster.template(self, 'callcenter-user-row' , {
-								user_id: v.id,
-								user_name: v.first_name + ' ' + v.last_name
+						if (data.data.agents.indexOf(v.id) >= 0) {
+							var html = $(self.getTemplate({
+								name: 'user-row',
+								data: {
+									user_id: v.id,
+									user_name: v.first_name + ' ' + v.last_name
+								},
+								submodule: 'callcenter'
 							}));
 
 							$('.js-user-table-body', parent).append(html);
@@ -676,11 +694,23 @@ define(function(require){
 					});
 				} else {
 					$('.js-user-table-body', parent).empty()
-						.append($(monster.template(self, 'callcenter-user-row')));
+						.append(
+							$(self.getTemplate({
+								name: 'user-row',
+								data: {},
+								submodule: 'callcenter'
+							}))
+						);
 				}
 			} else {
 				$('.js-user-table-body', parent).empty()
-					.append($(monster.template(self, 'callcenter-user-row')));
+					.append(
+						$(self.getTemplate({
+							name: 'user-row',
+							data: {},
+							submodule: 'callcenter'
+						}))
+					);
 			}
 		},
 
@@ -688,21 +718,21 @@ define(function(require){
 			var self = this,
 				normalized_data = self.normalizeData($.extend(true, {}, data.data, form_data));
 
-			if(typeof data.data == 'object' && data.data.id) {
+			if (typeof data.data === 'object' && data.data.id) {
 				var queueId = data.data.id;
 				self.queueUpdate(queueId, normalized_data, function(queueData) {
 					self.agentsSave(queueId, data.field_data.user_list.new_list, function(agentsData) {
 						queueData.agents = agentsData.agents;
-						if(typeof(success) === 'function') {
+						if (typeof (success) === 'function') {
 							success(queueData);
 						}
 					});
 				});
 			} else {
-				self.queueCreate(normalized_data, function(queueData){
+				self.queueCreate(normalized_data, function(queueData) {
 					self.agentsSave(queueData.id, data.field_data.user_list.new_list, function(agentsData) {
 						queueData.agents = agentsData.agents;
-						if(typeof(success) === 'function') {
+						if (typeof (success) === 'function') {
 							success(queueData);
 						}
 					});
@@ -721,20 +751,20 @@ define(function(require){
 					generateError: false,
 					data: data
 				},
-				success: function (data) {
-					if(typeof(success) === 'function' && data.data) {
+				success: function(data) {
+					if (typeof (success) === 'function' && data.data) {
 						success(data.data);
 					}
 				},
 				error: function(data) {
-					if(typeof(error) === 'function') {
+					if (typeof (error) === 'function') {
 						error(data);
 					}
 				}
 			});
 		},
 
-		queueCreate: function(data, success, error){
+		queueCreate: function(data, success, error) {
 			var self = this;
 
 			monster.request({
@@ -744,13 +774,13 @@ define(function(require){
 					generateError: false,
 					data: data
 				},
-				success: function (_data) {
-					if(typeof(success) === 'function') {
+				success: function(_data) {
+					if (typeof (success) === 'function') {
 						success(_data.data);
 					}
 				},
 				error: function(_data) {
-					if(typeof(error) === 'function') {
+					if (typeof (error) === 'function') {
 						error(_data);
 					}
 				}

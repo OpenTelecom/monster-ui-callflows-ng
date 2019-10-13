@@ -1,4 +1,4 @@
-define(function(require){
+define(function(require) {
 	var $ = require('jquery'),
 		_ = require('lodash'),
 		monster = require('monster');
@@ -45,58 +45,57 @@ define(function(require){
 				};
 
 			monster.parallel({
-					media_list: function(callback) {
-						self.callApi({
-							resource: 'media.list',
-							data: {
-								accountId: self.accountId,
-								filters: { paginate:false }
-							},
-							success: function(mediaList, status) {
-								_.each(mediaList.data, function(media) {
-									if(media.media_source) {
-										media.name = '['+media.media_source.substring(0,3).toUpperCase()+'] ' + media.name;
-									}
-								});
-
-								mediaList.data.unshift({
-									id: '',
-									name: self.i18n.active().callflows.menu.not_set
-								});
-
-								defaults.field_data.media = mediaList.data;
-
-								callback(null, mediaList);
+				media_list: function(callback) {
+					self.callApi({
+						resource: 'media.list',
+						data: {
+							accountId: self.accountId,
+							filters: {
+								paginate: false
 							}
-						});
-					},
-					menu_get: function(callback) {
-						if(typeof data == 'object' && data.id) {
-							self.menuGet(data.id, function(menuData, status) {
-								self.menuformatData(menuData);
-
-								callback(null, { data: menuData });
+						},
+						success: function(mediaList, status) {
+							_.each(mediaList.data, function(media) {
+								if (media.media_source) {
+									media.name = '[' + media.media_source.substring(0, 3).toUpperCase() + '] ' + media.name;
+								}
 							});
+
+							mediaList.data.unshift({
+								id: '',
+								name: self.i18n.active().callflows.menu.not_set
+							});
+
+							defaults.field_data.media = mediaList.data;
+
+							callback(null, mediaList);
 						}
-						else {
-							callback(null, {});
-						}
-					}
+					});
 				},
-				function(err, results) {
-					var render_data = defaults;
+				menu_get: function(callback) {
+					if (typeof data === 'object' && data.id) {
+						self.menuGet(data.id, function(menuData, status) {
+							self.menuformatData(menuData);
 
-					if(typeof data === 'object' && data.id) {
-						render_data = $.extend(true, defaults, results.menu_get)
-					}
-
-					self.menuRender(render_data, target, callbacks);
-
-					if(typeof callbacks.after_render == 'function') {
-						callbacks.after_render();
+							callback(null, { data: menuData });
+						});
+					} else {
+						callback(null, {});
 					}
 				}
-			);
+			}, function(err, results) {
+				var render_data = defaults;
+
+				if (typeof data === 'object' && data.id) {
+					render_data = $.extend(true, defaults, results.menu_get);
+				}
+
+				self.menuRender(render_data, target, callbacks);
+
+				if (typeof callbacks.after_render === 'function') {
+					callbacks.after_render();
+				}
+			});
 		},
 
 		menuPopupEdit: function(data, callback, data_defaults) {
@@ -108,14 +107,14 @@ define(function(require){
 				save_success: function(_data) {
 					popup.dialog('close');
 
-					if(typeof callback == 'function') {
+					if (typeof callback === 'function') {
 						callback(_data);
 					}
 				},
 				delete_success: function() {
 					popup.dialog('close');
 
-					if(typeof callback == 'function') {
+					if (typeof callback === 'function') {
 						callback({ data: {} });
 					}
 				},
@@ -127,9 +126,13 @@ define(function(require){
 			}, data_defaults);
 		},
 
-		menuRender: function(data, target, callbacks){
+		menuRender: function(data, target, callbacks) {
 			var self = this,
-				menu_html = $(monster.template(self, 'menu-edit', data)),
+				menu_html = $(self.getTemplate({
+					name: 'edit',
+					data: data,
+					submodule: 'menu'
+				})),
 				menuForm = menu_html.find('#menu-form');
 
 			monster.ui.validate(menuForm, {
@@ -165,7 +168,7 @@ define(function(require){
 
 			self.winkstartTabs(menu_html);
 
-			if(!$('#media_greeting', menu_html).val()) {
+			if (!$('#media_greeting', menu_html).val()) {
 				$('#edit_link_media', menu_html).hide();
 			}
 
@@ -174,7 +177,7 @@ define(function(require){
 			});
 
 			$('.inline_action_media', menu_html).click(function(ev) {
-				var _data = ($(this).data('action') == 'edit') ? { id: $('#media_greeting', menu_html).val() } : {},
+				var _data = ($(this).data('action') === 'edit') ? { id: $('#media_greeting', menu_html).val() } : {},
 					_id = _data.id;
 
 				ev.preventDefault();
@@ -185,20 +188,18 @@ define(function(require){
 						/* Create */
 						dataMedia.name = '[UPL] ' + dataMedia.name;
 
-						if(!_id) {
-							$('#media_greeting', menu_html).append('<option id="'+ dataMedia.id  +'" value="'+ dataMedia.id +'">'+ dataMedia.name +'</option>')
+						if (!_id) {
+							$('#media_greeting', menu_html).append('<option id="' + dataMedia.id + '" value="' + dataMedia.id + '">' + dataMedia.name + '</option>');
 							$('#media_greeting', menu_html).val(dataMedia.id);
 
 							$('#edit_link_media', menu_html).show();
-						}
-						else {
+						} else {
 							/* Update */
-							if(dataMedia.hasOwnProperty('id')) {
-								$('#media_greeting #'+dataMedia.id, menu_html).text(dataMedia.name);
-							}
+							if (dataMedia.hasOwnProperty('id')) {
+								$('#media_greeting #' + dataMedia.id, menu_html).text(dataMedia.name);
 							/* Delete */
-							else {
-								$('#media_greeting #'+_id, menu_html).remove();
+							} else {
+								$('#media_greeting #' + _id, menu_html).remove();
 								$('#edit_link_media', menu_html).hide();
 							}
 						}
@@ -211,15 +212,15 @@ define(function(require){
 
 				var $this = $(this);
 
-				if(!$this.hasClass('disabled')) {
+				if (!$this.hasClass('disabled')) {
 					$this.addClass('disabled');
 
-					if(monster.ui.valid(menuForm)) {
+					if (monster.ui.valid(menuForm)) {
 						var form_data = monster.ui.getFormData('menu-form');
 
 						self.menuCleanFormData(form_data);
 
-						if('field_data' in data) {
+						if ('field_data' in data) {
 							delete data.field_data;
 						}
 
@@ -250,7 +251,7 @@ define(function(require){
 			var self = this,
 				normalized_data = self.menuNormalizeData($.extend(true, {}, data.data, form_data));
 
-			if (typeof data.data == 'object' && data.data.id) {
+			if (typeof data.data === 'object' && data.data.id) {
 				self.menuUpdate(normalized_data, function(data, status) {
 					success && success(data, status, 'update');
 				}, error);
@@ -271,26 +272,21 @@ define(function(require){
 				data.timeout /= 1000; // ms to seconds
 			}
 
-			if(data.interdigit_timeout) {
+			if (data.interdigit_timeout) {
 				data.interdigit_timeout /= 1000; // ms to seconds
 			}
 
-
-			if(data.media) {
-				if(data.media.invalid_media === false && data.media.transfer_media === false && data.media.exit_media === false) {
+			if (data.media) {
+				if (data.media.invalid_media === false && data.media.transfer_media === false && data.media.exit_media === false) {
 					data.suppress_media = true;
-				}
-				else {
+				} else {
 					data.suppress_media = false;
 				}
 			}
 		},
 
 		menuCleanFormData: function(form_data) {
-			if(form_data.record_pin.length == 0) {
-				form_data.max_extension_length = 4;
-			}
-			else if(form_data.max_extension_length < form_data.record_pin.length) {
+			if (form_data.max_extension_length < form_data.record_pin.length) {
 				form_data.max_extension_length = form_data.record_pin.length;
 			}
 
@@ -302,12 +298,11 @@ define(function(require){
 
 			if ('suppress_media' in form_data) {
 				form_data.media = form_data.media || {};
-				if(form_data.suppress_media === true) {
+				if (form_data.suppress_media === true) {
 					form_data.media.invalid_media = false;
 					form_data.media.transfer_media = false;
 					form_data.media.exit_media = false;
-				}
-				else {
+				} else {
 					form_data.media.invalid_media = true;
 					form_data.media.transfer_media = true;
 					form_data.media.exit_media = true;
@@ -316,19 +311,19 @@ define(function(require){
 		},
 
 		menuNormalizeData: function(form_data) {
-			if(!form_data.media.greeting) {
+			if (!form_data.media.greeting) {
 				delete form_data.media.greeting;
 			}
 
-			if(form_data.hunt_allow == '') {
+			if (form_data.hunt_allow === '') {
 				delete form_data.hunt_allow;
 			}
 
-			if(form_data.hunt_deny == '') {
+			if (form_data.hunt_deny === '') {
 				delete form_data.hunt_deny;
 			}
 
-			if(form_data.record_pin == '') {
+			if (form_data.record_pin === '') {
 				delete form_data.record_pin;
 			}
 
@@ -359,10 +354,10 @@ define(function(require){
 					],
 					isUsable: 'true',
 					weight: 60,
-					key_caption: function(child_node, caption_map) {
+					key_caption: function(child_node) {
 						var key = child_node.key;
 
-						return (key != '_') ? key : self.i18n.active().callflows.menu.default_action;
+						return (key !== '_') ? key : self.i18n.active().callflows.menu.default_action;
 					},
 					key_edit: function(child_node, callback) {
 						var popup, popup_html;
@@ -371,23 +366,28 @@ define(function(require){
 						   The '#' Key is only displayed if it exists in the callflow, otherwise it is hidden by the template (see /tmpl/menu_key_callflow.html)
 						*/
 
-						popup_html = $(monster.template(self, 'menu-callflowKey', {
-							items: {
-								'_': self.i18n.active().callflows.menu.default_action,
-								'0': '0',
-								'1': '1',
-								'2': '2',
-								'3': '3',
-								'4': '4',
-								'5': '5',
-								'6': '6',
-								'7': '7',
-								'8': '8',
-								'9': '9',
-								'*': '*',
-								'#': '#'
+						popup_html = $(self.getTemplate({
+							name: 'callflowKey',
+							data: {
+								items: {
+									'_': self.i18n.active().callflows.menu.default_action,
+									'timeout': 'timeout',
+									'0': '0',
+									'1': '1',
+									'2': '2',
+									'3': '3',
+									'4': '4',
+									'5': '5',
+									'6': '6',
+									'7': '7',
+									'8': '8',
+									'9': '9',
+									'*': '*',
+									'#': '#'
+								},
+								selected: child_node.key
 							},
-							selected: child_node.key
+							submodule: 'menu'
 						}));
 
 						popup_html.find('#add').on('click', function() {
@@ -410,7 +410,7 @@ define(function(require){
 						var id = node.getMetadata('id'),
 							returned_value = '';
 
-						if(id in caption_map) {
+						if (id in caption_map) {
 							returned_value = caption_map[id].name;
 						}
 
@@ -422,18 +422,21 @@ define(function(require){
 						self.menuList(function(menus) {
 							var popup, popup_html;
 
-							popup_html = $(monster.template(self, 'menu-callflowEdit', {
-								items: _.sortBy(menus, 'name'),
-								selected: node.getMetadata('id') || ''
+							popup_html = $(self.getTemplate({
+								name: 'callflowEdit',
+								data: {
+									items: _.sortBy(menus, 'name'),
+									selected: node.getMetadata('id') || ''
+								},
+								submodule: 'menu'
 							}));
 
-							if($('#menu_selector option:selected', popup_html).val() == undefined) {
+							if ($('#menu_selector option:selected', popup_html).val() === undefined) {
 								$('#edit_link', popup_html).hide();
 							}
 
 							$('.inline_action', popup_html).click(function(ev) {
-								var _data = ($(this).data('action') == 'edit') ?
-												{ id: $('#menu_selector', popup_html).val() } : {};
+								var _data = ($(this).data('action') === 'edit') ? { id: $('#menu_selector', popup_html).val() } : {};
 
 								ev.preventDefault();
 
@@ -456,7 +459,7 @@ define(function(require){
 								title: self.i18n.active().callflows.menu.menu_title,
 								minHeight: '0',
 								beforeClose: function() {
-									if(typeof callback == 'function') {
+									if (typeof callback === 'function') {
 										callback();
 									}
 								}
@@ -468,7 +471,9 @@ define(function(require){
 							resource: 'menu.list',
 							data: {
 								accountId: self.accountId,
-								filters: { paginate:false }
+								filters: {
+									paginate: false
+								}
 							},
 							success: function(data, status) {
 								callback && callback(data.data);
@@ -487,7 +492,9 @@ define(function(require){
 				resource: 'menu.list',
 				data: {
 					accountId: self.accountId,
-					filters: { paginate:false }
+					filters: {
+						paginate: false
+					}
 				},
 				success: function(data) {
 					callback && callback(data.data);

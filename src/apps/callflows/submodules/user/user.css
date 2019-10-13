@@ -16,6 +16,8 @@
 }
 
 .callflows-port #user-form #equipment .help_box {
+	color: #333333;
+	line-height: 12px;
 }
 
 .callflows-port #user-form #equipment .add_device {

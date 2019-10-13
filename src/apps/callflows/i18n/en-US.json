@@ -1,6 +1,22 @@
 {
+	"callflowsApp": {
+		"editor": {
+			"confirmDialog": {
+				"enableModule": {
+					"text": "This action is currently disabled, do you want to enable it?",
+					"cancel": "No",
+					"ok": "Yes"
+				}
+			},
+			"moduleBox": {
+				"tooltip": {
+					"disabled": "Disabled"
+				}
+			}
+		}
+	},
 	"callflows": {
-		"addCallflow": "Add Callfow",
+		"addCallflow": "Add Callflow",
 		"searchDatabase": "Search Database",
 		"buyNumbers": "Buy Numbers",
 		"buyLocal": "Local",
@@ -152,8 +168,6 @@
 			"caller_id_number_data_content3": "Define the Caller ID Number of this Device for Emergency Calls.",
 			"music_on_hold": "Music on Hold",
 			"music_on_hold_data_content": "Select the media file that you want to be played by default when it's not set on a user or a device.",
-			"peer_to_peer_audio": "Peer to Peer Audio",
-			"peer_to_peer_audio_data_content": "Select the kind of Peer-to-Peer that you would like to set on this device",
 			"secure_rtp": "Secure RTP",
 			"none": "None",
 			"srtp": "SRTP",
@@ -216,6 +230,19 @@
 			"mediaWebrtc": {
 				"content": "If checked, forces a WebRTC compatible SDP on the INVITE.",
 				"label": "WebRTC"
+			},
+			"asserted": "Asserted Identity",
+			"caller_id_name_data_content4": "Define the Caller ID Name of this Device, to be used for P-Asserted-Identity header (max. 30 chars).",
+			"caller_id_number_data_content4": "Define the Caller ID Number of this Device, to be used for P-Asserted-Identity header.",
+			"caller_id_realm": "Caller ID Realm",
+			"caller_id_realm_placeholder": "Realm",
+			"caller_id_realm_data_content4": "Define the Caller ID Realm of this Device, to be used for P-Asserted-Identity header.",
+			"validation": {
+				"caller_id": {
+					"name": "Please only enter alphanumeric characters, space or comma",
+					"number": "Please enter a valid phone number",
+					"realm": "Please enter a valid realm"
+				}
 			}
 		},
 		"disa": {
@@ -321,6 +348,7 @@
 			"caller_id": "Caller ID",
 			"caller_id_placeholder": "Caller ID",
 			"caller_id_data_content": "Caller ID for this fax box",
+			"caller_id_no_selected": "- No caller ID -",
 			"fax_header": "Fax header",
 			"fax_header_placeholder": "Fax header",
 			"fax_header_data_content": "Information imprinted on the fax",
@@ -425,7 +453,8 @@
 			"__version": "4.1",
 			"shoutcastURL": "Stream URL",
 			"shoutcastURLHelp": "You can type any URL including :// (http, https, shout...)",
-			"silence": "Silence"
+			"silence": "Silence",
+			"shoutcastURLWarning": "WARNING: If the stream selected here attempts to be played, and is unavailable, the call may fail completely. Please make sure the stream you use is available 24/7."
 		},
 		"menu": {
 			"menu": "Menu",
@@ -466,7 +495,7 @@
 			"timeout_for_dialing_data_content": "Number of seconds allowed without pressing any key.",
 			"extension_number_length": "Extension Number Length",
 			"length": "Length",
-			"extension_number_length_data_content": "The maximum length of an extension. By default, it is set to the Record PIN number length.",
+			"extension_number_length_data_content": "The maximum length of an extension. You can not set a length shorter than the length of the PIN set on this menu (ie: if you set this field to \"2\" but the PIN is set to \"1234\" then the system will automatically set this field to \"4\").",
 			"allow_outside_recording": "Allow outside recording",
 			"allow_outside_recording_data_content": "This option allows someone to dial into a menu from an outside number (i.e. their cell phone, landline, etc.) and enter the PIN for the menu to be able to re-record it.",
 			"suppress_playing_of_invalid_entry": "Suppress playing of Invalid Entry",
@@ -572,6 +601,11 @@
 			"add_time_of_day_label": "Add Time of Day",
 			"all_other_times": "All other times",
 			"name_regex": "/^[a-zA-Z0-9\\s_']+$/",
+			"toastr": {
+				"warning": {
+					"missingDay": "Please select at least one day of the week"
+				}
+			},
 			"__comment": "UI-1929: adding time of day sets to options in time of days",
 			"__version": "4.1",
 			"types": {
@@ -599,7 +633,7 @@
 			"add_user": "Add a user",
 			"ring_this_users_devices_for": "Ring this user's devices for",
 			"seconds": "seconds",
-			"allow_this_user_to_call_himself": "Allow this user to call himself.",
+			"allow_this_user_to_call_themselves": "Allow this user to call themselves.",
 			"when_you_check_this_box": "When you check this box, calls from the user's own extension to themselves will ring the extension. If this box isn't checked, calls from the user's own extension to themselves will go to their voicemail.",
 			"select_user": "Select User",
 			"create_user": "Create User",
@@ -631,8 +665,6 @@
 			"email_notifications": "Email Notifications",
 			"voicemail": "Voicemail",
 			"voicemail_data_content": "By checking this option, an email will be sent to the specified e-mail address each time this user gets a voicemail.",
-			"fax": "Fax",
-			"fax_data_content": "By checking this option, an email will be sent to the specified e-mail address each time you get a Fax.",
 			"in_house_calls": "In-House Calls",
 			"caller_id_name": "Caller ID Name",
 			"caller_id_name_placeholder": "Name",
@@ -731,13 +763,23 @@
 				},
 				"caller_id": {
 					"name": "Please only enter alphanumeric characters, space or comma",
-					"number": "Please enter a valid phone number"
+					"number": "Please enter a valid phone number",
+					"realm": "Please enter a valid realm"
 				}
 			},
 			"__version": "4.0",
 			"__comment": "UI-2475: add a failover option to callforward",
 			"failover_callforward": "Failover",
-			"failover_callforward_content": "When checked, if all this user's devices are unregistered, then the system will automatically call-forward (even if the Enable Call-Forward setting isn't enabled)"
+			"failover_callforward_content": "When checked, if all this user's devices are unregistered, then the system will automatically call-forward (even if the Enable Call-Forward setting isn't enabled)",
+			"__comment": "UI-2921: adding way to impersonate users",
+			"__version": "4.2",
+			"impersonate": "Impersonate",
+			"asserted": "Asserted Identity",
+			"caller_id_name_data_content4": "Define the Caller ID Name of this User, to be used for P-Asserted-Identity header (max. 30 chars).",
+			"caller_id_number_data_content4": "Define the Caller ID Number of this User, to be used for P-Asserted-Identity header.",
+			"caller_id_realm": "Caller ID Realm",
+			"caller_id_realm_placeholder": "Realm",
+			"caller_id_realm_data_content4": "Define the Caller ID Realm of this User, to be used for P-Asserted-Identity header."
 		},
 		"vmbox": {
 			"voicemail": "Voicemail",
@@ -783,6 +825,10 @@
 			"delete_after_notification_data_content": "Delete the voicemail after the notification has been sent",
 			"not_configurable": "Configurable via menu?",
 			"not_configurable_data_content": " If unchecked, it will disallow the user to configure voicemail via the menu",
+			"fast_forward_rewind": "Enable fast-forward and rewind?",
+			"fast_forward_rewind_data_content": "If enabled, it will allow the user to fast forward and rewind their voicemail messages",
+			"oldest_message_first": "Sort voicemail box by oldest message first",
+			"oldest_message_first_data_content": "If enabled, voicemails will be played in order from oldest to newest",
 			"delete": "Delete",
 			"save": "Save",
 			"voicemail_boxes_label": "Voicemail Boxes",
@@ -803,19 +849,27 @@
 			"mp3": "mp3",
 			"mp4": "mp4",
 			"wav": "wav",
-			"default": "Account Default"
+			"default": "Account Default",
+			"__comment": "UI-3040: add temporary greeting",
+			"temporary_unavailable_message": "Temporary Message",
+			"temporary_unavailable_message_data_content": "Select the Temporary Unavailable message that you want to use for this this device. If you set this field, it will take precedence over the Unavailable message, but if you select - Not set -, then the Unavailable message will be played instead."
 		},
 		"__comment": "UI-1493: Adding accountSettings to advanced callflows app",
 		"__version": "3.22",
 		"accountSettings": {
 			"title": "Account Settings",
 			"callerId": {
-				"titleOutbound": "Account's Outbound Caller ID",
-				"titleInbound": "Account's Inbound Caller ID",
+				"titleOutbound": "Account's External/Off-net Caller ID",
+				"titleInbound": "Account's Internal/On-net Caller ID",
 				"titleEmergency": "Account's Emergency Caller ID",
+				"titleAsserted": "Account's Asserted ID",
 				"nameLabel": "Caller ID Name:",
 				"numberLabel": "Caller ID Number:",
-				"defaultNumber": "Default"
+				"realmLabel": "Caller ID Realm:",
+				"defaultNumber": "Default",
+				"messages": {
+					"invalidNumber": "Please enter a valid number"
+				}
 			},
 			"musicOnHold": {
 				"title": "Account's Music on Hold",
@@ -828,7 +882,8 @@
 				"__comment": "UI-2654: Allow shoutcast URL for MoH",
 				"__version": "v4.1",
 				"shoutcastURL": "Stream URL",
-				"shoutcastURLHelp": "You can type any URL including :// (http, https, shout...)"
+				"shoutcastURLHelp": "You can type any URL including :// (http, https, shout...)",
+				"shoutcastURLWarning": "WARNING: If the stream selected here attempts to be played, and is unavailable, the call may fail completely. Please make sure the stream you use is available 24/7."
 			},
 			"blacklist": {
 				"title": "Blacklists"
@@ -860,6 +915,7 @@
 			"star_data_content": "The star is mandatory for any feature code, that's why it has been added by default.",
 			"feature_codes_label": "Feature Codes",
 			"nothing_to_save": "Nothing to save",
+			"directed_ext_pickup": "Directed Extension Pickup",
 			"enable_call_forward": "Enable Call-Forward",
 			"call_forward_cat": "Call-Forward",
 			"disable_call_forward": "Disable Call-Forward",
@@ -976,6 +1032,15 @@
 			"popupTitle": "Missed Call Alert",
 			"unselectedUsers": "Unselected Users",
 			"selectedUsers": "Selected Users"
+		},
+
+		"setCav": {
+			"title": "Set CAV",
+			"popupTitle": "Setting custom application vars",
+			"tip": "Set Custom Application Var ",
+			"help": "This feature allows you to set custom application variables providing key/value",
+			"key": "Key",
+			"value": "Value"
 		},
 
 		"__comment": "UI-2646: adding ring group togle to adv. callflows",
@@ -1139,6 +1204,48 @@
 			"dragAndDropAction": "Drag actions from the actions panel to the callflow box. You can customize a callflow by adding more actions. <div class='callflows-drag-and-drop'></div>",
 			"nextBtnText": "Next »",
 			"endTourBtnText": "Close"
+		},
+
+		"__comment": "UI-3210: Add Set Ringtone callflow element",
+		"setAlertInfo": {
+			"name": "Distinctive Ring",
+			"title": "Set Distinctive Ring",
+			"label": "\"Alert-Info\" Header",
+			"tip": "Set distinctive ring for incoming call"
+		},
+
+		"webhook": {
+			"help": "This feature allows you to trigger a webhook call at any level of the callflow, to get \"real time\" info on how the callflow is behaving.",
+			"popupTitle": "Trigger Webhook",
+			"title": "Webhook",
+			"tip": "Trigger a webhook at any level in a callflow to get \"real time\" info on how the callflow is behaving.",
+			"uri": {
+				"label": "URL",
+				"help": "The HTTP URI to send the request",
+				"errorMessages": {
+					"url": "Invalid URL"
+				}
+			},
+			"httpVerb": {
+				"label": "Request Type",
+				"help": "HTTP method to use when sending the request"
+			},
+			"format": {
+				"label": "Body Format",
+				"help": "Format to use when sending the webhook ",
+				"options": {
+					"formData": "FORM-DATA",
+					"json": "JSON"
+				}
+			},
+			"retries": {
+				"label": "Re-try attempts",
+				"help": "How many times to retry the request if the host isn't available"
+			},
+			"customData": {
+				"label": "Custom data (optional)",
+				"help": "These properties will be added to the event and will overwrite existing values"
+			}
 		}
 	},
 	"oldCallflows": {
@@ -1147,7 +1254,6 @@
 		"advanced_cat": "Advanced",
 		"call_recording_cat": "Call Recording",
 		"caller_id_cat": "Caller-ID",
-		"integrations_cat": "Integrations",
 		"delete_callflow": "Delete callflow",
 		"save_changes": "Save changes",
 		"invalid_number": "Invalid number!",
@@ -1161,6 +1267,7 @@
 		"hide_from_contact_list": "Hide from Contact List",
 		"giving_a_name_to_a_callflow": "Giving a name to a callflow isn't mandatory. Leave the field blank and the callflow will be displayed in the left listing as the list of numbers used in this callflow.",
 		"popup_title": "Edit Callflow Name",
+		"callflow_preview_title": "Callflow Preview",
 		"add_number": "Add number",
 		"add_a_number": "Add a number",
 		"available_numbers": "Spare Numbers",
@@ -1269,7 +1376,7 @@
 		"callflow_module_label": "Callflow Module",
 		"add_callflow_label": "Add Callflow",
 		"the_owner_of_this_device_is_already": "The owner of this device is already in the ring group. By adding this device, you will remove the User from this ring group. Would you like to continue anyway?",
-		"this_user_has_already_some_devices": "This user has already some devices belonging to him in this ring group. By adding him to the ring group, you will remove devices that were already in the ring group. Would you like to continue anyway?",
+		"this_user_has_already_some_devices": "This user has already some devices belonging to them in this ring group. By adding them to the ring group, you will remove devices that were already in the ring group. Would you like to continue anyway?",
 		"undefined_device": "Undefined Device",
 		"ring_group_val": "Ring Group - ",
 		"not_setting_a_pin": "Not setting a PIN is a security risk, are you sure you don\\'t want to set a PIN?",
@@ -1296,19 +1403,7 @@
 				"current": "Current",
 				"original": "Original"
 			}
-		},
-		"check_cid": "Match caller number",
-		"check_cid_tip": "Branch in a callflow based on the A number",
-		"check_cid_match": "Match",
-		"check_cid_nomatch": "No match",
-		"check_cid_matchnomatch": "Match or no match?",
-		"regex": "Regex",
-		"webhook": "Send webhook",
-		"webhook_tip": "Send a webhook to an external webservice when this callflow node is hit",
-		"webhook_title": "Send a HTTP webhook",
-		"webhook_uri": "URI",
-		"webhook_method": "HTTP method",
-		"webhook_retry": "# retries"
+		}
 	},
 	"__comment": "UI-1260: created common control for carrier selection",
 	"__version": "v3.20_s2",
@@ -1324,5 +1419,9 @@
 			"title": "Show All Callflows",
 			"help": "As an admin, you're allowed to see all the existing callflows in this page. This include \"Applications\" Callflows that are created by other apps, but that you don't necesserarily want to update. If you wish to reduce clutter, you can switch this off to hide these callflows."
 		}
+	},
+	"node": {
+		"disabled": "Node disabled",
+		"confirmEnable": "This node is disabled. Do you want to enable it?"
 	}
 }

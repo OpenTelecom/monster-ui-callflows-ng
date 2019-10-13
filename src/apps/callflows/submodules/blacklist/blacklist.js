@@ -1,4 +1,4 @@
-define(function(require){
+define(function(require) {
 	var $ = require('jquery'),
 		_ = require('lodash'),
 		monster = require('monster');
@@ -8,7 +8,7 @@ define(function(require){
 
 		subscribe: {
 			'callflows.blacklist.edit': 'blacklistEdit',
-			'callflows.fetchActions': 'blacklistDefineActions',
+			'callflows.fetchActions': 'blacklistDefineActions'
 		},
 
 		blacklistDefineActions: function(args) {
@@ -24,7 +24,9 @@ define(function(require){
 							resource: 'blacklist.list',
 							data: {
 								accountId: self.accountId,
-								filters: { paginate:false }
+								filters: {
+									paginate: false
+								}
 							},
 							success: function(data, status) {
 								callback && callback(data.data);
@@ -40,18 +42,30 @@ define(function(require){
 		blacklistEdit: function(args) {
 			var self = this,
 				afterGetData = function(data) {
-					var template = $(monster.template(self, 'blacklist-edit', {data: data})),
+					var template = $(self.getTemplate({
+							name: 'edit',
+							data: {
+								data: data
+							},
+							submodule: 'blacklist'
+						})),
 						blacklistForm = template.find('#blacklist-form'),
 						$listNumbers = template.find('.saved-numbers');
 
 					monster.ui.validate(blacklistForm, {
 						rules: {
-							'name': { required: true },
+							'name': { required: true }
 						}
 					});
 
 					_.each(data.numbers, function(v, number) {
-						$listNumbers.append(monster.template(self, 'blacklist-addNumber', {number: number}));
+						$listNumbers.append($(self.getTemplate({
+							name: 'addNumber',
+							data: {
+								number: number
+							},
+							submodule: 'blacklist'
+						})));
 					});
 
 					self.blacklistBindEvents(data, template, args.callbacks);
@@ -61,12 +75,11 @@ define(function(require){
 						.append(template);
 				};
 
-			if(args.data.id) {
+			if (args.data.id) {
 				self.blacklistGet(args.data.id, function(data) {
 					afterGetData(data);
 				});
-			}
-			else {
+			} else {
 				afterGetData({});
 			}
 		},
@@ -77,7 +90,14 @@ define(function(require){
 					var number = template.find('#number_value').val();
 
 					if (number) {
-						$('.list-numbers .saved-numbers', template).prepend(monster.template(self, 'blacklist-addNumber', { number: number }));
+						$('.list-numbers .saved-numbers', template)
+							.prepend($(self.getTemplate({
+								name: 'addNumber',
+								data: {
+									number: number
+								},
+								submodule: 'blacklist'
+							})));
 
 						$('#number_value', template).val('');
 					}
@@ -141,14 +161,20 @@ define(function(require){
 			});
 		},*/
 
-
 		blacklistBindEvents: function(data, template, callbacks) {
 			var self = this,
 				addNumber = function(e) {
 					var number = template.find('#number_value').val();
 
-					if(number) {
-						$('.list-numbers .saved-numbers', template).prepend(monster.template(self,'blacklist-addNumber', { number: number }));
+					if (number) {
+						$('.list-numbers .saved-numbers', template)
+							.prepend($(self.getTemplate({
+								name: 'addNumber',
+								data: {
+									number: number
+								},
+								submodule: 'blacklist'
+							})));
 
 						$('#number_value', template).val('');
 					}
@@ -170,7 +196,7 @@ define(function(require){
 			$('.add-number', template).bind('keypress', function(e) {
 				var code = e.keyCode || e.which;
 
-				if(code === 13) {;
+				if (code === 13) {
 					addNumber(e);
 				}
 			});
@@ -187,7 +213,7 @@ define(function(require){
 			});
 
 			$('.blacklist-save', template).click(function() {
-				var formData = form2object('blacklist-form'),
+				var formData = monster.ui.getFormData('blacklist-form'),
 					cleanData = self.blacklistCleanFormData(formData),
 					mapNumbers = {};
 
@@ -198,7 +224,7 @@ define(function(require){
 
 				cleanData.numbers = mapNumbers;
 
-				if(data.id) {
+				if (data.id) {
 					cleanData.id = data.id;
 				}
 
@@ -221,10 +247,9 @@ define(function(require){
 		blacklistSave: function(data, callback) {
 			var self = this;
 
-			if(data.id) {
+			if (data.id) {
 				self.blacklistUpdate(data, callback);
-			}
-			else {
+			} else {
 				self.blacklistCreate(data, callback);
 			}
 		},
@@ -236,7 +261,9 @@ define(function(require){
 				resource: 'blacklist.list',
 				data: {
 					accountId: self.accountId,
-					filters: { paginate:false }
+					filters: {
+						paginate: false
+					}
 				},
 				success: function(data) {
 					callback && callback(data.data);

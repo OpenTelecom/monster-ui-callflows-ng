@@ -1,4 +1,4 @@
-define(function(require){
+define(function(require) {
 	var $ = require('jquery'),
 		_ = require('lodash'),
 		monster = require('monster');
@@ -168,7 +168,11 @@ define(function(require){
 
 		temporalsetRender: function(data, target, callbacks) {
 			var self = this,
-				temporalset_html = $(monster.template(self, 'temporalset-callflowEdit', data)),
+				temporalset_html = $(self.getTemplate({
+					name: 'callflowEdit',
+					data: data,
+					submodule: 'temporalset'
+				})),
 				temporalsetForm = temporalset_html.find('#temporalset-form'),
 				widgetRules = self.temporalSetFormatRules(data);
 
@@ -280,7 +284,9 @@ define(function(require){
 				resource: 'temporalRule.list',
 				data: {
 					accountId: self.accountId,
-					filters: { paginate:false }
+					filters: {
+						paginate: false
+					}
 				},
 				success: function(data) {
 					callback && callback(data.data);
@@ -295,7 +301,9 @@ define(function(require){
 				resource: 'temporalSet.list',
 				data: {
 					accountId: self.accountId,
-					filters: { paginate:false }
+					filters: {
+						paginate: false
+					}
 				},
 				success: function(data) {
 					callback && callback(data.data);

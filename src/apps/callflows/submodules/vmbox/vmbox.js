@@ -1,4 +1,4 @@
-define(function(require){
+define(function(require) {
 	var $ = require('jquery'),
 		_ = require('lodash'),
 		monster = require('monster'),
@@ -24,14 +24,14 @@ define(function(require){
 				save_success: function(_data) {
 					popup.dialog('close');
 
-					if(typeof callback == 'function') {
+					if (typeof callback === 'function') {
 						callback(_data);
 					}
 				},
 				delete_success: function() {
 					popup.dialog('close');
 
-					if(typeof callback == 'function') {
+					if (typeof callback === 'function') {
 						callback({ data: {} });
 					}
 				},
@@ -103,12 +103,11 @@ define(function(require){
 					});
 				},
 				get_vmbox: function(callback) {
-					if(typeof data == 'object' && data.id) {
+					if (typeof data === 'object' && data.id) {
 						self.vmboxGet(data.id, function(_data) {
 							callback(null, _data);
 						});
-					}
-					else {
+					} else {
 						callback(null, {});
 					}
 				}
@@ -116,13 +115,13 @@ define(function(require){
 			function(err, results) {
 				var render_data = defaults;
 
-				if(typeof data === 'object' && data.id) {
+				if (typeof data === 'object' && data.id) {
 					render_data = $.extend(true, defaults, { data: results.get_vmbox });
 				}
 
 				self.vmboxRender(render_data, target, callbacks);
 
-				if(typeof callbacks.after_render == 'function') {
+				if (typeof callbacks.after_render === 'function') {
 					callbacks.after_render();
 				}
 			});
@@ -141,10 +140,14 @@ define(function(require){
 		vmboxRender: function(data, target, callbacks) {
 			var self = this,
 				formattedData = self.vmboxFormatData(data),
-				vmbox_html = $(monster.template(self, 'vmbox-edit', formattedData)),
+				vmbox_html = $(self.getTemplate({
+					name: 'edit',
+					data: formattedData,
+					submodule: 'vmbox'
+				})),
 				vmboxForm = vmbox_html.find('#vmbox-form');
 
-			timezone.populateDropdown($('#timezone', vmbox_html), data.data.timezone||'inherit', {inherit: self.i18n.active().defaultTimezone});
+			timezone.populateDropdown($('#timezone', vmbox_html), data.data.timezone || 'inherit', {inherit: self.i18n.active().defaultTimezone});
 
 			monster.ui.validate(vmboxForm, {
 				rules: {
@@ -172,9 +175,8 @@ define(function(require){
 
 			self.winkstartTabs(vmbox_html);
 
-
 			$('#owner_id', vmbox_html).change(function() {
-				if($(this).val()) {
+				if ($(this).val()) {
 					self.callApi({
 						resource: 'user.get',
 						data: {
@@ -182,7 +184,7 @@ define(function(require){
 							userId: $(this).val()
 						},
 						success: function(data) {
-							if('timezone' in data.data) {
+							if ('timezone' in data.data) {
 								$('#timezone', vmbox_html).val(data.data.timezone);
 							}
 						}
@@ -190,22 +192,21 @@ define(function(require){
 				}
 			});
 
-			if(!$('#owner_id', vmbox_html).val()) {
+			if (!$('#owner_id', vmbox_html).val()) {
 				$('#edit_link', vmbox_html).hide();
 			}
 
 			$('#owner_id', vmbox_html).change(function() {
-				if(!$('#owner_id option:selected', vmbox_html).val()) {
+				if (!$('#owner_id option:selected', vmbox_html).val()) {
 					$('#edit_link', vmbox_html).hide();
 					$('#timezone', vmbox_html).val(timezone.getLocaleTimezone());
-				}
-				else {
-					 $('#edit_link', vmbox_html).show();
+				} else {
+					$('#edit_link', vmbox_html).show();
 				}
 			});
 
 			$('.inline_action', vmbox_html).click(function(ev) {
-				var _data = ($(this).data('action') == 'edit') ? { id: $('#owner_id', vmbox_html).val() } : {},
+				var _data = ($(this).data('action') === 'edit') ? { id: $('#owner_id', vmbox_html).val() } : {},
 					_id = _data.id;
 
 				ev.preventDefault();
@@ -214,22 +215,20 @@ define(function(require){
 					data: _data,
 					callback: function(_data) {
 						/* Create */
-						if(!_id) {
-							$('#owner_id', vmbox_html).append('<option id="'+ _data.id  +'" value="'+ _data.id +'">'+ _data.first_name + ' ' + _data.last_name  +'</option>')
+						if (!_id) {
+							$('#owner_id', vmbox_html).append('<option id="' + _data.id + '" value="' + _data.id + '">' + _data.first_name + ' ' + _data.last_name + '</option>');
 							$('#owner_id', vmbox_html).val(_data.id);
 
 							$('#edit_link', vmbox_html).show();
 							$('#timezone', vmbox_html).val(_data.timezone);
-						}
-						else {
+						} else {
 							/* Update */
-							if('id' in _data) {
-								$('#owner_id #'+_data.data.id, vmbox_html).text(_data.first_name + ' ' + _data.last_name);
+							if ('id' in _data) {
+								$('#owner_id #' + _data.data.id, vmbox_html).text(_data.first_name + ' ' + _data.last_name);
 								$('#timezone', vmbox_html).val(_data.timezone);
-							}
-							/* Delete */
-							else {
-								$('#owner_id #'+_id, vmbox_html).remove();
+							} else {
+								/* Delete */
+								$('#owner_id #' + _id, vmbox_html).remove();
 								$('#edit_link', vmbox_html).hide();
 								$('#timezone', vmbox_html).val('America/Los_Angeles');
 							}
@@ -238,7 +237,7 @@ define(function(require){
 				});
 			});
 
-			if(!$('#media_unavailable', vmbox_html).val()) {
+			if (!$('#media_unavailable', vmbox_html).val()) {
 				$('#edit_link_media', vmbox_html).hide();
 			}
 
@@ -247,7 +246,7 @@ define(function(require){
 			});
 
 			$('.inline_action_media', vmbox_html).click(function(ev) {
-				var _data = ($(this).data('action') == 'edit') ? { id: $('#media_unavailable', vmbox_html).val() } : {},
+				var _data = ($(this).data('action') === 'edit') ? { id: $('#media_unavailable', vmbox_html).val() } : {},
 					_id = _data.id;
 
 				ev.preventDefault();
@@ -256,20 +255,18 @@ define(function(require){
 					data: _data,
 					callback: function(_data) {
 						/* Create */
-						if(!_id) {
-							$('#media_unavailable', vmbox_html).append('<option id="'+ _data.id  +'" value="'+ _data.id +'">'+ _data.name +'</option>')
+						if (!_id) {
+							$('#media_unavailable', vmbox_html).append('<option id="' + _data.id + '" value="' + _data.id + '">' + _data.name + '</option>');
 							$('#media_unavailable', vmbox_html).val(_data.id);
 
 							$('#edit_link_media', vmbox_html).show();
-						}
-						else {
+						} else {
 							/* Update */
-							if('id' in _data) {
-								$('#media_unavailable #'+_data.id, vmbox_html).text(_data.name);
-							}
-							/* Delete */
-							else {
-								$('#media_unavailable #'+_id, vmbox_html).remove();
+							if ('id' in _data) {
+								$('#media_unavailable #' + _data.id, vmbox_html).text(_data.name);
+							} else {
+								/* Delete */
+								$('#media_unavailable #' + _id, vmbox_html).remove();
 								$('#edit_link_media', vmbox_html).hide();
 							}
 						}
@@ -277,15 +274,51 @@ define(function(require){
 				});
 			});
 
+			if (!$('#media_temporary_unavailable', vmbox_html).val()) {
+				$('#edit_link_temporary_media', vmbox_html).hide();
+			}
 
-			var validateEmail = function (email) {
-					var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+			$('#media_temporary_unavailable', vmbox_html).change(function() {
+				!$('#media_temporary_unavailable option:selected', vmbox_html).val() ? $('#edit_link_temporary_media', vmbox_html).hide() : $('#edit_link_temporary_media', vmbox_html).show();
+			});
+
+			$('.inline_action_temporary_media', vmbox_html).click(function(ev) {
+				var _data = ($(this).data('action') === 'edit') ? { id: $('#media_temporary_unavailable', vmbox_html).val() } : {},
+					_id = _data.id;
+
+				ev.preventDefault();
+
+				monster.pub('callflows.media.editPopup', {
+					data: _data,
+					callback: function(_data) {
+						/* Create */
+						if (!_id) {
+							$('#media_temporary_unavailable', vmbox_html).append('<option id="' + _data.id + '" value="' + _data.id + '">' + _data.name + '</option>');
+							$('#media_temporary_unavailable', vmbox_html).val(_data.id);
+
+							$('#edit_link_temporary_media', vmbox_html).show();
+						} else {
+							/* Update */
+							if ('id' in _data) {
+								$('#media_temporary_unavailable #' + _data.id, vmbox_html).text(_data.name);
+							} else {
+								/* Delete */
+								$('#media_temporary_unavailable #' + _id, vmbox_html).remove();
+								$('#edit_link_temporary_media', vmbox_html).hide();
+							}
+						}
+					}
+				});
+			});
+
+			var validateEmail = function(email) {
+					var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 					return re.test(email);
 				},
 				getRecipients = function() {
 					var list = $('#recipients_list', vmbox_html).val().replace(/\s+/g, '').split(',');
 
-					return list.filter(function(email) { return validateEmail(email) });
+					return list.filter(function(email) { return validateEmail(email); });
 				};
 
 			$('.vmbox-save', vmbox_html).click(function(ev) {
@@ -293,23 +326,24 @@ define(function(require){
 
 				var $this = $(this);
 
-				if(!$this.hasClass('disabled')) {
+				if (!$this.hasClass('disabled')) {
 					$this.addClass('disabled');
 
-					if(monster.ui.valid(vmboxForm)) {
+					if (monster.ui.valid(vmboxForm)) {
 						var form_data = monster.ui.getFormData('vmbox-form');
 
 						form_data.notify_email_addresses = getRecipients();
 
 						/* self.clean_form_data(form_data); */
 
-						if('field_data' in data) {
+						if ('field_data' in data) {
 							delete data.field_data;
 						}
 
-						self.vmboxSave(form_data, data, callbacks.save_success);
-					}
-					else {
+						self.vmboxSave(form_data, data, callbacks.save_success, function() {
+							$this.removeClass('disabled');
+						});
+					} else {
 						$this.removeClass('disabled');
 					}
 				}
@@ -332,36 +366,39 @@ define(function(require){
 			var self = this,
 				normalized_data = self.vmboxNormalizeData($.extend(true, {}, data.data, form_data), form_data);
 
-			if(typeof data.data == 'object' && data.data.id) {
+			if (typeof data.data === 'object' && data.data.id) {
 				self.vmboxUpdate(normalized_data, function(_data, status) {
-					if(typeof success == 'function') {
+					if (typeof success === 'function') {
 						success(_data, status, 'update');
 					}
-				});
-			}
-			else {
+				}, error);
+			} else {
 				self.vmboxCreate(normalized_data, function(_data, status) {
-					if(typeof success == 'function') {
+					if (typeof success === 'function') {
 						success(_data, status, 'create');
 					}
-				});
+				}, error);
 			}
 		},
 
 		vmboxNormalizeData: function(mergedData, formData) {
-			if(!mergedData.owner_id) {
+			if (!mergedData.owner_id) {
 				delete mergedData.owner_id;
 			}
 
-			if(!mergedData.media.unavailable) {
+			if (!mergedData.media.unavailable) {
 				delete mergedData.media.unavailable;
 			}
 
-			if(mergedData.pin === '') {
+			if (!mergedData.media.temporary_unavailable) {
+				delete mergedData.media.temporary_unavailable;
+			}
+
+			if (mergedData.pin === '') {
 				delete mergedData.pin;
 			}
 
-			if(mergedData.timezone && mergedData.timezone === 'inherit') {
+			if (mergedData.timezone && mergedData.timezone === 'inherit') {
 				delete mergedData.timezone;
 			}
 
@@ -403,7 +440,7 @@ define(function(require){
 							var id = node.getMetadata('id'),
 								returned_value = '';
 
-							if(id in caption_map) {
+							if (id in caption_map) {
 								returned_value = caption_map[id].name;
 							}
 
@@ -413,61 +450,65 @@ define(function(require){
 							var _this = this;
 
 							self.vmboxList(function(data) {
-									var popup, popup_html;
+								var popup, popup_html;
 
-									popup_html = $(monster.template(self, 'vmbox-callflowEdit', {
+								popup_html = $(self.getTemplate({
+									name: 'callflowEdit',
+									data: {
 										items: _.sortBy(data, 'name'),
 										selected: node.getMetadata('id') || ''
-									}));
+									},
+									submodule: 'vmbox'
+								}));
 
-									if($('#vmbox_selector option:selected', popup_html).val() == undefined) {
-										$('#edit_link', popup_html).hide();
-									}
+								if ($('#vmbox_selector option:selected', popup_html).val() === undefined) {
+									$('#edit_link', popup_html).hide();
+								}
 
-									$('.inline_action', popup_html).click(function(ev) {
-										var _data = ($(this).data('action') == 'edit') ?
-														{ id: $('#vmbox_selector', popup_html).val() } : {};
+								$('.inline_action', popup_html).click(function(ev) {
+									var _data = ($(this).data('action') === 'edit') ? { id: $('#vmbox_selector', popup_html).val() } : {};
 
-										ev.preventDefault();
+									ev.preventDefault();
 
-										self.vmboxPopupEdit({
-											data: _data,
-											callback: function(vmbox) {
-												node.setMetadata('id', vmbox.id || 'null');
+									self.vmboxPopupEdit({
+										data: _data,
+										callback: function(vmbox) {
+											node.setMetadata('id', vmbox.id || 'null');
 
-												node.caption = vmbox.name || '';
+											node.caption = vmbox.name || '';
 
-												popup.dialog('close');
-											}
-										});
-									});
-
-									$('#add', popup_html).click(function() {
-										node.setMetadata('id', $('#vmbox_selector', popup_html).val());
-
-										node.caption = $('#vmbox_selector option:selected', popup_html).text();
-
-										popup.dialog('close');
-									});
-
-									popup = monster.ui.dialog(popup_html, {
-										title: self.i18n.active().callflows.vmbox.voicemail_title,
-										minHeight: '0',
-										beforeClose: function() {
-											if(typeof callback == 'function') {
-												callback();
-											}
+											popup.dialog('close');
 										}
 									});
-								}
-							);
+								});
+
+								$('#add', popup_html).click(function() {
+									node.setMetadata('id', $('#vmbox_selector', popup_html).val());
+
+									node.caption = $('#vmbox_selector option:selected', popup_html).text();
+
+									popup.dialog('close');
+								});
+
+								popup = monster.ui.dialog(popup_html, {
+									title: self.i18n.active().callflows.vmbox.voicemail_title,
+									minHeight: '0',
+									beforeClose: function() {
+										if (typeof callback === 'function') {
+											callback();
+										}
+									}
+								});
+							});
 						},
 						listEntities: function(callback) {
 							self.callApi({
 								resource: 'voicemail.list',
 								data: {
 									accountId: self.accountId,
-									filters: { paginate:false }
+									filters: {
+										paginate: false
+									}
 								},
 								success: function(data, status) {
 									callback && callback(data.data);
@@ -477,7 +518,7 @@ define(function(require){
 						editEntity: 'callflows.vmbox.edit'
 					};
 
-					if(hasCategory) {
+					if (hasCategory) {
 						action.category = self.i18n.active().oldCallflows.basic_cat;
 					}
 
@@ -510,11 +551,11 @@ define(function(require){
 					],
 					isUsable: 'true',
 					weight: 120,
-					caption: function(node, caption_map) {
+					caption: function(node) {
 						return '';
 					},
 					edit: function(node, callback) {
-						if(typeof callback == 'function') {
+						if (typeof callback === 'function') {
 							callback();
 						}
 					}
@@ -529,7 +570,9 @@ define(function(require){
 				resource: 'voicemail.list',
 				data: {
 					accountId: self.accountId,
-					filters: { paginate:false }
+					filters: {
+						paginate: false
+					}
 				},
 				success: function(data) {
 					callback && callback(data.data);
@@ -552,7 +595,7 @@ define(function(require){
 			});
 		},
 
-		vmboxCreate: function(data, callback) {
+		vmboxCreate: function(data, callback, error) {
 			var self = this;
 
 			self.callApi({
@@ -563,11 +606,14 @@ define(function(require){
 				},
 				success: function(data) {
 					callback && callback(data.data);
+				},
+				error: function(errorPayload, data, globalHandler) {
+					error && error(errorPayload);
 				}
 			});
 		},
 
-		vmboxUpdate: function(data, callback) {
+		vmboxUpdate: function(data, callback, error) {
 			var self = this;
 
 			self.callApi({
@@ -579,6 +625,9 @@ define(function(require){
 				},
 				success: function(data) {
 					callback && callback(data.data);
+				},
+				error: function(errorPayload, data, globalHandler) {
+					error && error(errorPayload);
 				}
 			});
 		},
@@ -605,7 +654,9 @@ define(function(require){
 				resource: 'media.list',
 				data: {
 					accountId: self.accountId,
-					filters: { paginate:false }
+					filters: {
+						paginate: false
+					}
 				},
 				success: function(data) {
 					callback && callback(data.data);
@@ -620,7 +671,9 @@ define(function(require){
 				resource: 'user.list',
 				data: {
 					accountId: self.accountId,
-					filters: { paginate:false }
+					filters: {
+						paginate: false
+					}
 				},
 				success: function(data) {
 					callback && callback(data.data);
