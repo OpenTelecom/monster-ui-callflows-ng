@@ -4,9 +4,11 @@ define(function(require) {
 		monster = require('monster');
 	var appSubmodules = [
 		'blacklist',
+		'callcenter',
 		'conference',
 		'device',
 		'directory',
+        'eavesdrop',
 		'faxbox',
 		'featurecodes',
 		'groups',
@@ -19,7 +21,6 @@ define(function(require) {
 		'timeofday',
 		'user',
 		'vmbox',
-		'callcenter'
 	];
 
 	var appSubmodulesFullPath = _.map(appSubmodules, function(name) {

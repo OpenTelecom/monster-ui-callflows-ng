@@ -385,7 +385,7 @@ define(function(require) {
 
 				/*'eavesdrop[]': {
 					name: self.i18n.active().callflows.eavesdrop.name,
-					icon: 'headset',
+					icon: 'headphones',
 					category: self.i18n.active().oldCallflows.advanced_cat,
 					module: 'eavesdrop',
 					tip: self.i18n.active().callflows.eavesdrop.tip,
