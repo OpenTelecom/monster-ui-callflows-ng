@@ -46,3 +46,15 @@
 #parking_settings_popup label.monster-invalid {
 	margin-top: 0;
 }
+
+#eavesdrop_settings_popup label.monster-invalid {
+	position: static;
+	margin: 0;
+	display: block;
+	float: none;
+	color: #FF3D24;
+}
+
+#eavesdrop_settings_popup .form_content select {
+	min-width: 165px;
+}

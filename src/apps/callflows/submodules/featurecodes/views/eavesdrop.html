@@ -1,0 +1,74 @@
+<div id="eavesdrop_settings_popup" class="dialog_popup callflows-port">
+	<form id="form_eavesdrop" name="form" class="form-horizontal" method="post" action="#">
+		<div class="form_content">
+			<div class="popup_field">
+				<label for="endpoint">
+					{{ i18n.callflows.featureCodes.eavesdropPopup.eavesdropTarget.label }}
+					<i class="help-popover fa fa-question-circle"
+					   data-original-title="{{ i18n.callflows.featureCodes.eavesdropPopup.eavesdropTarget.tooltip}}"
+					   data-placement="right"
+					   data-toggle="tooltip"></i>
+				</label>
+				<div class="select_wrapper">
+					<select id="endpoint" name="group_id">
+						{{#select data.targetId}}
+							<option value="empty">{{ i18n.callflows.featureCodes.eavesdropPopup.none }}</option>
+							{{#each fieldData}}
+								{{#compare @key "===" "group"}}
+									{{#each this}}
+										<option
+											data-type="{{@../key}}"
+											id="{{ id }}"
+											value="{{ id }}"
+											{{#compare @root.data.selected_id "===" id}} selected{{/compare}}
+										>
+											{{ name }}
+										</option>
+									{{/each}}
+								{{/compare}}
+							{{/each}}
+						{{/select}}
+					</select>
+					<div class="clear"></div>
+				</div>
+				<div class="clear"></div>
+			</div>
+
+			<div class="popup_field">
+				<label for="approved-endpoint">
+					{{ i18n.callflows.featureCodes.eavesdropPopup.approvedEndpoint.label }}
+					<i class="help-popover fa fa-question-circle"
+						data-original-title="{{ i18n.callflows.featureCodes.eavesdropPopup.approvedEndpoint.tooltip}}"
+						data-placement="right"
+						data-toggle="tooltip"></i>
+				</label>
+				<div class="select_wrapper">
+					<select id="approved-endpoint" name="approved-endpoint">
+						{{#select data.approvedId}}
+							{{#each fieldData}}
+								<optgroup data-type="{{ @key }}" label="{{ @key }}">
+									{{#each this}}
+										<option
+											data-type="{{@../key}}"
+											id="{{ id }}"
+											value="{{ id }}"
+											{{#compare @root.data.selected_id "===" id}} selected{{/compare}}
+										>
+											{{ name }}
+										</option>
+									{{/each}}
+								</optgroup>
+							{{/each}}
+						{{/select}}
+					</select>
+					<div class="clear"/>
+				</div>
+				<div class="clear"></div>
+			</div>
+		</div>
+	</form>
+	<div class="buttons-center">
+		<button id="save" class="monster-button monster-button-primary">{{ i18n.save }}</button>
+	</div>
+</div>
+

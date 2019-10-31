@@ -664,7 +664,25 @@ define(function(require) {
 					build_regex: function(number) {
 						return number;
 					}
-				}
+				},
+                'eavesdrop': {
+                    name: self.i18n.active().callflows.featureCodes.eavesdrop,
+                    icon: 'phone',
+                    category: self.i18n.active().callflows.featureCodes.miscellaneous_cat,
+                    module: 'eavesdrop',
+                    number_type: 'numbers',
+                    data: {},
+                    enabled: false,
+                    hasStar: true,
+                    editConfiguration: function() {
+                        self.featureCodesEditEavesdrop(this);
+                    },
+                    default_number: '*',
+                    number: this.default_number,
+                    build_regex: function(number) {
+                        return '^\\*' + number + '([0-9]+)$';
+                    }
+                }
 				/*'call_forward[action=on_busy_enable]': {
 					name: 'Enable Call-Forward on Busy',
 					icon: 'phone',
@@ -984,6 +1002,110 @@ define(function(require) {
 				popup = monster.ui.dialog(template, {
 					title: self.i18n.active().callflows.featureCodes.parkingValetPopup.title
 				});
+			});
+		},
+
+		featureCodesEditEavesdrop: function(featureCode) {
+			var self = this;
+
+			self.featureCodeGet(featureCode.id, function(callflowData) {
+				var featureCodeData = callflowData.featurecode;
+				self.featureCodesEavesdropGetEndpoints(function(endpoints) {
+					var getApprovedId = function(data) {
+						if (data.hasOwnProperty('approved_device_id')) {
+							return data.approved_device_id;
+						}
+						if (data.hasOwnProperty('approved_group_id')) {
+							return data.approved_group_id;
+						}
+						if (data.hasOwnProperty('approved_user_id')) {
+							return data.approved_user_id;
+						}
+						return '';
+					};
+					var popup,
+						template = $(self.getTemplate({
+							name: 'eavesdrop',
+							submodule: 'featurecodes',
+							data: {
+								fieldData: endpoints,
+								data: {
+									'targetId': featureCodeData.group_id === 'undefined' ? 'empty' : featureCodeData.group_id,
+									'approvedId': getApprovedId(featureCodeData)
+								}
+							}
+						}));
+
+					monster.ui.tooltips(template);
+
+					template.find('#save').on('click', function(e) {
+						e.preventDefault();
+
+						var $target = $('#endpoint');
+						var $approvedEndpointSelected = $('#approved-endpoint option:selected');
+						var approvedEndpointField = 'approved_' + $approvedEndpointSelected.data('type') + '_id';
+						var approvedEndpointVal = $approvedEndpointSelected.val();
+
+						var data = {};
+						data.group_id = $target.val() === 'empty' ? 'undefined' : $target.val();
+						data[approvedEndpointField] = approvedEndpointVal;
+
+						var newCallflowData = $.extend(true, {
+							flow: callflowData.flow,
+							patterns: callflowData.patterns,
+							numbers: callflowData.numbers,
+							featurecode: {
+								name: callflowData.featurecode.name,
+								number: callflowData.featurecode.number
+							}
+						}, {
+							featurecode: data
+						});
+
+						self.featureCodeUpdate(callflowData.id, newCallflowData, function() {
+							monster.ui.toast({
+								type: 'success',
+								message: self.i18n.active().callflows.featureCodes.eavesdropPopup.successUpdate
+							});
+							popup.dialog('close');
+						});
+					});
+
+					popup = monster.ui.dialog(template, {
+						title: self.i18n.active().callflows.featureCodes.eavesdropPopup.title
+					});
+				});
+			});
+		},
+
+		featureCodesEavesdropGetEndpoints: function(callback) {
+			var self = this;
+
+			monster.parallel({
+				'group': function(callback) {
+					self.groupsGroupList(function(data) {
+						callback(null, data);
+					});
+				},
+				'user': function(callback) {
+					self.groupsRequestUserList({
+						success: function(data) {
+							callback(null, data);
+						}
+					});
+				},
+				'device': function(callback) {
+					self.groupsRequestDeviceList({
+						success: function(data) {
+							callback(null, data);
+						}
+					});
+				}
+			}, function(err, results) {
+				_.each(results.user, function(user) {
+					user.name = user.first_name + ' ' + user.last_name;
+				});
+				callback(results);
 			});
 		},
 

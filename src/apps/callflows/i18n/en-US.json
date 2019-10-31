@@ -928,6 +928,21 @@
 			"check_voicemail": "Check Voicemail",
 			"miscellaneous_cat": "Miscellaneous",
 			"direct_to_voicemail": "Direct to Voicemail",
+			"eavesdrop": "Eavesdrop",
+			"eavesdropPopup": {
+				"title": "Eavesdrop",
+				"eavesdropTarget": {
+					"label": "List of eavesdrop targets",
+					"tooltip": "If you set \"None\" then anybody can be eavesdropped."
+				},
+				"approvedEndpoint": {
+					"label": "Approved Endpoint",
+					"tooltip": "One of the approved device, approved user or approved group must be defined to access feature code."
+				},
+				"none": "None",
+				"default": "Default",
+				"successUpdate": "You successfully updated settings of the Eavesdrop Feature Code"
+			},
 			"intercom": "Intercom",
 			"privacy": "Privacy",
 			"park_and_retrieve": "Park and Retrieve",
