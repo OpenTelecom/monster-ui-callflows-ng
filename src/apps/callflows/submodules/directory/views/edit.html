@@ -28,23 +28,6 @@
 					</div>
 
 					<div class="clearfix">
-						<div id="tab_users">
-							<div class="row row-user title">
-								<div class="column first">
-									<i class="fa fa-users"></i>
-									{{ i18n.callflows.directory.user }}
-								</div>
-								<div class="column second">
-									<i class="fa fa-link"></i>
-									{{ i18n.callflows.directory.callflow }}
-								</div>
-								<div class="column third">
-									{{ i18n.callflows.directory.remove }}
-								</div>
-							</div>
-							<div class="rows"></div>
-						</div>
-
 						<div class="add_user">
 							<div class="add_user_title">{{ i18n.callflows.directory.add_user }}</div>
 							<div class="add_content_wrapper">
@@ -83,11 +66,30 @@
 									</ul>
 								</div>
 								<div class="add_user_div">
-									<span class="fa fa-plus-circle"/>&nbsp;
-									<a class="add_user_link" href="javascript:void(0);" data-directory_id="{{ data.id }}">{{ i18n.callflows.directory.add_this_user }}</a>
+									<a class="add_user_link" href="javascript:void(0);" data-directory_id="{{ data.id }}">
+										<span class="fa fa-plus-circle"></span>&nbsp;
+										{{ i18n.callflows.directory.add_this_user }}
+									</a>
 									<div class="clear"/>
 								</div>
 							</div>
+						</div>
+
+						<div id="tab_users">
+							<div class="row row-user title">
+								<div class="column first">
+									<i class="fa fa-users"></i>
+									{{ i18n.callflows.directory.user }}
+								</div>
+								<div class="column second">
+									<i class="fa fa-link"></i>
+									{{ i18n.callflows.directory.callflow }}
+								</div>
+								<div class="column third">
+									{{ i18n.callflows.directory.remove }}
+								</div>
+							</div>
+							<div class="rows"></div>
 						</div>
 					</div>
 				</div>

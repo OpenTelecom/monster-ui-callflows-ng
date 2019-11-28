@@ -111,7 +111,7 @@
 
 .callflows-port #directory-form #basic .add_user .add_content_wrapper {
 	background: #EEEEEE;
-	padding: 0 15px 10px;
+	padding: 12px 15px 20px;
 }
 
 .callflows-port #directory-form #basic .add_user .add_user_title {
@@ -125,6 +125,7 @@
 
 .callflows-port #directory-form #basic .add_user select {
 	width: 180px;
+	margin: 2px 6px 5px;
 }
 
 .callflows-port #directory-form #basic .add_user .add_user_fields {
@@ -150,19 +151,12 @@
 .callflows-port #directory-form #basic .add_user .add_user_div {
 	display: inline-block;
 	vertical-align: top;
-	margin: 28px 0 0;
+	margin: 24px 0 0 6px;
 }
 
 .callflows-port #directory-form #basic .add_user .add_user_div a {
 	color: #333333;
 }
-
-.callflows-port #directory-form #basic .add_user label {
-	color: #404040;
-	width: auto;
-}
-
-
 
 .callflows-port #directory-form #basic .add_user .add_user_div:hover a {
 	color: #05addc;
