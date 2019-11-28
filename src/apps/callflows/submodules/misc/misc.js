@@ -503,57 +503,23 @@ define(function(require) {
 						});
 					}
 				},
-				'webhook[]': {
-					name: self.i18n.active().oldCallflows.webhook,
-					icon: 'upload',
-					category: self.i18n.active().oldCallflows.integrations_cat,
-					module: 'webhook',
-					tip: self.i18n.active().oldCallflows.webhook_tip,
-					data: {
-					},
-					rules: [
-						{
-							type: 'quantity',
-							maxSize: '1'
-						}
-					],
-					isUsable: 'true',
-					weight: 40,
-					caption: function(node, caption_map) {
-						return node.getMetadata('webhook') || '';
-					},
-					edit: function(node, callback) {
-						var popup_html = $(self.getTemplate({
-                            name: 'webhook-callflowEdit',
-                            data: {
-                                data_webhook: {
-                                    'http_verb': node.getMetadata('http_verb') || 'get',
-                                    'retries': node.getMetadata('retries') || '3',
-                                    'uri': node.getMetadata('uri') || ''
-                                }
-                            },
-                            submodule: 'misc'
-                        })),
-                        popup;
-						$('#add', popup_html).click(function() {
-							node.setMetadata('http_verb', $('#http_verb option:selected', popup_html).val());
-							node.setMetadata('retries', $('#retries_input', popup_html).val());
-							node.setMetadata('uri', $('#uri_input', popup_html).val());
-
-							popup.dialog('close');
-						});
-
-						popup = monster.ui.dialog(popup_html, {
-							title: self.i18n.active().oldCallflows.webhook_title,
-							beforeClose: function() {
-								if (typeof callback === 'function') {
-									callback();
-								}
-							}
-						});
-					}
-
-				},
+                'webhook[]': {
+                    name: self.i18n.active().callflows.webhook.title,
+                    icon: 'upload',
+                    category: self.i18n.active().oldCallflows.advanced_cat,
+                    module: 'webhook',
+                    tip: self.i18n.active().callflows.webhook.tip,
+                    data: {},
+                    rules: [],
+                    isUsable: 'true',
+                    weight: 170,
+                    caption: function() {
+                        return '';
+                    },
+                    edit: function(node, callback) {
+                        self.miscRenderEditWebhook(node, callback);
+                    }
+                },
 				'set_alert_info[]': {
 					name: self.i18n.active().callflows.setAlertInfo.name,
 					icon: 'play',
