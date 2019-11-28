@@ -665,24 +665,24 @@ define(function(require) {
 						return number;
 					}
 				},
-                'eavesdrop': {
-                    name: self.i18n.active().callflows.featureCodes.eavesdrop,
-                    icon: 'phone',
-                    category: self.i18n.active().callflows.featureCodes.miscellaneous_cat,
-                    module: 'eavesdrop',
-                    number_type: 'numbers',
-                    data: {},
-                    enabled: false,
-                    hasStar: true,
-                    editConfiguration: function() {
-                        self.featureCodesEditEavesdrop(this);
-                    },
-                    default_number: '*',
-                    number: this.default_number,
-                    build_regex: function(number) {
-                        return '^\\*' + number + '([0-9]+)$';
-                    }
-                }
+				'eavesdrop_feature': {
+					name: self.i18n.active().callflows.featureCodes.eavesdrop_feature,
+					icon: 'phone',
+					category: self.i18n.active().callflows.featureCodes.miscellaneous_cat,
+					module: 'eavesdrop_feature',
+					number_type: 'patterns',
+					data: {},
+					enabled: false,
+					hasStar: true,
+					editConfiguration: function() {
+						self.featureCodesEditEavesdrop(this);
+					},
+					default_number: '77',
+					number: this.default_number,
+					build_regex: function(number) {
+						return '^\\*' + number + '([0-9]*)$';
+					}
+				}
 				/*'call_forward[action=on_busy_enable]': {
 					name: 'Enable Call-Forward on Busy',
 					icon: 'phone',

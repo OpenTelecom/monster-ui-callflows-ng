@@ -928,7 +928,7 @@
 			"check_voicemail": "Check Voicemail",
 			"miscellaneous_cat": "Miscellaneous",
 			"direct_to_voicemail": "Direct to Voicemail",
-			"eavesdrop": "Eavesdrop",
+			"eavesdrop_feature": "Eavesdrop Feature",
 			"eavesdropPopup": {
 				"title": "Eavesdrop",
 				"eavesdropTarget": {
