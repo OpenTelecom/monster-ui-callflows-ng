@@ -1272,9 +1272,6 @@
 	margin-left:20px;
 	display:inline;
 }
-.callflows-port .pill-content .edit_create a {
-	color: #EEE;
-}
 
 .callflows-port .pill-content .edit_create > a:not(:first-child) {
 	margin-left: 15px;
