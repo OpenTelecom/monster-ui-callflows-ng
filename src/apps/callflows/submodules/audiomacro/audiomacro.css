@@ -1,0 +1,89 @@
+.accordion-header-link {
+	float: right;
+}
+
+.audio-macro-form {
+	margin-bottom: 0;
+}
+
+.audio-macro-form .popup_field textarea {
+	margin-bottom: 0;
+}
+
+.form-part_hidden {
+	display: none;
+}
+
+.audio-macro-dialog {}
+
+.audio-macro-dialog .ui-state-default .fa{
+	color: #2297FF;
+}
+
+.audio-macro-dialog .ui-state-hover .fa {
+	color: white;
+}
+
+
+.audio-macro-dialog .ui-state-active {
+	border: 1px solid #2297FF;
+	color: white;
+	background: #2297FF;
+}
+
+.audio-macro-dialog .ui-state-active .fa,
+.audio-macro-dialog .ui-state-focus .fa {
+	color: white;
+}
+
+.audio-macro-dialog .ui-state-hover,
+.audio-macro-dialog .ui-state-focus {
+	border: 1px solid #2297FF;
+	background: #2297FF;
+	color: white;
+}
+
+.audio-macro-dialog .ui-state-default .ui-icon {
+	background: none;
+	width: 0;
+	height: 0;
+	border-top: 5px solid transparent;
+	border-bottom: 5px solid transparent;
+	border-left: 7px solid #2297FF;
+	margin-top: -5px;
+}
+
+.audio-macro-dialog .ui-state-focus .ui-icon,
+.audio-macro-dialog .ui-state-hover .ui-icon {
+	border-left: 7px solid white;
+}
+
+.audio-macro-dialog .ui-state-active .ui-icon {
+	border-top: 7px solid white;
+	border-bottom: none;
+	border-left: 5px solid transparent;
+	border-right: 5px solid transparent;
+}
+
+.dialog_popup .form_content input[type="text"],
+.dialog_popup .form_content input[type="number"] {
+	width: 100%;
+	max-width: 200px;
+}
+
+.dialog_popup .form_content .field_wrapper {
+	float: left;
+}
+
+.dialog_popup .form_content .checkbox-label-wrapper {
+	padding-left: 140px;
+	text-align: left;
+	width: 200px;
+	margin-right: 0;
+	margin-bottom: 13px;
+	padding-top: 0;
+}
+
+.dialog_content-part {
+	margin: 15px 0;
+}

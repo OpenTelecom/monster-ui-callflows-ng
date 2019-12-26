@@ -5,6 +5,7 @@ define(function(require) {
 	var appSubmodules = [
 		'blacklist',
 		'callcenter',
+		'audiomacro',
 		'conference',
 		'device',
 		'directory',

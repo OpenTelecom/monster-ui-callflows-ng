@@ -1,0 +1,23 @@
+<div class="js-accordion">
+	{{#each items}}
+		<div class="group js-accordion-group">
+			<h3>
+				<span class="js-accordion-group-title">{{ this.title }}</span>
+				<a href="" class="js-remove-item accordion-header-link">
+					<i class="fa fa-times-circle"></i>
+				</a>
+			</h3>
+
+			<div>
+				{{{ this.content }}}
+			</div>
+		</div>
+	{{/each}}
+</div>
+<div class="dialog_content-part">
+	<button class="btn js-add-item">{{ i18n.callflows.audio_macro.new_macro_btn_text }}</button>
+</div>
+<div class="dialog_content-part">
+	{{ i18n.callflows.audio_macro.common_terminators }}:<br/>
+	<input type="text" id="common-terminators" value="{{ terminators }}"/>
+</div>

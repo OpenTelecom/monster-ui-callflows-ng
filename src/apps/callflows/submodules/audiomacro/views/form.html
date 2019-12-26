@@ -1,0 +1,255 @@
+<form method="post" action="#" class="audio-macro-form">
+	<div class="form_content">
+		<div class="popup_field">
+			<label for="macro-{{ randomInt }}">{{ i18n.callflows.audio_macro.macro_type }}</label>
+			<div class="select_wrapper">
+				<select id="macro-{{ randomInt }}" class="js-macro" name="macro">
+					{{#select macro.macro}}
+						{{#each macrosAllList}}
+							<option value="{{ this.value }}">{{ this.name }}</option>
+						{{/each}}
+					{{/select}}
+				</select>
+			</div>
+		</div>
+
+		<div class="form-part form-part_play {{#compare macro.macro '!==' 'play'}}form-part_hidden{{/compare}}">
+			<div class="popup_field clear">
+				<label for="media-{{ randomInt }}">{{ i18n.callflows.audio_macro.media }}</label>
+				<div class="select_wrapper">
+					<select name="id" id="media-{{ randomInt }}">
+						{{#select macro.id}}
+							{{#each media}}
+								<option value="{{ this.id }}">{{ this.name }}</option>
+							{{/each}}
+						{{/select}}
+					</select>
+				</div>
+			</div>
+
+			<div class="popup_field clear">
+				<label class="checkbox-label-wrapper">
+					<input name="endless_playback" type="checkbox"{{#if macro.endless_playback}} checked="checked"{{/if}}>
+					{{ i18n.callflows.audio_macro.endless_playback }}
+				</label>
+			</div>
+			<div class="popup_field clear">
+				<label class="checkbox-label-wrapper">
+					<input name="answer" type="checkbox"{{#if macro.answer}} checked="checked"{{/if}}>
+					{{ i18n.callflows.audio_macro.answer }}
+				</label>
+			</div>
+			<div class="popup_field clear">
+				<label for="play-loop-count-{{ randomInt }}">
+					{{ i18n.callflows.audio_macro.loop_count }}
+				</label>
+				<div class="field_wrapper">
+					<input name="loop_count" type="number"
+						value="{{safeVal macro.loop_count '1'}}"
+						id="play-loop-count-{{ randomInt }}"/>
+				</div>
+			</div>
+			<div class="popup_field clear">
+				<label for="play-terminators-{{ randomInt }}">
+					{{ i18n.callflows.audio_macro.terminators }}
+				</label>
+				<div class="field_wrapper">
+					<input name="terminators" type="text"
+						value="{{#if macro.terminators}}{{join macro.terminators ''}}{{else}}123456789*0#{{/if}}"
+						id="play-terminators-{{ randomInt }}"/>
+				</div>
+			</div>
+		</div>
+
+		<div class="form-part form-part_tts {{#compare macro.macro '!==' 'tts'}}form-part_hidden{{/compare}}">
+			<div class="popup_field clear">
+				<label class="checkbox-label-wrapper">
+					<input name="endless_playback" type="checkbox"{{#if macro.endless_playback}} checked="checked"{{/if}}>
+					{{ i18n.callflows.audio_macro.endless_playback }}
+				</label>
+			</div>
+
+			<div class="popup_field clear">
+				<label for="engine-{{ randomInt }}">{{ i18n.callflows.audio_macro.engine.label }}</label>
+				<div class="select_wrapper">
+					<select name="engine" id="engine-{{ randomInt }}">
+						{{#select macro.engine}}
+							<option value="flite">{{ i18n.callflows.audio_macro.engine.flite }}</option>
+							<option value="google">{{ i18n.callflows.audio_macro.engine.google }}</option>
+							<option value="ispeech">{{ i18n.callflows.audio_macro.engine.ispeech }}</option>
+							<option value="voicefabric">{{ i18n.callflows.audio_macro.engine.voicefabric }}</option>
+						{{/select}}
+					</select>
+				</div>
+			</div>
+
+			<div class="popup_field clear">
+				<label for="tts-language-{{ randomInt }}">{{ i18n.callflows.audio_macro.language }}</label>
+				<div class="select_wrapper">
+					<select id="tts-language-{{ randomInt }}" name="language">
+						{{#select macro.language }}
+							{{#each languages}}
+								<option value="{{ this }}">{{ this }}</option>
+							{{/each}}
+						{{/select}}
+					</select>
+				</div>
+			</div>
+
+			<div class="popup_field clear">
+				<label for="tts-terminators-{{ randomInt }}">
+					{{ i18n.callflows.audio_macro.terminators }}
+				</label>
+				<div class="field_wrapper">
+					<input name="terminators" type="text"
+						value="{{#if macro.terminators}}{{join macro.terminators ''}}{{else}}123456789*0#{{/if}}"
+						id="tts-terminators-{{ randomInt }}"/>
+				</div>
+			</div>
+
+			<div class="popup_field clear">
+				<label for="tts-text-{{ randomInt }}">{{ i18n.callflows.audio_macro.text }}</label>
+				<textarea id="tts-text-{{ randomInt }}" name="text" maxlength="1000">{{#compare macro.macro '===' 'tts'}}{{ macro.text }}{{/compare}}</textarea>
+			</div>
+
+			<div class="popup_field clear">
+				<label for="tts-voice-{{ randomInt }}">{{ i18n.callflows.audio_macro.voice }}</label>
+				<div class="select_wrapper">
+					<select id="tts-voice-{{ randomInt }}" name="voice">
+						{{#select macro.voice }}
+							{{#each voices}}
+								<option value="{{ this }}">{{ this }}</option>
+							{{/each}}
+						{{/select}}
+					</select>
+				</div>
+			</div>
+		</div>
+
+		<div class="form-part form-part_prompt {{#compare macro.macro '!==' 'prompt'}}form-part_hidden{{/compare}}">
+			<div class="popup_field clear">
+				<label for="prompt-id-{{ randomInt }}">{{ i18n.callflows.audio_macro.prompt }}</label>
+				<div class="select_wrapper">
+					<select id="prompt-id-{{ randomInt }}" name="id">
+						{{#select macro.id }}
+						{{#each prompts}}
+						<option value="{{@key}}">{{@key}}</option>
+						{{/each}}
+						{{/select}}
+					</select>
+				</div>
+			</div>
+
+			<div class="popup_field clear">
+				<label for="prompt-language-{{ randomInt }}">{{ i18n.callflows.audio_macro.language }}</label>
+				<div class="select_wrapper">
+					<select id="prompt-language-{{ randomInt }}" name="language">
+						{{#select macro.language }}
+							{{#each languages}}
+								<option value="{{ this }}">{{ this }}</option>
+							{{/each}}
+						{{/select}}
+					</select>
+				</div>
+			</div>
+
+			<div class="popup_field clear">
+				<label for="prompt-terminators-{{ randomInt }}">
+					{{ i18n.callflows.audio_macro.terminators }}
+				</label>
+				<div class="field_wrapper">
+					<input name="terminators" type="text"
+						value="{{#if macro.terminators}}{{join macro.terminators ''}}{{else}}123456789*0#{{/if}}"
+						id="prompt-terminators-{{ randomInt }}"/>
+				</div>
+			</div>
+		</div>
+
+		<div class="form-part form-part_say {{#compare macro.macro '!==' 'say'}}form-part_hidden{{/compare}}">
+			<div class="popup_field clear">
+				<label for="say-text-{{ randomInt }}">{{ i18n.callflows.audio_macro.text }}</label>
+				<textarea id="say-text-{{ randomInt }}" name="text" maxlength="1000">{{#compare macro.macro '===' 'say'}}{{ macro.text }}{{/compare}}</textarea>
+			</div>
+
+			<div class="popup_field clear">
+				<label for="say-gender-{{ randomInt }}">{{ i18n.callflows.audio_macro.gender.label }}</label>
+				<div class="select_wrapper">
+					<select id="say-gender-{{ randomInt }}" name="gender">
+						{{#select macro.gender }}
+							<option value="masculine">{{ i18n.callflows.audio_macro.gender.masculine }}</option>
+							<option value="feminine">{{ i18n.callflows.audio_macro.gender.feminine }}</option>
+							<option value="neuter">{{ i18n.callflows.audio_macro.gender.neuter }}</option>
+						{{/select}}
+					</select>
+				</div>
+			</div>
+
+			<div class="popup_field clear">
+				<label for="say-language-{{ randomInt }}">{{ i18n.callflows.audio_macro.language }}</label>
+				<div class="select_wrapper">
+					<select id="say-language-{{ randomInt }}" name="language">
+						{{#select macro.language }}
+							{{#each languages}}
+								<option value="{{ this }}">{{ this }}</option>
+							{{/each}}
+						{{/select}}
+					</select>
+				</div>
+			</div>
+
+			<div class="popup_field clear">
+				<label for="say-method-{{ randomInt }}">{{ i18n.callflows.audio_macro.method.label }}</label>
+				<div class="select_wrapper">
+					<select id="say-method-{{ randomInt }}" name="method">
+						{{#select macro.method }}
+							<option value="pronounced">{{ i18n.callflows.audio_macro.method.pronounced }}</option>
+							<option value="iterated">{{ i18n.callflows.audio_macro.method.iterated }}</option>
+							<option value="counted">{{ i18n.callflows.audio_macro.method.counted }}</option>
+							<option value="none">{{ i18n.callflows.audio_macro.method.none }}</option>
+						{{/select}}
+					</select>
+				</div>
+			</div>
+
+			<div class="popup_field clear">
+				<label for="say-type-{{ randomInt }}">{{ i18n.callflows.audio_macro.say.type.label }}</label>
+				<div class="select_wrapper">
+					<select id="say-type-{{ randomInt }}" name="type">
+						{{#select macro.type }}
+							<option value="number">{{ i18n.callflows.audio_macro.say.type.number }}</option>
+							<option value="items">{{ i18n.callflows.audio_macro.say.type.items }}</option>
+							<option value="persons">{{ i18n.callflows.audio_macro.say.type.persons }}</option>
+							<option value="messages">{{ i18n.callflows.audio_macro.say.type.messages }}</option>
+							<option value="currency">{{ i18n.callflows.audio_macro.say.type.currency }}</option>
+							<option value="time_measurement">{{ i18n.callflows.audio_macro.say.type.time_measurement }}</option>
+							<option value="current_date">{{ i18n.callflows.audio_macro.say.type.current_date }}</option>
+							<option value="current_time">{{ i18n.callflows.audio_macro.say.type.current_time }}</option>
+							<option value="current_date_time">{{ i18n.callflows.audio_macro.say.type.current_date_time }}</option>
+							<option value="telephone_number">{{ i18n.callflows.audio_macro.say.type.telephone_number }}</option>
+							<option value="telephone_extension">{{ i18n.callflows.audio_macro.say.type.telephone_extension }}</option>
+							<option value="url">{{ i18n.callflows.audio_macro.say.type.url }}</option>
+							<option value="ip_address">{{ i18n.callflows.audio_macro.say.type.ip_address }}</option>
+							<option value="e-mail_address">{{ i18n.callflows.audio_macro.say.type.e-mail_address }}</option>
+							<option value="postal_address">{{ i18n.callflows.audio_macro.say.type.postal_address }}</option>
+							<option value="account_number">{{ i18n.callflows.audio_macro.say.type.account_number }}</option>
+							<option value="name_spelled">{{ i18n.callflows.audio_macro.say.type.name_spelled }}</option>
+							<option value="name_phonetic">{{ i18n.callflows.audio_macro.say.type.name_phonetic }}</option>
+							<option value="short_date_time">{{ i18n.callflows.audio_macro.say.type.short_date_time }}</option>
+						{{/select}}
+					</select>
+				</div>
+			</div>
+
+			<div class="popup_field clear">
+				<label for="say-terminators-{{ randomInt }}">
+					{{ i18n.callflows.audio_macro.terminators }}
+				</label>
+				<div class="field_wrapper">
+					<input name="terminators" type="text"
+						   value="{{#if macro.terminators}}{{join macro.terminators ''}}{{else}}123456789*0#{{/if}}"
+						   id="say-terminators-{{ randomInt }}"/>
+				</div>
+			</div>
+		</div>
+	</div>
+</form>

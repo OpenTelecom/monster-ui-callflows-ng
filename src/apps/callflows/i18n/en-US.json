@@ -27,6 +27,72 @@
 			"qubicle_tip": "Route to a queue",
 			"which_queue": "Which queue?"
 		},
+		"audio_macro": {
+			"dialog_title": "Audio Macro",
+			"macro_type": "Macro type",
+			"media": "Media",
+			"endless_playback": "Endless Playback",
+			"language": "Language",
+			"voice": "Voice",
+			"answer": "Answer",
+			"loop_count": "Loop count",
+			"terminators": "Terminators",
+			"engine": {
+				"label": "Engine",
+				"flite": "Flite",
+				"google": "Google",
+				"ispeech": "Ispeach",
+				"voicefabric": "Voicefabric"
+			},
+			"text": "Text",
+			"prompt": "Prompt",
+			"gender": {
+				"label": "Gender",
+				"masculine": "Masculine",
+				"feminine": "Feminine",
+				"neuter": "Neuter"
+			},
+			"method": {
+				"label": "Method",
+				"pronounced": "Pronounced",
+				"iterated": "Iterated",
+				"counted": "Counted",
+				"none": "None"
+			},
+			"say": {
+				"type": {
+					"label": "Type",
+					"number": "Number",
+					"items": "Items",
+					"persons": "Persons",
+					"messages": "Messages",
+					"currency": "Currency",
+					"time_measurement": "Time measurement",
+					"current_date": "Current date",
+					"current_time": "Current time",
+					"current_date_time": "Current date time",
+					"telephone_number": "Telephone number",
+					"telephone_extension": "Telephone extension",
+					"url": "URL",
+					"ip_address": "IP Address",
+					"e-mail_address": "Email",
+					"postal_address": "Postal address",
+					"account_number": "Account number",
+					"name_spelled": "Name spelled",
+					"name_phonetic": "Name phonetic",
+					"short_date_time": "Short date time"
+				}
+			},
+			"new_macro_btn_text": "Add macro",
+			"common_terminators": "Terminators",
+			"accordion_titles": {
+				"play": "Play",
+				"say": "Say",
+				"tts": "TTS",
+				"prompt": "Prompt"
+			},
+			"are_you_sure_you_want_to_delete": "Are you sure you want to delete this item?"
+		},
 		"conference": {
 			"conference": "Conference",
 			"conference_tip": "Connect a caller to a Meet-Me conference bridge",
@@ -928,7 +994,7 @@
 			"check_voicemail": "Check Voicemail",
 			"miscellaneous_cat": "Miscellaneous",
 			"direct_to_voicemail": "Direct to Voicemail",
-			"eavesdrop_feature": "Eavesdrop Feature",
+			"eavesdrop": "Eavesdrop",
 			"eavesdropPopup": {
 				"title": "Eavesdrop",
 				"eavesdropTarget": {

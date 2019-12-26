@@ -10,6 +10,7 @@
 @import url('../submodules/featurecodes/featurecodes.css');
 @import url('../submodules/temporalset/temporalset.css');
 @import url('../submodules/callcenter/callcenter.css');
+@import url('../submodules/audiomacro/audiomacro.css');
 @import url('../../../css/vendor/bootstrap-tour.css');
 /* style.css */
 #ws_callflow > .callflow {
@@ -1271,6 +1272,9 @@
 .callflows-port .pill-content .edit_create {
 	margin-left:20px;
 	display:inline;
+}
+.callflows-port .pill-content .edit_create a {
+	color: #EEE;
 }
 
 .callflows-port .pill-content .edit_create > a:not(:first-child) {
