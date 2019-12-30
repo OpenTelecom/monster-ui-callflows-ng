@@ -435,7 +435,7 @@
 	text-align: center;
 	vertical-align: top;
 	display: inline-block;
-	line-height: 15px;
+	line-height: 13px;
 	width: 100%;
 	padding-top: 5px;
 	color: white;
@@ -1273,6 +1273,7 @@
 	margin-left:20px;
 	display:inline;
 }
+
 .callflows-port .pill-content .edit_create a {
 	color: #EEE;
 }
