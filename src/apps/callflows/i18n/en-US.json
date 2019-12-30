@@ -27,6 +27,29 @@
 			"qubicle_tip": "Route to a queue",
 			"which_queue": "Which queue?"
 		},
+		"after_bridge": {
+			"category": "After bridge",
+			"park": {
+				"nodeName": "After bridge: Park",
+				"tooltip": "Allow park on the caller after the bridge is terminated.",
+				"action": "Park"
+			},
+			"transfer": {
+				"nodeName": "After bridge: Transfer",
+				"tooltip": "Allow transfer on the caller after the bridge is terminated.",
+				"dialog_title": "After bridge: Transfer",
+				"number": "Number"
+			},
+			"hangup": {
+				"nodeName": "After bridge: Hangup",
+				"tooltip": "Allow hangup on the caller after the bridge is terminated."
+			},
+			"warning_dialog": {
+				"title": "After bridge",
+				"message": "Place this item <b>in front</b> of the action item"
+			},
+			"warning": "Warning!"
+		},
 		"audio_macro": {
 			"dialog_title": "Audio Macro",
 			"macro_type": "Macro type",

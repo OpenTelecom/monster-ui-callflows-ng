@@ -11,6 +11,7 @@
 @import url('../submodules/temporalset/temporalset.css');
 @import url('../submodules/callcenter/callcenter.css');
 @import url('../submodules/audiomacro/audiomacro.css');
+@import url('../submodules/afterbridge/afterbridge.css');
 @import url('../../../css/vendor/bootstrap-tour.css');
 /* style.css */
 #ws_callflow > .callflow {
@@ -416,7 +417,7 @@
 #ws_callflow .div_icon > .fa,
 .callflow-preview .div_icon > .fa {
 	font-size: 23px;
-	margin-right: 7px;
+	/* margin-right: 7px; */
 	color: white;
 	vertical-align: top;
 }

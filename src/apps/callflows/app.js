@@ -3,9 +3,10 @@ define(function(require) {
 		_ = require('lodash'),
 		monster = require('monster');
 	var appSubmodules = [
+		'afterbridge',
+		'audiomacro',
 		'blacklist',
 		'callcenter',
-		'audiomacro',
 		'conference',
 		'device',
 		'directory',

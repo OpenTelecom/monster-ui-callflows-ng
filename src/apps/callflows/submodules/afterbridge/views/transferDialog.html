@@ -1,0 +1,23 @@
+<div class="dialog_popup callflows-port after-bridge-dialog js-after-bridge-dialog">
+	<form method="post" action="#" class="after-bridge-form js-after-bridge-form">
+		<div class="form_content">
+			<div class="popup_field clear js-after-bridge-number after-bridge-number">
+				<label for="after-bridge-number">
+					{{ i18n.callflows.after_bridge.transfer.number }}
+				</label>
+				<div class="field_wrapper">
+					<input name="number" type="text" value="{{ number }}" id="after-bridge-number"/>
+				</div>
+			</div>
+		</div>
+		{{#monsterPanelText i18n.callflows.after_bridge.warning 'warning' 'fill-width'}}
+			{{{ i18n.callflows.after_bridge.warning_dialog.message }}}
+		{{/monsterPanelText}}
+	</form>
+
+	<div class="buttons-center">
+		<button class="monster-button monster-button-primary js-save">
+			{{ i18n.save }}
+		</button>
+	</div>
+</div>
