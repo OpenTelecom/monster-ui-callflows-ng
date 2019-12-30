@@ -66,9 +66,7 @@ define(function(require) {
 		},
 
 		subscribe: {
-			'callflows.fetchActions': 'audiomacroDefineActions',
-			'callflows.audiomacro.editPopup': 'audiomacroPopupEdit',
-			'callflows.audiomacro.edit': 'audiomacroEdit'
+			'callflows.fetchActions': 'audiomacroDefineActions'
 		},
 
 		audiomacroDefineActions: function(args) {
@@ -102,8 +100,7 @@ define(function(require) {
 					},
 					edit: function(node, callback) {
 						self.audiomacroEditAudioMacro(node, callback);
-					},
-					editEntity: 'callflows.audiomacro.edit'
+					}
 				}
 			});
 		},
@@ -465,121 +462,6 @@ define(function(require) {
 			node.setMetadata('macros', resultMacros); // self.audiomacroPrepareDataForSave(resultMacros)
 			node.setMetadata('terminators', commonTerminators);
 			node.caption = self.audiomacroGetCaptionText(resultMacros);
-		},
-
-		audiomacroPopupEdit: function(args) {
-			var self = this,
-				popup_html = $('<div class="callflows-callcenter-popup inline_popup callflows-port"><div class="inline_content main_content"></div></div>'),
-				callback = args.callback,
-				popup,
-				data = args.data,
-				data_defaults = args.data_defaults;
-
-			popup_html.css({
-				height: 500,
-				'overflow-y': 'scroll'
-			});
-
-			self.queueEdit({
-				data: data,
-				parent: popup_html,
-				target: $('.inline_content', popup_html),
-				callbacks: {
-					save_success: function(_data) {
-						popup.dialog('close');
-
-						if (typeof callback === 'function') {
-							callback(_data);
-						}
-					},
-					delete_success: function() {
-						popup.dialog('close');
-
-						if (typeof callback === 'function') {
-							callback({ data: {} });
-						}
-					},
-					after_render: function() {
-						popup = monster.ui.dialog(popup_html, {
-							title: (data.id) ? self.i18n.active().callflows.callcenter.editQueue : self.i18n.active().callflows.callcenter.createQueue
-						});
-					}
-				},
-				data_defaults: data_defaults
-			});
-		},
-
-		audiomacroEdit: function(args) {
-			var self = this,
-				data = args.data,
-				parent = args.parent || $('#queue-content'),
-				target = args.target || $('#queue-view', parent),
-				_callbacks = args.callbacks || {},
-				callbacks = {
-					save_success: _callbacks.save_success || function(_data) {
-						self.queueRenderList(parent);
-
-						self.queueEdit({
-							data: {
-								id: _data.data.id
-							},
-							parent: parent,
-							target: target,
-							callbacks: callbacks
-						});
-					},
-
-					save_error: _callbacks.save_error,
-
-					delete_success: _callbacks.delete_success || function() {
-						target.empty();
-
-						self.queueRenderList(parent);
-					},
-
-					delete_error: _callbacks.delete_error,
-
-					after_render: _callbacks.after_render
-				},
-				defaults = {
-					data: $.extend(true, {
-						connection_timeout: '300',
-						member_timeout: '5'
-						/* caller_exit_key: '#' */
-					}, args.data_defaults || {}),
-					field_data: {
-						sort_by: {
-							'first_name': self.i18n.active().callflows.callcenter.first_name,
-							'last_name': self.i18n.active().callflows.callcenter.last_name
-						}
-					}
-				};
-
-			self.getUsersList(function(users) {
-				defaults.field_data.users = users;
-
-				if (typeof data === 'object' && data.id) {
-					self.queueGet(data.id, function(queueData) {
-						var render_data = $.extend(true, defaults, queueData);
-
-						render_data.field_data.old_list = [];
-						if ('agents' in queueData.data) {
-							render_data.field_data.old_list = queueData.data.agents;
-						}
-						self.queueRender(render_data, target, callbacks);
-
-						if (typeof (callbacks.after_render) === 'function') {
-							callbacks.after_render();
-						}
-					});
-				} else {
-					self.queueRender(defaults, target, callbacks);
-
-					if (typeof (callbacks.after_render) === 'function') {
-						callbacks.after_render();
-					}
-				}
-			});
 		}
 	};
 
