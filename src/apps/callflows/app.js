@@ -10,7 +10,7 @@ define(function(require) {
 		'conference',
 		'device',
 		'directory',
-        'eavesdrop',
+		'eavesdrop',
 		'faxbox',
 		'featurecodes',
 		'groups',
@@ -606,11 +606,16 @@ define(function(require) {
 			formattedData.extra.isShoutcast = false;
 
 			formattedData.extra.preflowCallflows = [];
+			var numbers,
+				patterns
 			_.each(formattedData.callflows, function(callflow) {
-				if (callflow.featurecode === false && callflow.numbers && callflow.numbers.length && callflow.numbers.indexOf('no_match') < 0) {
+				numbers = callflow.numbers;
+				patterns = callflow.patterns;
+				if (callflow.featurecode === false
+					&& (numbers.length > 0 || patterns.length > 0)) {
 					formattedData.extra.preflowCallflows.push({
 						id: callflow.id,
-						friendlyName: callflow.name || callflow.numbers.toString()
+						friendlyName: callflow.name || numbers.concat(patterns).join(', ')
 					});
 				}
 			});
@@ -1023,19 +1028,20 @@ define(function(require) {
 
 			_.each(data.data, function(callflow) {
 				var formattedNumbers = _.map(callflow.numbers || '-', function(number) {
-						return _.startsWith('+', number)
-							? monster.util.formatPhoneNumber(number)
-							: number;
-					}),
-					listNumbers = formattedNumbers.toString(),
-					isFeatureCode = callflow.featurecode !== false && !_.isEmpty(callflow.featurecode);
+					return _.startsWith('+', number)
+						? monster.util.formatPhoneNumber(number)
+						: number;
+				});
+
+				var listNumbersAndPatterns = _.merge(formattedNumbers, callflow.patterns).join(', ');
+				var isFeatureCode = callflow.featurecode !== false && !_.isEmpty(callflow.featurecode);
 
 				if (!isFeatureCode) {
 					if (callflow.name) {
-						callflow.description = listNumbers;
+						callflow.description = listNumbersAndPatterns;
 						callflow.title = callflow.name;
 					} else {
-						callflow.title = listNumbers;
+						callflow.title = listNumbersAndPatterns;
 					}
 
 					formattedList.push(callflow);
@@ -1049,6 +1055,20 @@ define(function(require) {
 			data.data = formattedList;
 
 			return data;
+		},
+
+		callflowsGetModulesByNameInCallflow: function (flow, moduleName, resultArr) {
+			var self = this;
+			resultArr = resultArr || [];
+
+			if(flow.module === moduleName) {
+				resultArr.push(flow.data);
+			}
+
+			for(var k in flow.children) if(flow.children.hasOwnProperty(k)) {
+				self.callflowsGetModulesByNameInCallflow(flow.children[k], moduleName, resultArr);
+			}
+			return resultArr;
 		},
 
 		editCallflow: function(data) {
@@ -1078,14 +1098,28 @@ define(function(require) {
 						self.flow.name = callflow.name;
 						self.flow.contact_list = { exclude: 'contact_list' in callflow ? callflow.contact_list.exclude || false : false };
 						self.flow.caption_map = callflow.metadata;
-
-						if (callflow.flow.module !== undefined) {
-							self.flow.root = self.buildFlow(callflow.flow, self.flow.root, 0, '_');
-						}
-
 						self.flow.numbers = callflow.numbers || [];
+						self.flow.patterns = callflow.patterns || [];
 
-						self.repaintFlow();
+						var buildAndRepaintFlow = function () {
+							if (callflow.flow.module !== undefined) {
+								self.flow.root = self.buildFlow(callflow.flow, self.flow.root, 0, '_');
+							}
+							self.repaintFlow();
+						};
+
+						var callflowModulesInFlow = self.callflowsGetModulesByNameInCallflow(callflow.flow, 'callflow', []);
+						if(callflowModulesInFlow.length > 0) {
+							self.callflowsExtendMetadataOfCallflowModules(callflowModulesInFlow, function (callflows) {
+								for (var c in callflows) if (callflows.hasOwnProperty(c)) {
+									self.flow.caption_map[callflows[c].id].numbers = callflows[c].numbers;
+									self.flow.caption_map[callflows[c].id].patterns = callflows[c].patterns;
+								}
+								buildAndRepaintFlow();
+							})
+						} else {
+							buildAndRepaintFlow();
+						}
 					}
 				});
 			} else {
@@ -1098,6 +1132,48 @@ define(function(require) {
 			self.renderTools();
 		},
 
+		callflowsGetCallflow: function (id, callback) {
+			var self = this;
+
+			self.callApi({
+				resource: 'callflow.get',
+				data: {
+					accountId: self.accountId,
+					callflowId: id
+				},
+				success: function(callflow) {
+					callflow = callflow.data;
+
+					if(typeof(callback) === 'function') {
+						callback(callflow);
+					}
+				},
+				error: function(data) {
+					console.log('Error while getting callflow');
+					console.log(data);
+				}
+			});
+		},
+
+		callflowsExtendMetadataOfCallflowModules: function (callflowsList, callback) {
+			var self = this;
+			var requestsList = {};
+			for (var i = 0, len = callflowsList.length; i< len; i++) {
+				requestsList[callflowsList[i].id] = (function(){
+					var callflowId = callflowsList[i].id;
+					return function (callback) {
+						self.callflowsGetCallflow(callflowId, function (callflow) {
+							callback(null, callflow);
+						})
+					}
+				})();
+			}
+
+			monster.parallel(requestsList, function(error, results) {
+				callback && callback(results);
+			});
+		},
+
 		renderButtons: function() {
 			var self = this,
 				buttons = $(self.getTemplate({
@@ -1107,11 +1183,20 @@ define(function(require) {
 			$('.buttons').empty();
 
 			$('.save', buttons).click(function() {
-				if (self.flow.numbers && self.flow.numbers.length > 0) {
-					self.save();
-				} else {
+				var numbersAndPatternsNotFound = self.flow.numbers.length === 0 && self.flow.patterns.length === 0;
+				var numbersAndPatternsTogether = self.flow.numbers.length > 0 && self.flow.patterns.length > 0;
+
+				if(numbersAndPatternsNotFound) {
 					monster.ui.alert(self.i18n.active().oldCallflows.invalid_number + '<br/><br/>' + self.i18n.active().oldCallflows.please_select_valid_number);
+					return;
 				}
+
+				if(numbersAndPatternsTogether) {
+					monster.ui.alert(self.i18n.active().callflows.messages.numbers_and_patterns_together_error);
+					return;
+				}
+
+				self.save();
 			});
 
 			$('.delete', buttons).click(function() {
@@ -1200,6 +1285,7 @@ define(function(require) {
 			self.flow.root = self.branch('root'); // head of the flow tree
 			self.flow.root.key = 'flow';
 			self.flow.numbers = [];
+			self.flow.patterns = [];
 			self.flow.caption_map = {};
 			self.formatFlow();
 		},
@@ -1437,6 +1523,10 @@ define(function(require) {
 			$.each(flow.numbers, function(key, value) {
 				s_flow += '|' + value;
 			});
+			s_flow += '|PATTERNS';
+			$.each(flow.patterns, function(key, value) {
+				s_flow += '|' + value;
+			});
 			s_flow += '|NODES';
 			$.each(flow.nodes, function(key, value) {
 				s_flow += '|' + key + '::';
@@ -1476,7 +1566,7 @@ define(function(require) {
 
 					flow.root = self.branch('root');
 					flow.root.key = 'flow';
-					flow.numbers = [];
+					flow.patterns = [];
 					flow.caption_map = {};
 					flow.root.index(0);
 					flow.nodes = flow.root.nodes();
@@ -1492,6 +1582,7 @@ define(function(require) {
 
 					flow.nodes = flow.root.nodes();
 					flow.numbers = callflow.numbers || [];
+					flow.patterns = callflow.patterns || [];
 
 					//prepare html from callflow
 
@@ -1512,16 +1603,23 @@ define(function(require) {
 								}
 							}));
 
-							for (var counter, size = flow.numbers.length, j = Math.floor((size) / 2) + 1, i = 0; i < j; i++) {
+							var numbersFormatted = _.map(flow.numbers, function(number) {
+								return _.startsWith('+', number)
+									? monster.util.formatPhoneNumber(number)
+									: number;
+							});
+							var numbersAndPatterns = numbersFormatted.concat(flow.patterns);
+							for (var counter, size = numbersAndPatterns.length, j = Math.floor((size) / 2) + 1, i = 0; i < j; i++) {
 								counter = i * 2;
 
-								var numbers = flow.numbers.slice(counter, (counter + 2 < size) ? counter + 2 : size),
-									row = $(self.getTemplate({
-										name: 'rowNumber',
-										data: {
-											numbers: numbers
-										}
-									}));
+								var currentNumbersAndPatterns = numbersAndPatterns.slice(counter, (counter + 2 < size) ? counter + 2 : size);
+
+								var row = $(self.getTemplate({
+									name: 'rowNumber',
+									data: {
+										numbers: currentNumbersAndPatterns
+									}
+								}));
 
 								node_html
 									.find('.content')
@@ -1603,20 +1701,24 @@ define(function(require) {
 						});
 					});
 
-					for (var counter, size = self.flow.numbers.length, j = Math.floor((size) / 2) + 1, i = 0; i < j; i++) {
+					var numbersFormatted = _.map(self.flow.numbers, function(number) {
+						return _.startsWith('+', number)
+							? monster.util.formatPhoneNumber(number)
+							: number;
+					});
+
+					var numbersAndPatterns = numbersFormatted.concat(self.flow.patterns);
+					for (var counter, size = numbersAndPatterns.length, j = Math.floor((size) / 2) + 1, i = 0; i < j; i++) {
 						counter = i * 2;
 
-						var numbers = self.flow.numbers.slice(counter, (counter + 2 < size) ? counter + 2 : size),
-							row = $(self.getTemplate({
-								name: 'rowNumber',
-								data: {
-									numbers: _.map(numbers, function(number) {
-										return _.startsWith('+', number)
-											? monster.util.formatPhoneNumber(number)
-											: number;
-									})
-								}
-							}));
+						var currentNumbersAndPatterns = numbersAndPatterns.slice(counter, (counter + 2 < size) ? counter + 2 : size);
+
+						var row = $(self.getTemplate({
+							name: 'rowNumber',
+							data: {
+								numbers: currentNumbersAndPatterns
+							}
+						}));
 
 						node_html
 							.find('.content')
@@ -1646,9 +1748,7 @@ define(function(require) {
 									title: self.i18n.active().oldCallflows.add_number
 								});
 
-							monster.ui.chosen(popup_html.find('#list_numbers'), {
-								width: '160px'
-							});
+							monster.ui.chosen(popup_html.find('#list_numbers'), {});
 							// Have to do that so that the chosen dropdown isn't hidden.
 							popup_html.parent().css('overflow', 'visible');
 
@@ -1673,15 +1773,21 @@ define(function(require) {
 								});
 							};
 
-							$('.extensions_content', popup).hide();
+							$('.js-add-number-content', popup).hide();
+							$('.js-list-numbers-content', popup).show();
 
 							$('input[name="number_type"]', popup).click(function() {
-								if ($(this).val() === 'your_numbers') {
-									$('.list_numbers_content', popup).show();
-									$('.extensions_content', popup).hide();
-								} else {
-									$('.extensions_content', popup).show();
-									$('.list_numbers_content', popup).hide();
+								$('.js-add-number-content', popup).hide();
+								switch($(this).val()) {
+									case 'your_numbers':
+										$('.js-list-numbers-content', popup).show();
+										break;
+									case 'extension':
+										$('.js-extensions-content', popup).show();
+										break;
+									default: // case 'pattern':
+										$('.js-pattern-content', popup).show();
+										break;
 								}
 							});
 
@@ -1714,38 +1820,23 @@ define(function(require) {
 
 							$('.add_number', popup).click(function(event) {
 								event.preventDefault();
-								var number = $('input[name="number_type"]:checked', popup).val() === 'your_numbers' ? $('#list_numbers option:selected', popup).val() : $('#add_number_text', popup).val();
-
-								if (number !== 'select_none' && number !== '') {
-									self.flow.numbers.push(number);
-									popup.dialog('close');
-
-									self.repaintFlow();
-
-									if (self.tour
-										&& $('#ws_callflow .number_column').not('.js-add-number').length === 1) {
-										if (self.tour.ended()) {
-											self.tour.restart();
-										}
-										if (self.tour.getCurrentStep() !== 2) {
-											self.tour.goTo(2);
-										}
-									}
-								} else {
-									monster.ui.alert(self.i18n.active().oldCallflows.you_didnt_select);
-								}
+								self.callflowsAddNumberOrPattern(this, popup);
 							});
 						});
 					});
 
 					$('.number_column .delete', node_html).click(function() {
-						var number = $(this).parent('.number_column').data('number') + '',
-							index = $.inArray(number, self.flow.numbers);
+						var numberOrPattern = $(this).parent('.number_column').data('number') + '';
+						var indexInNumbers = $.inArray(numberOrPattern, self.flow.numbers);
+						var indexInPatterns = $.inArray(numberOrPattern, self.flow.patterns);
 
-						if (index >= 0) {
-							self.flow.numbers.splice(index, 1);
+						if(indexInNumbers !== -1) {
+							self.flow.numbers.splice(indexInNumbers, 1);
 						}
 
+						if(indexInPatterns !== -1) {
+							self.flow.patterns.splice(indexInPatterns, 1);
+						}
 						self.repaintFlow();
 					});
 				} else {
@@ -1915,12 +2006,85 @@ define(function(require) {
 			});
 
 			$('.node-options .jump', layout).click(function() {
-                var $this = $(this),
-                    callflowId = $this.attr('id');
-                self.editCallflow({ id: callflowId });
-            });
+				var $this = $(this),
+					callflowId = $this.attr('id');
+				self.editCallflow({ id: callflowId });
+			});
 
 			return layout;
+		},
+
+		callflowsAddNumberOrPattern: function (button, popup) {
+			var self = this,
+				numberType = $('input[name="number_type"]:checked', popup).val(),
+				pattern = '',
+				number = '',
+				$messageContainer = $('.js-message-container', popup),
+				togetherErrorMessage = self.i18n.active().callflows.messages.numbers_and_patterns_together_error;
+
+			var showNextTourStep = function () {
+				if (self.tour
+					&& $('#ws_callflow .number_column').not('.js-add-number').length === 1) {
+					if (self.tour.ended()) {
+						self.tour.restart();
+					}
+					if (self.tour.getCurrentStep() !== 2) {
+						self.tour.goTo(2);
+					}
+				}
+			};
+
+			switch(numberType) {
+				case 'your_numbers':
+					number = $('#list_numbers option:selected', popup).val();
+					break;
+				case 'extension':
+					number = $('#add_number_text', popup).val();
+					break;
+				default: // case 'pattern':
+					pattern = $('#add_pattern_text', popup).val();
+					break;
+			}
+
+			if (number && number === 'select_none') {
+				monster.ui.alert(self.i18n.active().oldCallflows.you_didnt_select);
+			}
+
+			if (number) {
+				if (self.flow.patterns.length > 0) {
+					$messageContainer.empty();
+					self.callflowsInsertAlertMessage($messageContainer, 'warning', togetherErrorMessage);
+					return;
+				}
+				self.flow.numbers.push(number);
+				self.repaintFlow();
+				showNextTourStep();
+				popup.dialog('close');
+				return;
+			}
+
+			if (pattern) {
+				if (self.flow.numbers.length > 0) {
+					$messageContainer.empty();
+					self.callflowsInsertAlertMessage($messageContainer, 'warning', togetherErrorMessage);
+					return;
+				}
+				self.flow.patterns.push(pattern);
+				self.repaintFlow();
+				showNextTourStep();
+				popup.dialog('close');
+			}
+		},
+
+		callflowsInsertAlertMessage: function ($target, type, message, additionalClasses) {
+			var validTypes = ['info', 'question', 'error', 'warning'];
+			type = typeof type === 'string' && validTypes.indexOf(type) >= 0 ? type : 'info';
+			var templateData = {
+				className: additionalClasses ? 'callflows-message ' + additionalClasses : 'callflows-message',
+				content: message
+			};
+			var template = monster.template(monster.apps.core, 'monster-text-' + type, templateData, false, false, true);
+			$target.append(template);
 		},
 
 		renderBranch: function(branch) {
@@ -2133,13 +2297,22 @@ define(function(require) {
 		},
 
 		save: function() {
-			var self = this;
+			var self = this,
+				haveNumbers = self.flow.numbers && self.flow.numbers.length > 0,
+				havePatterns = self.flow.patterns && self.flow.patterns.length > 0;
 
-			if (self.flow.numbers && self.flow.numbers.length > 0) {
+			if (haveNumbers || havePatterns) {
 				var data_request = {
-					numbers: self.flow.numbers,
 					flow: (self.flow.root.children[0] === undefined) ? {} : self.flow.root.children[0].serialize()
 				};
+
+				if(haveNumbers) {
+					data_request.numbers = self.flow.numbers;
+				}
+
+				if(havePatterns) {
+					data_request.patterns = self.flow.patterns;
+				}
 
 				if (self.flow.name !== '') {
 					data_request.name = self.flow.name;

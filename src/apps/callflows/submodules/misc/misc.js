@@ -87,14 +87,19 @@ define(function(require) {
 						var id = node.getMetadata('id'),
 							return_value = '';
 
-						if (id in caption_map) {
-							if (caption_map[id].hasOwnProperty('name')) {
+						var callflow,
+							numbers,
+							patterns;
+						if (id in caption_map && caption_map.hasOwnProperty(id)) {
+							callflow = caption_map[id];
+							if (callflow.name) {
 								return_value = caption_map[id].name;
-							} else if (caption_map[id].hasOwnProperty('numbers')) {
-								return_value = caption_map[id].numbers.toString();
+							} else {
+								numbers = callflow.numbers || [];
+								patterns = callflow.patterns || [];
+								return_value = numbers.concat(patterns).join(', ');
 							}
 						}
-
 						return return_value;
 					},
 					edit: function(node, callback) {
@@ -111,8 +116,13 @@ define(function(require) {
 
 								$.each(data.data, function() {
 									if (!this.featurecode && this.id !== self.flow.id) {
-										this.name = this.name ? this.name : ((this.numbers) ? this.numbers.toString() : self.i18n.active().oldCallflows.no_numbers);
-
+										if (!this.name) {
+											if(this.numbers && this.numbers.length > 0) {
+												this.name = this.numbers ? this.numbers.join(', ') : self.i18n.active().oldCallflows.no_numbers
+											} else if (this.patterns && this.patterns.length > 0) {
+												this.name = this.patterns ? this.patterns.join(', ') : self.i18n.active().oldCallflows.no_numbers
+											}
+										}
 										_data.push(this);
 									}
 								});
@@ -503,23 +513,23 @@ define(function(require) {
 						});
 					}
 				},
-                'webhook[]': {
-                    name: self.i18n.active().callflows.webhook.title,
-                    icon: 'upload',
-                    category: self.i18n.active().oldCallflows.advanced_cat,
-                    module: 'webhook',
-                    tip: self.i18n.active().callflows.webhook.tip,
-                    data: {},
-                    rules: [],
-                    isUsable: 'true',
-                    weight: 170,
-                    caption: function() {
-                        return '';
-                    },
-                    edit: function(node, callback) {
-                        self.miscRenderEditWebhook(node, callback);
-                    }
-                },
+				'webhook[]': {
+					name: self.i18n.active().callflows.webhook.title,
+					icon: 'upload',
+					category: self.i18n.active().oldCallflows.advanced_cat,
+					module: 'webhook',
+					tip: self.i18n.active().callflows.webhook.tip,
+					data: {},
+					rules: [],
+					isUsable: 'true',
+					weight: 170,
+					caption: function() {
+						return '';
+					},
+					edit: function(node, callback) {
+						self.miscRenderEditWebhook(node, callback);
+					}
+				},
 				'set_alert_info[]': {
 					name: self.i18n.active().callflows.setAlertInfo.name,
 					icon: 'play',
@@ -1258,13 +1268,13 @@ define(function(require) {
 							}));
 
 							if ($('#media_selector option:selected', popup_html).val() === undefined
-							|| $('#media_selector option:selected', popup_html).val() === 'null') {
+								|| $('#media_selector option:selected', popup_html).val() === 'null') {
 								$('#edit_link', popup_html).hide();
 							}
 
 							$('#media_selector', popup_html).change(function() {
 								if ($('#media_selector option:selected', popup_html).val() === undefined
-								|| $('#media_selector option:selected', popup_html).val() === 'null') {
+									|| $('#media_selector option:selected', popup_html).val() === 'null') {
 									$('#edit_link', popup_html).hide();
 								} else {
 									$('#edit_link', popup_html).show();

@@ -454,8 +454,10 @@
 	padding-right: 0px;
 }
 
+#ws_callflow .details a,
 .callflow-preview .details a {
-	color: #22A5FF;
+	color: white;
+	text-decoration: underline;
 }
 
 .callflow-preview * {
@@ -1913,6 +1915,41 @@
 	background: url('static/images/callflows-drag-and-drop.gif') no-repeat;
 }
 
+.callflows-form.form-inline .form-label-wrapper {
+	display: inline-block;
+	vertical-align: top;
+	text-align: left;
+	width: 160px;
+	margin-right: 0;
+	margin-bottom: 13px;
+	padding-top: 10px;
+}
+
+.callflows-form.form-inline .form-field-wrapper {
+	display: inline-block;
+	vertical-align: top;
+}
+
+.callflows-message-container {
+	padding: 10px 20px 20px;
+}
+
+.callflows-message {
+	border: 1px solid #22A5FF;
+	background: #22A5FF;
+}
+
+.callflows-message .text-wrapper {
+	color: white;
+}
+
+.help-box .wrapper-icon {
+	background: white;
+}
+
+.callflows-message .fa {
+	color: #22A5FF !important;
+}
 
 /*
  * Bootstrap guide tour - override styles
