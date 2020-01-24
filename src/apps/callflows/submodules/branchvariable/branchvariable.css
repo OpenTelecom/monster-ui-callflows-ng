@@ -1,0 +1,12 @@
+.dialog_popup .branch-bnumber-form .form_content .checkbox-label-wrapper {
+	padding-left: 170px;
+	text-align: left;
+	width: 200px;
+	margin-right: 0;
+	margin-bottom: 13px;
+	padding-top: 0;
+}
+
+.callflows-port form.branch-bnumber-form label:not(.monster-invalid) {
+	width: 160px;
+}

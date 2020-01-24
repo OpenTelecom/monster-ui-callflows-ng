@@ -1,0 +1,21 @@
+<div class="js-value-dialog dialog_popup">
+	<form name="form" method="post" action="#">
+		<div class="form_content">
+			<div class="popup_field clear">
+				<label for="branch-variable-value">
+					{{ i18n.callflows.branch_variable.value_dialog.value_label }}
+					<i class="help-popover fa fa-question-circle"
+					   data-original-title="{{ i18n.callflows.branch_variable.value_dialog.value_tooltip }}"
+					   data-placement="right"
+					   data-toggle="tooltip"></i>
+				</label>
+				<div class="field_wrapper">
+					<input name="value" type="text" value="{{ value }}" id="branch-variable-value"/>
+				</div>
+			</div>
+		</div>
+	</form>
+	<div class="buttons-center">
+		<button class="js-save monster-button monster-button-primary">{{ i18n.save }}</button>
+	</div>
+</div>

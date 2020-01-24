@@ -120,6 +120,27 @@
 			},
 			"are_you_sure_you_want_to_delete": "Are you sure you want to delete this item?"
 		},
+		"branch_variable": {
+			"branch_variable": "Branch variable",
+			"tooltip": "The Branch variable callflow enables you to branch based on value of some field inside one of the a call CCVs, user's document, device's document or an account's document.",
+			"edit_dialog": {
+				"title": "Branch variable",
+				"scope_label": "Scope",
+				"scope_tooltip": "Specifies where the variable is defined",
+				"variable_label": "Variable",
+				"variable_tooltip": "Specifies the name of variable/property that should be looked up"
+			},
+			"value_dialog": {
+				"title": "Variable value",
+				"value_label": "Value",
+				"value_tooltip": "specifies the value of variable/property that should be looked up"
+			},
+			"account": "Account",
+			"custom_channel_vars": "Custom channel vars",
+			"device": "Device",
+			"merged": "Merged",
+			"user": "User"
+		},
 		"conference": {
 			"conference": "Conference",
 			"conference_tip": "Connect a caller to a Meet-Me conference bridge",

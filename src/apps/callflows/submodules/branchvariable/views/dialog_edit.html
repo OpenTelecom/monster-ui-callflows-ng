@@ -1,0 +1,43 @@
+<div class="js-branch-variable-dialog dialog_popup callflows-port branch-variable-dialog">
+	<form method="post" action="#" class="js-branch-variable-form branch-variable-form">
+		<div class="form_content">
+			<div class="popup_field clear">
+				<label for="branch-variable-scope">
+					{{ i18n.callflows.branch_variable.edit_dialog.scope_label }}
+					<i class="help-popover fa fa-question-circle"
+					   data-original-title="{{ i18n.callflows.branch_variable.edit_dialog.scope_tooltip }}"
+					   data-placement="right"
+					   data-toggle="tooltip"></i>
+				</label>
+				<div class="select_wrapper">
+					<select name="scope" id="branch-variable-scope">
+						{{#select scope}}
+							{{#each scopeList}}
+								<option value="{{ this.value }}">{{ this.name }}</option>
+							{{/each}}
+						{{/select}}
+					</select>
+				</div>
+			</div>
+
+			<div class="popup_field clear">
+				<label for="branch-variable-variable">
+					{{ i18n.callflows.branch_variable.edit_dialog.variable_label }}
+					<i class="help-popover fa fa-question-circle"
+					   data-original-title="{{ i18n.callflows.branch_variable.edit_dialog.variable_tooltip }}"
+					   data-placement="right"
+					   data-toggle="tooltip"></i>
+				</label>
+				<div class="field_wrapper">
+					<input name="variable" type="text" value="{{ variable }}" id="branch-variable-variable"/>
+				</div>
+			</div>
+		</div>
+	</form>
+
+	<div class="buttons-center">
+		<button class="monster-button monster-button-primary js-save">
+			{{ i18n.save }}
+		</button>
+	</div>
+</div>
