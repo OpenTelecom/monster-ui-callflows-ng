@@ -6,6 +6,7 @@ define(function(require) {
 		'afterbridge',
 		'audiomacro',
 		'blacklist',
+		'branchbnumber',
 		'branchvariable',
 		'callcenter',
 		'conference',

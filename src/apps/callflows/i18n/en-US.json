@@ -120,6 +120,25 @@
 			},
 			"are_you_sure_you_want_to_delete": "Are you sure you want to delete this item?"
 		},
+		"branch_bnumber": {
+			"branch_bnumber": "Branch Bnumber",
+			"tooltip": "Try to branch to the capture group of the feature code",
+			"hunting": "Hunting",
+			"branching": "Branching",
+			"menu_option": "Menu option",
+			"menu_option_title": "Menu Option",
+			"default_action": "Default action",
+			"timeout": "Timeout",
+			"edit_dialog": {
+				"title": "Branch Bnumber",
+				"hunt_label": "Hunt",
+				"hunt_tooltip": "With the hunt flag set to false, the capture group will be used to lookup a child branch",
+				"hunt_allow_label": "Hunt allow (regexp)",
+				"hunt_allow_tooltip": "A regexp used to match against the capture group to whitelist allowed numbers to hunt",
+				"hunt_deny_label": "Hunt deny (regexp)",
+				"hunt_deny_tooltip": "A regexp used to match against the capture group to blacklist denied numbers to hunt"
+			}
+		},
 		"branch_variable": {
 			"branch_variable": "Branch variable",
 			"tooltip": "The Branch variable callflow enables you to branch based on value of some field inside one of the a call CCVs, user's document, device's document or an account's document.",

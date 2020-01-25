@@ -1,0 +1,52 @@
+<div class="dialog_popup callflows-port branch-bnumber-dialog js-branch-bnumber-dialog">
+	<form method="post" action="#" class="branch-bnumber-form js-branch-bnumber-form">
+		<div class="form_content">
+			<div class="popup_field clear">
+				<label for="branch-bnumber-hunt">
+					{{ i18n.callflows.branch_bnumber.edit_dialog.hunt_label }}
+					<i class="help-popover fa fa-question-circle"
+					   data-original-title="{{ i18n.callflows.branch_bnumber.edit_dialog.hunt_tooltip}}"
+					   data-placement="bottom"
+					   data-toggle="tooltip"></i>
+				</label>
+				<div class="field_wrapper">
+					{{#monsterSwitch}}
+						<input id="branch-bnumber-hunt" name="hunt" type="checkbox"{{#if hunt}} checked="checked"{{/if}}>
+					{{/monsterSwitch}}
+				</div>
+			</div>
+
+			<div class="popup_field clear">
+				<label for="branch-bnumber-hunt-allow">
+					{{ i18n.callflows.branch_bnumber.edit_dialog.hunt_allow_label }}
+					<i class="help-popover fa fa-question-circle"
+					   data-original-title="{{ i18n.callflows.branch_bnumber.edit_dialog.hunt_allow_tooltip}}"
+					   data-placement="right"
+					   data-toggle="tooltip"></i>
+				</label>
+				<div class="field_wrapper">
+					<input name="hunt_allow" type="text" value="{{ huntAllow }}" id="branch-bnumber-hunt-allow"/>
+				</div>
+			</div>
+
+			<div class="popup_field clear">
+				<label for="branch-bnumber-hunt-deny">
+					{{ i18n.callflows.branch_bnumber.edit_dialog.hunt_deny_label }}
+					<i class="help-popover fa fa-question-circle"
+					   data-original-title="{{ i18n.callflows.branch_bnumber.edit_dialog.hunt_deny_tooltip}}"
+					   data-placement="right"
+					   data-toggle="tooltip"></i>
+				</label>
+				<div class="field_wrapper">
+					<input name="hunt_deny" type="text" value="{{ huntDeny }}" id="branch-bnumber-hunt-deny"/>
+				</div>
+			</div>
+		</div>
+	</form>
+
+	<div class="buttons-center">
+		<button class="js-save monster-button monster-button-primary">
+			{{ i18n.save }}
+		</button>
+	</div>
+</div>
