@@ -19,6 +19,7 @@ define(function(require) {
 		'media',
 		'menu',
 		'misc',
+		'setvariable',
 		'qubicle',
 		'resource',
 		'temporalset',

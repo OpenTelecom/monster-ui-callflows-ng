@@ -659,6 +659,21 @@
 			"use_carriers_from_specific_account": "Use carriers from a specific account",
 			"account_id": "Account ID"
 		},
+		"set_variable": {
+			"set_variable": "Set variable",
+			"tooltip": "Sets a variable on the current leg",
+			"edit_dialog": {
+				"title": "Set variable",
+				"channel": "Channel",
+				"channel_a": "A (caller)",
+				"channel_both": "Both",
+				"channel_tooltip": "Which channel to set the variable on",
+				"value": "Value",
+				"value_tooltip": "The value to set \"variable\"",
+				"variable": "Variable",
+				"variable_tooltip": "The variable name to set on the leg(s)"
+			}
+		},
 		"timeofday": {
 			"time_of_day": "Time of Day",
 			"time_of_day_cat": "Time of Day",

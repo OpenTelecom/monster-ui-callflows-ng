@@ -1,0 +1,56 @@
+<div class="dialog_popup callflows-port set-variable-dialog js-set-variable-dialog">
+	<form method="post" action="#" class="set-variable-form js-set-variable-form">
+		<div class="form_content">
+			<div class="popup_field clear">
+				<label for="set-variable_variable">
+					{{ i18n.callflows.set_variable.edit_dialog.variable }}
+					<i class="help-popover fa fa-question-circle"
+					   data-original-title="{{ i18n.callflows.set_variable.edit_dialog.variable_tooltip}}"
+					   data-placement="right"
+					   data-toggle="tooltip"></i>
+				</label>
+				<div class="field_wrapper">
+					<input name="variable" type="text" value="{{ variable }}" id="set-variable_variable"/>
+				</div>
+			</div>
+
+			<div class="popup_field clear">
+				<label for="set-variable_value">
+					{{ i18n.callflows.set_variable.edit_dialog.value }}
+					<i class="help-popover fa fa-question-circle"
+					   data-original-title="{{ i18n.callflows.set_variable.edit_dialog.value_tooltip}}"
+					   data-placement="right"
+					   data-toggle="tooltip"></i>
+				</label>
+				<div class="field_wrapper">
+					<input name="value" type="text" value="{{ value }}" id="set-variable_value"/>
+				</div>
+			</div>
+
+			<div class="popup_field clear">
+				<label for="set-variable_channel">
+					{{ i18n.callflows.set_variable.edit_dialog.channel }}
+					<i class="help-popover fa fa-question-circle"
+					   data-original-title="{{ i18n.callflows.set_variable.edit_dialog.channel_tooltip }}"
+					   data-placement="right"
+					   data-toggle="tooltip"></i>
+				</label>
+				<div class="select_wrapper">
+					<select name="channel" id="set-variable_channel">
+						{{#select channel}}
+							{{#each channels}}
+								<option value="{{ this.value }}">{{ this.name }}</option>
+							{{/each}}
+						{{/select}}
+					</select>
+				</div>
+			</div>
+		</div>
+	</form>
+
+	<div class="buttons-center">
+		<button class="monster-button monster-button-primary js-save">
+			{{ i18n.save }}
+		</button>
+	</div>
+</div>
