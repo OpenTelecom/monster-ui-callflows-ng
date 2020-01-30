@@ -20,3 +20,7 @@
 .callflows-callcenter-popup .inline_content.main_content {
 	width: auto;
 }
+
+.queue-callflow-dialog .action_links_div {
+	margin-bottom: 15px;
+}

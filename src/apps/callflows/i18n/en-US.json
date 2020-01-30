@@ -1324,6 +1324,8 @@
 		"callcenter": {
 			"queue": "Queue",
 			"category": "Callcenter",
+			"priority": "Priority",
+			"priority_tooltip": "Assign a priority to the caller",
 			"tooltip": "Ask the caller to input the first letters of the name of the person that he wants to reach.",
 			"connect_caller_to_queue": "Connect caller to queue...",
 			"queue_edit_options": "Edit queue options",

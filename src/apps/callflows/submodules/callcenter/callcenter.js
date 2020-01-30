@@ -127,7 +127,8 @@ define(function(require) {
 									i18n: self.i18n.active(),
 									objects: {
 										items: queues,
-										selected: node.getMetadata('id') || ''
+										selected: node.getMetadata('id') || '',
+										priority: node.getMetadata('priority') || '',
 									}
 								},
 								submodule: 'callcenter'
@@ -138,14 +139,21 @@ define(function(require) {
 							}
 
 							$('.inline_action', popup_html).click(function(ev) {
-								var _data = ($(this).data('action') === 'edit') ? { id: $('#queue_selector', popup_html).val() } : {};
-
 								ev.preventDefault();
+
+								var _data = {};
+								if ($(this).data('action') === 'edit') {
+									_data = {
+										id: $('#queue_selector', popup_html).val(),
+										priority: $('#queue_priority', popup_html).val()
+									}
+								}
 
 								self.queuePopupEdit({
 									data: _data,
 									callback: function(_data) {
 										node.setMetadata('id', _data.id || 'null');
+										_data.priority && node.setMetadata('priority', _data.priority);
 										node.caption = _data.name || '';
 
 										popup.dialog('close');
@@ -155,6 +163,7 @@ define(function(require) {
 
 							$('#add', popup_html).click(function() {
 								node.setMetadata('id', $('#queue_selector', popup).val());
+								node.setMetadata('priority', parseInt($('#queue_priority', popup).val()));
 								node.caption = $('#queue_selector option:selected', popup).text();
 								popup.dialog('close');
 							});
@@ -168,6 +177,8 @@ define(function(require) {
 									}
 								}
 							});
+
+							monster.ui.tooltips(popup);
 						});
 					},
 					listEntities: function(callback) {
