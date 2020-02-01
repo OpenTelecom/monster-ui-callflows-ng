@@ -449,6 +449,8 @@
 	font-size: 10px;
 	overflow: hidden;
 	color: white;
+	text-overflow: ellipsis;
+	padding: 0 8px;
 }
 
 .dialog_popup.callflow-preview {
