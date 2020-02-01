@@ -3,18 +3,35 @@
 		{{ i18n.callflows.setCav.help }}
 	{{/monsterText}}
 	<form name="form" method="post" action="#" id="set_cav_form">
-		<table class="cav-list">
-			<thead>
-				<tr>
-					<th>{{i18n.callflows.setCav.key}}</th>
-					<th>{{i18n.callflows.setCav.value}}</th>
-					<th width="5"></th>
-				</tr>
-			</thead>
-			<tbody></tbody>
-		</table>
-		<div class="cav-add-row">
-			{{telicon "plus--circle-o"}}
+		<div class="form_content">
+			<table class="cav-list">
+				<thead>
+					<tr>
+						<th>{{i18n.callflows.setCav.key}}</th>
+						<th>{{i18n.callflows.setCav.value}}</th>
+						<th width="5"></th>
+					</tr>
+				</thead>
+				<tbody></tbody>
+			</table>
+			<div class="cav-add-row">
+				{{telicon "plus--circle-o"}}
+			</div>
+
+			<div class="popup_field clear">
+				<label for="cav-export">
+					{{ i18n.callflows.setCav.export_label }}
+					<i class="help-popover fa fa-question-circle"
+					   data-original-title="{{ i18n.callflows.setCav.export_tooltip}}"
+					   data-placement="bottom"
+					   data-toggle="tooltip"></i>
+				</label>
+				<div class="field_wrapper">
+					{{#monsterSwitch}}
+						<input id="cav-export" name="export" type="checkbox"{{#if exportParam}} checked="checked"{{/if}}>
+					{{/monsterSwitch}}
+				</div>
+			</div>
 		</div>
 	</form>
 

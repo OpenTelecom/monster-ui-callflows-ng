@@ -1203,7 +1203,9 @@
 			"tip": "Set Custom Application Var ",
 			"help": "This feature allows you to set custom application variables providing key/value",
 			"key": "Key",
-			"value": "Value"
+			"value": "Value",
+			"export_label": "Export",
+			"export_tooltip": "When true the provided key-value pairs are set on the channel and any channel bridged to it later"
 		},
 
 		"__comment": "UI-2646: adding ring group togle to adv. callflows",

@@ -1352,7 +1352,7 @@ define(function(require) {
 				},
 				'set_variables[]': {
 					name: self.i18n.active().callflows.setCav.title,
-					icon: 'settings2',
+					icon: 'check',
 					category: self.i18n.active().oldCallflows.advanced_cat,
 					module: 'set_variables',
 					tip: self.i18n.active().callflows.setCav.tip,
@@ -1363,7 +1363,8 @@ define(function(require) {
 					isUsable: 'true',
 					weight: 31,
 					caption: function(node) {
-						return '';
+						var variables = node.getMetadata('custom_application_vars') || {};
+						return Object.keys(variables).join(', ').substring(0, 25);
 					},
 					edit: function(node, callback) {
 						self.miscEditSetCAV(node, callback);
@@ -1461,11 +1462,13 @@ define(function(require) {
 		miscEditSetCAV: function(node, callback) {
 			var self = this,
 				variables = _.extend({}, node.getMetadata('custom_application_vars')),
+				exportParam = node.getMetadata('export'),
 				initTemplate = function() {
 					var template = $(self.getTemplate({
 							name: 'setcav-dialog',
 							data: {
-								variables: variables
+								variables: variables,
+								exportParam: exportParam
 							},
 							submodule: 'misc'
 						})),
@@ -1491,6 +1494,8 @@ define(function(require) {
 							}
 						}
 					});
+
+					monster.ui.tooltips(popup);
 
 					bindSetCavEvents({
 						template: template,
@@ -1518,7 +1523,9 @@ define(function(require) {
 							.mapValues('value')
 							.value();
 
+						node.setMetadata('export', formData.export);
 						node.setMetadata('custom_application_vars', variables);
+						node.caption = Object.keys(variables).join(', ').substring(0, 25);
 
 						popup.dialog('close');
 					});

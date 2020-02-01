@@ -191,8 +191,12 @@
 }
 
 /* Set CAV */
-#set_cav_alert_popup .cav-add-row .svg-icon {
-	cursor: pointer;
+#set_cav_alert_popup .cav-add-row {
+	margin-bottom: 15px;
+
+	.svg-icon {
+		cursor: pointer;
+	}
 }
 
 #set_cav_alert_popup .cav-remove-row {
@@ -208,6 +212,18 @@
 
 #set_cav_alert_popup .cav-list tr:hover .cav-remove-row {
 	visibility: visible;
+}
+
+#set_cav_alert_popup {
+	.popup_field > label,
+	.field_wrapper {
+		display: inline-block;
+		width: auto;
+		float: none;
+	}
+	.monster-switch {
+		float: none;
+	}
 }
 
 /* Collect DTMF Popup */
