@@ -14,6 +14,7 @@
 @import url('../submodules/afterbridge/afterbridge.css');
 @import url('../submodules/branchbnumber/branchbnumber.css');
 @import url('../submodules/branchvariable/branchvariable.css');
+@import url('../submodules/checkcid/checkcid.css');
 @import url('../../../css/vendor/bootstrap-tour.css');
 /* style.css */
 #ws_callflow > .callflow {
@@ -1396,7 +1397,6 @@
 	max-width: 214px;
 }
 
-
 .dialog_popup .form_content .checkbox-label-wrapper {
 	padding-left: 140px;
 	text-align: left;
@@ -1404,6 +1404,20 @@
 	margin-right: 0;
 	margin-bottom: 13px;
 	padding-top: 0;
+}
+
+.dialog_popup .dialog_content-part {
+	margin: 15px 0;
+}
+
+.dialog_popup .buttons-center,
+.dialog_popup .buttons-center {
+	padding: 10px 0 0;
+}
+
+.dialog_popup .buttons-center button,
+.dialog_popup .buttons-center .monster-button {
+	margin: 0 6px 14px;
 }
 
 .callflows-port form label:not(.monster-invalid) {
@@ -1418,6 +1432,12 @@
 
 .callflows-port form label.monster-switch {
 	padding-top: 0;
+	width: auto;
+}
+
+.callflows-port form label.monster-checkbox {
+	margin-top: 5px;
+	display: inline-block;
 	width: auto;
 }
 

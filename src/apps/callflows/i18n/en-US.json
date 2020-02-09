@@ -160,6 +160,35 @@
 			"merged": "Merged",
 			"user": "User"
 		},
+		"check_cid": {
+			"check_cid": "Check Cid",
+			"tooltip": "Handles inspection of incoming caller id and branching to a child callflow node accordingly.",
+			"edit_dialog": {
+				"title": "Check Cid",
+				"cid_external_name": "Caller id external name",
+				"cid_external_number": "Caller id external number",
+				"use_absolute_mode": "Use absolute mode",
+				"use_absolute_mode_tooltip": "If true, direct call down a branch that matches the caller ID",
+				"regex": "Regex",
+				"regex_tooltip": "Determine match/nomatch when \"Use absolute mode\" param is disabled",
+				"user_id": "User ID",
+				"user_id_tooltip": "User ID to use as owner instead of detected owner"
+			},
+			"menu_option_dialog": {
+				"title": "Menu option",
+				"menu_option": "Menu option",
+				"match": "Match",
+				"no_match": "No match",
+				"caller_id": "Caller ID"
+			},
+			"warning_dialog": {
+				"change_mode_warning": "Change mode warning",
+				"change_mode_warning_message": "You have changed to the absolute mode. Since your callflow has children elements created in another mode, they may not work correctly. You can delete them and recreate them, or make the necessary changes to existing nodes.",
+				"remove_all_children": "Remove all children",
+				"change_children_later": "I will change later",
+				"cancel": "Cancel"
+			}
+		},
 		"conference": {
 			"conference": "Conference",
 			"conference_tip": "Connect a caller to a Meet-Me conference bridge",

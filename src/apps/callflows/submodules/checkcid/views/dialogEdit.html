@@ -1,0 +1,81 @@
+<div class="dialog_popup callflows-port check-cid-dialog js-check-cid-dialog">
+	<form method="post" action="#" class="check-cid-form js-check-cid-form">
+		<div class="form_content">
+			<div class="popup_field clear">
+				<label for="check-cid_use_absolute_mode">
+					{{ i18n.callflows.check_cid.edit_dialog.use_absolute_mode }}
+					<i class="help-popover fa fa-question-circle"
+					   data-original-title="{{ i18n.callflows.check_cid.edit_dialog.use_absolute_mode_tooltip }}"
+					   data-placement="right"
+					   data-toggle="tooltip"></i>
+				</label>
+				<div class="field_wrapper">
+					{{#monsterCheckbox}}
+						<input id="check-cid_use_absolute_mode" name="use_absolute_mode" type="checkbox"{{#if use_absolute_mode}} checked="checked"{{/if}}>
+					{{/monsterCheckbox}}
+				</div>
+			</div>
+
+			<div class="js-caller-id-mode {{#unless use_absolute_mode}}hidden{{/unless}}">
+				<div class="popup_field clear">
+					<label for="check-cid_ext-name">
+						{{ i18n.callflows.check_cid.edit_dialog.cid_external_name }}
+					</label>
+					<div class="field_wrapper">
+						<input name="caller_id[external][name]" type="text" value="{{ caller_id.external.name }}" id="check-cid_ext-name"/>
+					</div>
+				</div>
+
+				<div class="popup_field clear">
+					<label for="check-cid_ext-number">
+						{{ i18n.callflows.check_cid.edit_dialog.cid_external_number }}
+					</label>
+					<div class="field_wrapper">
+						<input name="caller_id[external][number]" type="text" value="{{ caller_id.external.number }}" id="check-cid_ext-number"/>
+					</div>
+				</div>
+
+				<div class="popup_field clear">
+					<label for="check-cid_user-id">
+						{{ i18n.callflows.check_cid.edit_dialog.user_id }}
+						<i class="help-popover fa fa-question-circle"
+						   data-original-title="{{ i18n.callflows.check_cid.edit_dialog.user_id_tooltip }}"
+						   data-placement="right"
+						   data-toggle="tooltip"></i>
+					</label>
+					<div class="select_wrapper">
+						<select name="user_id" id="check-cid_user-id">
+							{{#select user_id}}
+								<option value=""></option>
+								{{#each users}}
+									<option value="{{ this.id }}">{{ this.username }}</option>
+								{{/each}}
+							{{/select}}
+						</select>
+					</div>
+				</div>
+			</div>
+
+			<div class="js-regexp-mode {{#if use_absolute_mode}}hidden{{/if}}">
+				<div class="popup_field clear">
+					<label for="check-cid_regex">
+						{{ i18n.callflows.check_cid.edit_dialog.regex }}
+						<i class="help-popover fa fa-question-circle"
+						   data-original-title="{{ i18n.callflows.check_cid.edit_dialog.regex_tooltip }}"
+						   data-placement="right"
+						   data-toggle="tooltip"></i>
+					</label>
+					<div class="field_wrapper">
+						<input name="regex" placeholder=".*" type="text" value="{{ regex }}" id="check-cid_regex"/>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+
+	<div class="buttons-center">
+		<button class="monster-button monster-button-primary js-save">
+			{{ i18n.save }}
+		</button>
+	</div>
+</div>

@@ -1,0 +1,32 @@
+<div class="dialog_popup">
+	<form name="form" method="post" action="#">
+		<div class="form_content">
+			<div class="popup_field clear {{#if useAbsoluteMode }}hidden{{/if}}">
+				<label for="check-cid_regex-menu-options">
+					{{ i18n.callflows.check_cid.menu_option_dialog.menu_option }}
+				</label>
+				<div class="select_wrapper">
+					<select name="regex-menu-options" id="check-cid_regex-menu-options">
+						{{#select selected }}
+							<option value="match">{{ i18n.callflows.check_cid.menu_option_dialog.match }}</option>
+							<option value="nomatch">{{ i18n.callflows.check_cid.menu_option_dialog.no_match }}</option>
+						{{/select}}
+					</select>
+				</div>
+			</div>
+		</div>
+
+		<div class="popup_field clear {{#unless useAbsoluteMode }}hidden{{/unless}}">
+			<label for="check-cid_caller-id">
+				{{ i18n.callflows.check_cid.menu_option_dialog.caller_id }}
+			</label>
+			<div class="field_wrapper">
+				<input name="caller_id" type="text" value="{{ selected }}" id="check-cid_caller-id"/>
+			</div>
+		</div>
+
+	</form>
+	<div class="buttons-center">
+		<button class="js-save monster-button monster-button-primary">{{ i18n.save }}</button>
+	</div>
+</div>

@@ -9,6 +9,7 @@ define(function(require) {
 		'branchbnumber',
 		'branchvariable',
 		'callcenter',
+		'checkcid',
 		'conference',
 		'device',
 		'directory',

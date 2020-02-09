@@ -1,0 +1,7 @@
+.check-cid-dialog.callflows-port form label:not(.monster-invalid) {
+	width: 160px;
+}
+
+.no-close .ui-dialog-titlebar-close {
+	display: none;
+}
