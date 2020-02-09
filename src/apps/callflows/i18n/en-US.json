@@ -54,6 +54,10 @@
 			},
 			"warning": "Warning!"
 		},
+		"answer": {
+			"answer": "Answer",
+			"tooltip": "Attempts to answer the call; will block callflow execution until the call is answered"
+		},
 		"audio_macro": {
 			"dialog_title": "Audio Macro",
 			"macro_type": "Macro type",

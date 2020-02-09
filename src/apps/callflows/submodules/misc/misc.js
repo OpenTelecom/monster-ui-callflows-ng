@@ -1282,6 +1282,30 @@ define(function(require) {
 					edit: function(node, callback) {
 						self.miscEditSetCAV(node, callback);
 					}
+				},
+				'answer[]': {
+					name: self.i18n.active().callflows.answer.answer,
+					icon: 'phone',
+					category: self.i18n.active().oldCallflows.basic_cat,
+					module: 'answer',
+					tip: self.i18n.active().callflows.answer.tooltip,
+					data: {},
+					rules: [
+						{
+							type: 'quantity',
+							maxSize: '1'
+						}
+					],
+					isUsable: 'true',
+					weight: 48,
+					caption: function(node, caption_map) {
+						return '';
+					},
+					edit: function(node, callback) {
+						if (typeof callback === 'function') {
+							callback();
+						}
+					}
 				}
 			});
 		},
