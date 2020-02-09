@@ -307,7 +307,7 @@
 }
 
 .callflow-preview .children .child:last-child:not(:first-child),
- #ws_cf_flow .children .child:last-child:not(:first-child) {
+#ws_cf_flow .children .child:last-child:not(:first-child) {
 	padding-right: 10px;
 }
 
@@ -1377,7 +1377,7 @@
 }
 
 .dialog_popup.callflows-port form label.monster-switch {
-	width: inherit;
+	width: auto;
 	margin-bottom: 7px;
 }
 
