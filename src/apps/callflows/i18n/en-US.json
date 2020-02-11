@@ -255,6 +255,10 @@
 			"play_exit_tone": "Play Exit Tone",
 			"play_exit_tone_help": "Will play a tone whenever a caller exits the conference if checked"
 		},
+		"dead_air": {
+			"dead_air": "Dead Air",
+			"tooltip": "Answers the call and switches media off. Could be useful for external calls/conferences recording over inbound leg."
+		},
 		"device": {
 			"device": "Device",
 			"device_tip": "Ring a VoIP or cell phone or other device",

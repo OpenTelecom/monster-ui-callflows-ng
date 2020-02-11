@@ -1306,6 +1306,30 @@ define(function(require) {
 							callback();
 						}
 					}
+				},
+				'dead_air[]': {
+					name: self.i18n.active().callflows.dead_air.dead_air,
+					icon: 'volume-off',
+					category: self.i18n.active().oldCallflows.basic_cat,
+					module: 'dead_air',
+					tip: self.i18n.active().callflows.dead_air.tooltip,
+					data: {},
+					rules: [
+						{
+							type: 'quantity',
+							maxSize: '1'
+						}
+					],
+					isUsable: 'true',
+					weight: 48,
+					caption: function(node, caption_map) {
+						return '';
+					},
+					edit: function(node, callback) {
+						if (typeof callback === 'function') {
+							callback();
+						}
+					}
 				}
 			});
 		},
