@@ -1,0 +1,22 @@
+<div class="dialog_popup">
+	<form name="form" method="post" action="#">
+		<div class="form_content">
+			<div class="popup_field clear">
+				<label for="cid-list-match_menu-option">
+					{{ i18n.callflows.cid_list_match.menu_option_dialog.menu_option }}
+				</label>
+				<div class="select_wrapper">
+					<select name="menu-option" id="cid-list-match_menu-option">
+						{{#select selected }}
+							<option value="match">{{ i18n.callflows.cid_list_match.menu_option_dialog.match }}</option>
+							<option value="nomatch">{{ i18n.callflows.cid_list_match.menu_option_dialog.no_match }}</option>
+						{{/select}}
+					</select>
+				</div>
+			</div>
+		</div>
+	</form>
+	<div class="buttons-center">
+		<button class="js-save monster-button monster-button-primary">{{ i18n.save }}</button>
+	</div>
+</div>

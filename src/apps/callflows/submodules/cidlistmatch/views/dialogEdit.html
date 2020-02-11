@@ -1,0 +1,27 @@
+<div class="dialog_popup callflows-port cid-list-match-dialog">
+	<form method="post" action="#" class="cid-list-match-form">
+		<div class="form_content">
+
+			<div class="popup_field clear">
+				<label for="cid-list-match_id">
+					{{ i18n.callflows.cid_list_match.edit_dialog.id }}
+				</label>
+				<div class="select_wrapper">
+					<select name="id" id="cid-list-match_id">
+						{{#select listId}}
+							{{#each lists}}
+								<option value="{{ this.id }}">{{ this.name }} ({{ this.id }})</option>
+							{{/each}}
+						{{/select}}
+					</select>
+				</div>
+			</div>
+		</div>
+	</form>
+
+	<div class="buttons-center">
+		<button class="monster-button monster-button-primary js-save">
+			{{ i18n.save }}
+		</button>
+	</div>
+</div>

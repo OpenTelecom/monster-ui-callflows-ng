@@ -10,6 +10,7 @@ define(function(require) {
 		'branchvariable',
 		'callcenter',
 		'checkcid',
+		'cidlistmatch',
 		'conference',
 		'device',
 		'directory',

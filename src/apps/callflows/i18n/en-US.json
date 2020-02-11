@@ -164,6 +164,20 @@
 			"merged": "Merged",
 			"user": "User"
 		},
+		"cid_list_match": {
+			"cid_list_match": "CID List Match",
+			"tooltip": "Handles inspection of incoming caller id and branching to a child callflow node accordingly",
+			"edit_dialog": {
+				"title": "CID List Match",
+				"id": "CallerID List ID"
+			},
+			"menu_option_dialog": {
+				"title": "Menu option",
+				"menu_option": "Menu option",
+				"match": "Match",
+				"no_match": "No match"
+			}
+		},
 		"check_cid": {
 			"check_cid": "Check Cid",
 			"tooltip": "Handles inspection of incoming caller id and branching to a child callflow node accordingly.",

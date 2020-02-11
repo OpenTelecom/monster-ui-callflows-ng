@@ -15,6 +15,7 @@
 @import url('../submodules/branchbnumber/branchbnumber.css');
 @import url('../submodules/branchvariable/branchvariable.css');
 @import url('../submodules/checkcid/checkcid.css');
+@import url('../submodules/cidlistmatch/cidlistmatch.css');
 @import url('../../../css/vendor/bootstrap-tour.css');
 /* style.css */
 #ws_callflow > .callflow {
