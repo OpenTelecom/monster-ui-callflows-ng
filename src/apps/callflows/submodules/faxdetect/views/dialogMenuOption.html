@@ -1,0 +1,22 @@
+<div class="dialog_popup callflows-port">
+	<form name="form" method="post" action="#" class="fax-detect-form">
+		<div class="form_content">
+			<div class="popup_field clear">
+				<label for="fax-detect_menu-option">
+					{{ i18n.callflows.fax_detect.menu_option_dialog.menu_option }}
+				</label>
+				<div class="select_wrapper">
+					<select name="menu-option" id="fax-detect_menu-option">
+						{{#select selected }}
+							<option value="ON_VOICE">{{ i18n.callflows.fax_detect.menu_option_dialog.on_voice }}</option>
+							<option value="ON_FAX">{{ i18n.callflows.fax_detect.menu_option_dialog.on_fax }}</option>
+						{{/select}}
+					</select>
+				</div>
+			</div>
+		</div>
+	</form>
+	<div class="buttons-center">
+		<button class="js-save monster-button monster-button-primary">{{ i18n.save }}</button>
+	</div>
+</div>

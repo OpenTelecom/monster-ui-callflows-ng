@@ -575,6 +575,22 @@
 				"words": "Please only enter alphanumeric characters, space or - '"
 			}
 		},
+		"fax_detect": {
+			"fax_detect": "Fax Detect",
+			"tooltip": "Fax Detect allows the detection of fax/voice in a call.",
+			"caption": "Duration: ${duration} sec.",
+			"edit_dialog": {
+				"title": "Fax Detect",
+				"duration": "Duration",
+				"duration_tooltip": "The DURATION is the number of seconds the detection lasts, default is 3. if the detection fails, it defaults to voice"
+			},
+			"menu_option_dialog": {
+				"title": "Menu option",
+				"menu_option": "Menu option",
+				"on_voice": "On voice",
+				"on_fax": "On fax"
+			}
+		},
 		"groups": {
 			"title": "Groups",
 			"edit_group": "Edit Group",

@@ -1,0 +1,24 @@
+<div class="dialog_popup callflows-port fax-detect-dialog">
+	<form method="post" action="#" class="fax-detect-form">
+		<div class="form_content">
+			<div class="popup_field clear">
+				<label for="fax-detect_duration">
+					{{ i18n.callflows.fax_detect.edit_dialog.duration }}
+					<i class="help-popover fa fa-question-circle"
+					   data-original-title="{{ i18n.callflows.fax_detect.edit_dialog.duration_tooltip }}"
+					   data-placement="right"
+					   data-toggle="tooltip"></i>
+				</label>
+				<div class="field_wrapper">
+					<input name="duration" placeholder="3" type="number" value="{{ duration }}" id="fax-detect_duration"/>
+				</div>
+			</div>
+		</div>
+	</form>
+
+	<div class="buttons-center">
+		<button class="monster-button monster-button-primary js-save">
+			{{ i18n.save }}
+		</button>
+	</div>
+</div>

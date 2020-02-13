@@ -16,6 +16,7 @@ define(function(require) {
 		'directory',
 		'eavesdrop',
 		'faxbox',
+		'faxdetect',
 		'featurecodes',
 		'groups',
 		'media',
