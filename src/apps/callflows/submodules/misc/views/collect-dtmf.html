@@ -1,24 +1,44 @@
 <div class="collect-dtmf-popup dialog_popup callflows-port">
 	<form name="form" method="post" action="#">
 		<div class="form_content">
-			<div class="popup_field">
-				<label for="collect_dtmf_collection_input"><i class="help-popover fa fa-question" data-toggle="tooltip" data-placement="right" data-original-title="{{ i18n.callflows.collectDTMF.collectionName.help }}"></i>{{ i18n.callflows.collectDTMF.collectionName.label }}</label>
+			<div class="popup_field clear">
+				<label for="collect_dtmf_collection_input">
+					<i class="help-popover fa fa-question"
+					   data-toggle="tooltip"
+					   data-placement="right"
+					   data-original-title="{{ i18n.callflows.collectDTMF.collectionName.help }}"></i>
+					{{ i18n.callflows.collectDTMF.collectionName.label }}
+				</label>
 				<input type="text" id="collect_dtmf_collection_input" class="medium" value="{{ data_dtmf.collection_name }}"/>
 			</div>
 			
-			<div class="popup_field">
-				<label for="collect_dtmf_interdigit_input"><i class="help-popover fa fa-question" data-toggle="tooltip" data-placement="right" data-original-title="{{ i18n.callflows.collectDTMF.interdigitTimeout.help }}"></i>{{ i18n.callflows.collectDTMF.interdigitTimeout.label }}</label>
+			<div class="popup_field clear">
+				<label for="collect_dtmf_interdigit_input">
+					<i class="help-popover fa fa-question"
+					   data-toggle="tooltip" data-placement="right"
+					   data-original-title="{{ i18n.callflows.collectDTMF.interdigitTimeout.help }}"></i>
+					{{ i18n.callflows.collectDTMF.interdigitTimeout.label }}
+				</label>
 				<input type="text" id="collect_dtmf_interdigit_input" class="medium" value="{{ data_dtmf.interdigit_timeout }}"/>
 			</div>
 
-			<div class="popup_field">
-				<label for="collect_dtmf_max_digits_input"><i class="help-popover fa fa-question" data-toggle="tooltip" data-placement="right" data-original-title="{{ i18n.callflows.collectDTMF.maxDigits.help }}"></i>{{ i18n.callflows.collectDTMF.maxDigits.label }}</label>
+			<div class="popup_field clear">
+				<label for="collect_dtmf_max_digits_input">
+					<i class="help-popover fa fa-question"
+					   data-toggle="tooltip"
+					   data-placement="right"
+					   data-original-title="{{ i18n.callflows.collectDTMF.maxDigits.help }}"></i>
+					{{ i18n.callflows.collectDTMF.maxDigits.label }}
+				</label>
 				<input type="text" id="collect_dtmf_max_digits_input" class="medium" value="{{ data_dtmf.max_digits }}"/>
 			</div>
 
-			<div class="popup_field">
+			<div class="popup_field clear">
 				<label for="collect_dtmf_terminator_input">
-					<i class="help-popover fa fa-question" data-toggle="tooltip" data-placement="right" data-original-title="{{ i18n.callflows.collectDTMF.terminator.help }}"></i>
+					<i class="help-popover fa fa-question"
+					   data-toggle="tooltip"
+					   data-placement="right"
+					   data-original-title="{{ i18n.callflows.collectDTMF.terminator.help }}"></i>
 					{{ i18n.callflows.collectDTMF.terminator.label }}
 				</label>
 				<div class="select_wrapper">
@@ -42,8 +62,30 @@
 				</div>
 			</div>
 
-			<div class="popup_field">
-				<label for="collect_dtmf_timeout_input"><i class="help-popover fa fa-question" data-toggle="tooltip" data-placement="right" data-original-title="{{ i18n.callflows.collectDTMF.timeout.help }}"></i>{{ i18n.callflows.collectDTMF.timeout.label }}</label>
+			<div class="popup_field clear">
+				<label for="collect_dtmf_terminators_input">
+					<i class="help-popover fa fa-question"
+					   data-toggle="tooltip"
+					   data-placement="right"
+					   data-original-title="{{ i18n.callflows.collectDTMF.terminators.help }}"></i>
+					{{ i18n.callflows.collectDTMF.terminators.label }}
+				</label>
+				<input type="text"
+					   id="collect_dtmf_terminators_input"
+					   class="medium"
+					   value="{{ data_dtmf.terminators }}"
+					   placeholder="1234567890#*"
+				/>
+			</div>
+
+			<div class="popup_field clear">
+				<label for="collect_dtmf_timeout_input">
+					<i class="help-popover fa fa-question"
+					   data-toggle="tooltip"
+					   data-placement="right"
+					   data-original-title="{{ i18n.callflows.collectDTMF.timeout.help }}"></i>
+					{{ i18n.callflows.collectDTMF.timeout.label }}
+				</label>
 				<input type="text" id="collect_dtmf_timeout_input" class="medium" value="{{ data_dtmf.timeout }}"/>
 			</div>
 			

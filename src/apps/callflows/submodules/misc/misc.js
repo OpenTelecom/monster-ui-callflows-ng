@@ -972,6 +972,7 @@ define(function(require) {
 					},
 					edit: function(node, callback) {
 						var popup, popup_html;
+						var terminators = node.getMetadata('terminators') || [];
 
 						popup_html = $(self.getTemplate({
 							name: 'collect-dtmf',
@@ -981,7 +982,8 @@ define(function(require) {
 									'collection_name': node.getMetadata('collection_name') || '',
 									'max_digits': node.getMetadata('max_digits') || '',
 									'terminator': node.getMetadata('terminator') || '#',
-									'timeout': node.getMetadata('timeout') || '5000'
+									'timeout': node.getMetadata('timeout') || '5000',
+									'terminators': terminators.join('')
 								}
 							},
 							submodule: 'misc'
@@ -1002,6 +1004,7 @@ define(function(require) {
 							setData('collection_name', $('#collect_dtmf_collection_input', popup_html).val());
 							setData('max_digits', $('#collect_dtmf_max_digits_input', popup_html).val());
 							setData('terminator', $('#collect_dtmf_terminator_input', popup_html).val());
+							setData('terminators', $('#collect_dtmf_terminators_input', popup_html).val().split(''));
 							setData('timeout', $('#collect_dtmf_timeout_input', popup_html).val());
 
 							popup.dialog('close');

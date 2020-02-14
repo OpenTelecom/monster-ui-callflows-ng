@@ -1319,6 +1319,10 @@
 			"timeout": {
 				"label": "Timeout",
 				"help": "How long, in milliseconds, to wait for the first DTMF"
+			},
+			"terminators": {
+				"label": "Terminators",
+				"help": "What DTMFs will terminate collection before the timeout occurs"
 			}
 		},
 
