@@ -1,0 +1,27 @@
+<div class="dialog_popup callflows-port flush-dtmf-dialog">
+	<form method="post" action="#" class="flush-dtmf-form">
+		<div class="form_content">
+			<div class="popup_field clear">
+				<label for="flush-dtmf_collection-name">
+					{{ i18n.callflows.flush_dtmf.edit_dialog.collection_name.label }}
+					<i class="help-popover fa fa-question-circle"
+					   data-original-title="{{ i18n.callflows.flush_dtmf.edit_dialog.collection_name.tooltip }}"
+					   data-placement="right"
+					   data-toggle="tooltip"></i>
+				</label>
+				<div class="field_wrapper">
+					<input name="collection_name"
+						   type="text"
+						   value="{{ collectionName }}"
+						   id="flush-dtmf_collection-name"/>
+				</div>
+			</div>
+		</div>
+	</form>
+
+	<div class="buttons-center">
+		<button class="monster-button monster-button-primary js-save">
+			{{ i18n.save }}
+		</button>
+	</div>
+</div>

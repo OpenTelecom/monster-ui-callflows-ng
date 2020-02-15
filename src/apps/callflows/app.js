@@ -18,6 +18,7 @@ define(function(require) {
 		'faxbox',
 		'faxdetect',
 		'featurecodes',
+		'flushdtmf',
 		'groups',
 		'media',
 		'menu',

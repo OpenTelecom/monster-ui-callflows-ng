@@ -1342,7 +1342,17 @@
 				"help": "You can force the eavesdropper to be a specific user/device/group by selecting an endpoint in this list."
 			}
 		},
-
+		"flush_dtmf": {
+			"flush_dtmf": "Flush DTMF",
+			"tooltip": "Flush collected DTMF in a named key",
+			"edit_dialog": {
+				"title": "Flush DTMF",
+				"collection_name": {
+					"label": "Collection Name",
+					"tooltip": "Flush collected DTMF in a named key"
+				}
+			}
+		},
 		"__comment": "UI-431: adding intercept to adv. callflows",
 		"__version": "v4.1",
 		"intercept": {
