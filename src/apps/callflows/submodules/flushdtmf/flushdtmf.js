@@ -2,8 +2,6 @@ define(function(require) {
 	var $ = require('jquery'),
 		monster = require('monster');
 
-	var useAbsoluteMode;
-
 	var app = {
 		requests: {},
 
