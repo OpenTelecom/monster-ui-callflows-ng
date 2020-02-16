@@ -547,56 +547,6 @@ define(function(require) {
 						});
 					}
 				},
-				'language[]': {
-					name: self.i18n.active().oldCallflows.language,
-					icon: 'language',
-					category: self.i18n.active().oldCallflows.advanced_cat,
-					module: 'language',
-					tip: self.i18n.active().oldCallflows.language_tip,
-					data: {
-					},
-					rules: [
-						{
-							type: 'quantity',
-							maxSize: '1'
-						}
-					],
-					isUsable: 'true',
-					weight: 50,
-					caption: function(node) {
-						return node.getMetadata('language') || '';
-					},
-					edit: function(node, callback) {
-						var popup, popup_html;
-
-						popup_html = $(self.getTemplate({
-							name: 'language',
-							data: {
-								data_language: {
-									'language': node.getMetadata('language') || ''
-								}
-							},
-							submodule: 'misc'
-						}));
-
-						$('#add', popup_html).click(function() {
-							var language = $('#language_id_input', popup_html).val();
-							node.setMetadata('language', language);
-							node.caption = language;
-
-							popup.dialog('close');
-						});
-
-						popup = monster.ui.dialog(popup_html, {
-							title: self.i18n.active().oldCallflows.language_title,
-							beforeClose: function() {
-								if (typeof callback === 'function') {
-									callback();
-								}
-							}
-						});
-					}
-				},
 				'group_pickup[]': {
 					name: self.i18n.active().oldCallflows.group_pickup,
 					icon: 'hand-pointer-o',

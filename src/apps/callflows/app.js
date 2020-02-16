@@ -20,6 +20,7 @@ define(function(require) {
 		'featurecodes',
 		'flushdtmf',
 		'groups',
+		'language',
 		'media',
 		'menu',
 		'misc',

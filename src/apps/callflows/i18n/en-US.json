@@ -1370,6 +1370,15 @@
 			}
 		},
 
+		"language": {
+			"language": "Language",
+			"tooltip": "Prompts and other content take optional language settings to know which to fetch. Use this callflow action to set the language for the call.",
+			"edit_dialog": {
+				"title": "Language",
+				"language": "Language"
+			}
+		},
+
 		"__comment": "UI-1929: adding time of day sets to adv. callflows",
 		"__version": "v4.1",
 		"temporalset": {
@@ -1633,9 +1642,6 @@
 		"resource_name": "Resource",
 		"this_callflow_is_outdated": "This callflow is outdated, please resave this callflow before continuing.",
 		"hot_desking_name": "Hot Desking",
-		"language_title": "Language",
-		"language": "Language",
-		"language_tip": "This callflow action lets you change the language of the prompts used in this callflow!",
 		"searchLink": "Search on the server for",
 		"searchReset": "Click again to clear the search",
 		"__comment": "UI-1742: Add a flag to list callflows in Main Numbers",

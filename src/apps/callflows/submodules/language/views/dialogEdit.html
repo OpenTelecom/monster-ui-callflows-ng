@@ -1,0 +1,26 @@
+<div class="dialog_popup callflows-port language-dialog">
+	<form method="post" action="#" class="language-form">
+		<div class="form_content">
+			<div class="popup_field clear">
+				<label for="language">
+					{{ i18n.callflows.language.edit_dialog.language }}
+				</label>
+				<div class="select_wrapper">
+					<select name="language" id="language">
+						{{#select selected}}
+							{{#each languages}}
+								<option value="{{ this.value }}">{{ this.label }}</option>
+							{{/each}}
+						{{/select}}
+					</select>
+				</div>
+			</div>
+		</div>
+	</form>
+
+	<div class="buttons-center">
+		<button class="monster-button monster-button-primary js-save">
+			{{ i18n.save }}
+		</button>
+	</div>
+</div>
