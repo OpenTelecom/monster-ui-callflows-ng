@@ -1,0 +1,37 @@
+<div class="dialog_popup callflows-port lookup-cid-name_dialog">
+	<div class="items-selector clearfix" id="lookup-cid-name_lists">
+		<div class="box-selector">
+			<div class="box-title">
+				{{ i18n.callflows.lookup_cid_name.edit_dialog.available_lists }}
+			</div>
+			<ul class="available-lists box-content connected-sortable">
+				{{#each lists}}
+					<li class="js-list item-selector" data-list_id="{{this.id}}">
+						<div class="item-handle"></div>
+						{{ this.name }}
+					</li>
+				{{/each}}
+			</ul>
+		</div>
+
+		<div class="box-selector">
+			<div class="box-title">
+				{{ i18n.callflows.lookup_cid_name.edit_dialog.selected_lists }}
+			</div>
+			<ul class="js-selected-lists selected-lists box-content connected-sortable">
+				{{#each selectedLists}}
+				<li class="js-list item-selector" data-list_id="{{this.id}}">
+					<div class="item-handle"></div>
+					{{ this.name }}
+				</li>
+				{{/each}}
+			</ul>
+		</div>
+	</div>
+
+	<div class="buttons-center">
+		<button class="monster-button monster-button-primary js-save">
+			{{ i18n.save }}
+		</button>
+	</div>
+</div>

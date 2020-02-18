@@ -1379,6 +1379,21 @@
 			}
 		},
 
+		"lookup_cid_name": {
+			"lookup_cid_name": "Lookup CID Name",
+			"edit_dialog": {
+				"title": "Lookup CID Name",
+				"available_lists": "Available lists",
+				"selected_lists": "Selected lists"
+			},
+			"menu_option_dialog": {
+				"title": "Menu option",
+				"menu_option": "Menu option",
+				"match": "Match",
+				"no_match": "No match"
+			}
+		},
+
 		"__comment": "UI-1929: adding time of day sets to adv. callflows",
 		"__version": "v4.1",
 		"temporalset": {

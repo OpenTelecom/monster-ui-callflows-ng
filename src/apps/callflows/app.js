@@ -21,6 +21,7 @@ define(function(require) {
 		'flushdtmf',
 		'groups',
 		'language',
+		'lookupcidname',
 		'media',
 		'menu',
 		'misc',
