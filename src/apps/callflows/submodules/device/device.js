@@ -979,9 +979,13 @@ define(function(require) {
 				form_data.caller_id.internal.number = form_data.caller_id.internal.number.replace(/\s|\(|\)|-|\./g, '');
 				form_data.caller_id.external.number = form_data.caller_id.external.number.replace(/\s|\(|\)|-|\./g, '');
 				form_data.caller_id.emergency.number = form_data.caller_id.emergency.number.replace(/\s|\(|\)|-|\./g, '');
-				form_data.caller_id.asserted.number = _.isEmpty(form_data.caller_id.asserted.number)
-					? ''	// Need to keep the empty string so the new value is not lost when merging the form data with the original data
-					: monster.util.getFormatPhoneNumber(form_data.caller_id.asserted.number).e164Number;
+
+				var assertedNumber = _.get(form_data.caller_id, 'asserted.number', '');
+				if(!_.isEmpty(assertedNumber)) {
+					monster.util.getFormatPhoneNumber(assertedNumber).e164Number;
+				}
+				// Need to keep the empty string so the new value is not lost when merging the form data with the original data
+				_.set(form_data.caller_id, 'asserted.number', assertedNumber);
 			}
 
 			if ('media' in form_data && 'audio' in form_data.media) {
