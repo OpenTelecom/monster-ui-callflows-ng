@@ -982,7 +982,7 @@ define(function(require) {
 
 				var assertedNumber = _.get(form_data.caller_id, 'asserted.number', '');
 				if(!_.isEmpty(assertedNumber)) {
-					monster.util.getFormatPhoneNumber(assertedNumber).e164Number;
+					assertedNumber = monster.util.getFormatPhoneNumber(assertedNumber).e164Number;
 				}
 				// Need to keep the empty string so the new value is not lost when merging the form data with the original data
 				_.set(form_data.caller_id, 'asserted.number', assertedNumber);
