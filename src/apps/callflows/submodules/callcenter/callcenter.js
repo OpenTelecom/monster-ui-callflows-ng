@@ -376,9 +376,8 @@ define(function(require) {
 				target = args.target || $('#queue-view', parent),
 				_callbacks = args.callbacks || {},
 				callbacks = {
-					save_success: _callbacks.save_success || function(_data) {
+					save_success: _callbacks.save_success || function (_data) {
 						self.queueRenderList(parent);
-
 						self.queueEdit({
 							data: {
 								id: _data.data.id
@@ -388,58 +387,85 @@ define(function(require) {
 							callbacks: callbacks
 						});
 					},
-
 					save_error: _callbacks.save_error,
-
-					delete_success: _callbacks.delete_success || function() {
+					delete_success: _callbacks.delete_success || function () {
 						target.empty();
 
 						self.queueRenderList(parent);
 					},
-
 					delete_error: _callbacks.delete_error,
-
 					after_render: _callbacks.after_render
 				},
 				defaults = {
-					data: $.extend(true, {
-						connection_timeout: '300',
-						member_timeout: '5'
-						/* caller_exit_key: '#' */
-					}, args.data_defaults || {}),
+					data: {},
 					field_data: {
 						sort_by: {
 							'first_name': self.i18n.active().callflows.callcenter.first_name,
 							'last_name': self.i18n.active().callflows.callcenter.last_name
 						}
 					}
-				};
+				}
 
-			self.getUsersList(function(users) {
-				defaults.field_data.users = users;
+			monster.parallel({
+				media_list: function (callback) {
+					self.callApi({
+						resource: 'media.list',
+						data: {
+							accountId: self.accountId,
+							filters: {
+								paginate: false
+							}
+						},
+						success: function (mediaList, status) {
+							_.each(mediaList.data, function (media) {
+								if (media.media_source) {
+									media.name = '[' + media.media_source.substring(0, 3).toUpperCase() + '] ' + media.name;
+								}
+							});
 
-				if (typeof data === 'object' && data.id) {
-					self.queueGet(data.id, function(queueData) {
-						var render_data = $.extend(true, defaults, queueData);
+							mediaList.data.unshift({
+								id: '',
+								name: self.i18n.active().callflows.menu.not_set
+							});
 
-						render_data.field_data.old_list = [];
-						if ('agents' in queueData.data) {
-							render_data.field_data.old_list = queueData.data.agents;
-						}
-						self.queueRender(render_data, target, callbacks);
+							defaults.field_data.media = mediaList.data;
 
-						if (typeof (callbacks.after_render) === 'function') {
-							callbacks.after_render();
+							callback(null, mediaList);
 						}
 					});
-				} else {
-					self.queueRender(defaults, target, callbacks);
+				},
+				user_list: function (callback) {
+					self.getUsersList(function (users) {
+						defaults.field_data.users = users;
 
-					if (typeof (callbacks.after_render) === 'function') {
-						callbacks.after_render();
-					}
+						if (typeof data === 'object' && data.id) {
+							self.queueGet(data.id, function (queueData) {
+								var render_data = $.extend(true, defaults, queueData);
+
+								render_data.field_data.old_list = [];
+								if ('agents' in queueData.data) {
+									render_data.field_data.old_list = queueData.data.agents;
+								}
+
+								callback(null, {});
+							});
+						}
+					});
+				}
+			}, function (err, results) {
+				let render_data = defaults;
+				if (typeof data === 'object' && data.id) {
+					render_data = $.extend(true, defaults, results.user_list);
+				}
+
+				self.queueRender(render_data, target, callbacks);
+
+				if (typeof (callbacks.after_render) === 'function') {
+					callbacks.after_render();
 				}
 			});
+
+
 		},
 
 
@@ -536,8 +562,13 @@ define(function(require) {
 				rules: self.validationRules
 			});
 
-			monster.ui.tooltips(queue_html, {
-				selector: '[rel=popover]'
+			// monster.ui.tooltips(queue_html, {
+			// 	selector: '[rel=popover]'
+			// });
+
+			$('*[rel=popover]', queue_html).popover({
+				trigger: 'focus',
+				placement: 'right'
 			});
 
 			$('.queue-save', queue_html).click(function(ev) {
@@ -633,6 +664,12 @@ define(function(require) {
 						}))
 					);
 				}
+			});
+
+			self.queueBindEvents({
+				data: data,
+				template: queue_html,
+				callbacks: callbacks
 			});
 
 			target.empty().append(queue_html);
@@ -800,7 +837,56 @@ define(function(require) {
 
 		normalizeData: function(form_data) {
 			delete form_data.user_id;
+
+			// remove blank fields and let Kazoo set the defaults
+			$.each(form_data, function(key, value){
+				if (value === "" || value === null){
+					delete form_data[key];
+				}
+			});
+
+			console.log(form_data)
+
 			return form_data;
+		},
+
+		queueBindEvents: function (args) {
+			var self = this,
+				data = args.data,
+				callbacks = args.callbacks,
+				queue_html = args.template;
+
+
+			console.log($('.inline_action_media', queue_html));
+			$('.inline_action_media', queue_html).click(function (ev) {
+				var _data = ($(this).data('action') === 'edit') ? {id: $('#announce', queue_html).val()} : {},
+					_id = _data.id;
+
+				ev.preventDefault();
+
+				monster.pub('callflows.media.editPopup', {
+					data: _data,
+					callback: function (media) {
+						/* Create */
+						if (!_id) {
+							$('#announce', queue_html).append('<option id="' + media.id + '" value="' + media.id + '">' + media.name + '</option>');
+							$('#announce', queue_html).val(media.id);
+
+							$('#edit_link_media', queue_html).show();
+						} else {
+							/* Update */
+							if (media.hasOwnProperty('id')) {
+								$('#announce #' + media.id, queue_html).text(media.name);
+								/* Delete */
+							} else {
+								$('#announce #' + _id, queue_html).remove();
+								$('#edit_link_media', queue_html).hide();
+							}
+						}
+					}
+				});
+			});
+
 		}
 	};
 
