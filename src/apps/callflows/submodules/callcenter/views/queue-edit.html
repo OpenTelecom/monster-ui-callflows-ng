@@ -7,25 +7,150 @@
 
 	<form id="queue-form" action="" method="post" class="form-horizontal">
 		<div class="control-group">
-			<label class="control-label" for="name">{{ i18nApp.name }}</label>
+			<label class="control-label" for="name">Name</label>
 			<div class="controls">
-				<input id="name" name="name" type="text" data-placement="top" data-toggle="tooltip" placeholder="{{ i18nApp.namePlaceholder }}" value="{{ data.name}}" rel="popover" data-original-title="{{this.help}}" data-content="{{ i18nApp.nameDataContent }}" />
+				<input id="name" name="name" type="text" data-placement="top" data-toggle="tooltip" value="{{ data.name }}" rel="popover" data-content="{{ i18nApp.name }}" />
 			</div>
 		 </div>
 
 		<div class="control-group">
-			<label class="control-label" for="connection_timeout">{{ i18nApp.queueTimeout }}</label>
+			<label class="control-label" for="moh">Music on Hold</label>
 			<div class="controls">
-				<input id="connection_timeout" name="connection_timeout" type="text" placeholder="{{ i18nApp.queueTimeoutPlaceholder }}" value="{{ data.connection_timeout }}" rel="popover" data-content="{{ i18nApp.queueTimeoutDataContent }}"/>
+				<select name="moh" id="moh" class="medium">
+					{{#select data.moh}}
+					{{#each field_data.media}}
+					<option	value="{{ id }}">{{ name }}</option>
+					{{/each}}
+					{{/select}}
+				</select>
+				<div class="edit_create" style="display: inline; margin-left: 20px">
+					<a style="margin-right: 15px;" class="inline_action_media" data-action="edit" href="#">{{ i18n.callflows.device.edit }}</a>
+					<a class="inline_action_media" data-action="create" href="#">{{ i18n.callflows.device.create }}</a>
+				</div>
+				<span class="help-block">{{ i18nApp.moh }}</span>
 			</div>
 		</div>
 
 		<div class="control-group">
-			<label class="control-label" for="member_timeout">{{ i18nApp.memberTimeout }}</label>
+			<label class="control-label" for="announce">Announcement</label>
 			<div class="controls">
-				<input id="member_timeout" name="member_timeout" type="text" placeholder="{{ i18nApp.memberTimeoutPlaceholder }}" value="{{ data.member_timeout }}" rel="popover" data-content="{{ i18nApp.memberTimeoutDataContent }}"/>
+				<select name="announce" id="announce" class="medium">
+					{{#select data.announce}}
+					{{#each field_data.media}}
+					<option	value="{{ id }}">{{ name }}</option>
+					{{/each}}
+					{{/select}}
+				</select>
+				<div class="edit_create" style="display: inline; margin-left: 20px">
+					<a style="margin-right: 15px;" class="inline_action_media" data-action="edit" href="#">{{ i18n.callflows.device.edit }}</a>
+					<a class="inline_action_media" data-action="create" href="#">{{ i18n.callflows.device.create }}</a>
+				</div>
+				<span class="help-block">{{ i18nApp.announce }}</span>
 			</div>
 		</div>
+
+		<div class="control-group">
+			<label class="control-label" for="connection_timeout">Connection Timeout</label>
+			<div class="controls">
+				<input id="connection_timeout" name="connection_timeout" type="text" value="{{ data.connection_timeout }}" rel="popover" data-content="{{ i18nApp.connection_timeout }}" />
+			</div>
+		</div>
+
+        <div class="control-group">
+            <label class="control-label" for="strategy">Ring Strategy</label>
+            <div class="controls">
+                <select name="strategy" id="strategy" class="input-medium" >
+                    <option value="round_robin" {{#compare data.strategy "===" "round_robin"}} selected{{/compare}}>Round Robin</option>
+                    <option value="most_idle" {{#compare data.strategy "===" "most_idle"}} selected{{/compare}}>Most Idle</option>
+                </select>
+                <span class="help-block">{{ i18nApp.strategy }}</span>
+            </div>
+        </div>
+
+		<div class="control-group">
+			<label class="control-label" for="ring_simultaneously">Agents to ring simultaneously</label>
+			<div class="controls">
+                <input id="ring_simultaneously" class="span1" name="ring_simultaneously" type="number" value="{{ data.ring_simultaneously }}" rel="popover" data-content="{{ i18nApp.ring_simultaneously }}" />
+			</div>
+		</div>
+
+		<div class="control-group">
+			<label class="control-label" for="agent_ring_timeout">Agent Ring Timeout</label>
+			<div class="controls">
+				<input id="agent_ring_timeout" name="agent_ring_timeout" type="text" value="{{ data.agent_ring_timeout }}" rel="popover" data-content="{{ i18nApp.agent_ring_timeout }}" />
+
+			</div>
+		</div>
+
+		<div class="control-group">
+			<label class="control-label" for="agent_ring_timeout">Agent Wrap-up Time</label>
+			<div class="controls">
+				<input id="agent_wrapup_time" name="agent_wrapup_time" type="text" value="{{ data.agent_wrapup_time }}" rel="popover" data-content="{{ i18nApp.agent_wrapup_time }}" />
+
+			</div>
+		</div>
+
+		<div class="control-group">
+			<label class="control-label" for="enter_when_empty">Enter When Empty</label>
+			<div class="controls">
+				<select name="enter_when_empty" id="enter_when_empty" class="input-medium" >
+					<option value=""></option>
+					<option value="true" {{#if data.enter_when_empty}} selected{{/if}}>Yes</option>
+					<option value="false" {{#compare data.enter_when_empty "===" false}} selected{{/compare}}>No</option>
+				</select>
+				<span class="help-block">{{ i18nApp.enter_when_empty }}</span>
+			</div>
+		</div>
+
+		<div class="control-group">
+			<label class="control-label" for="record_caller">Record Caller</label>
+			<div class="controls">
+				<select name="record_caller" id="record_caller" class="input-medium" >
+					<option value=""></option>
+					<option value="true" {{#if data.record_caller}} selected{{/if}}>Yes</option>
+					<option value="false" {{#compare data.record_caller "===" false}} selected{{/compare}}>No</option>
+				</select>
+				<span class="help-block">{{ i18nApp.record_caller }}</span>
+			</div>
+		</div>
+
+		<div class="control-group">
+			<label class="control-label" for="recording_url">Recording URL</label>
+			<div class="controls">
+				<input id="recording_url" name="recording_url" type="text" value="{{ data.recording_url }}" rel="popover" data-content="{{ i18nApp.recording_url }}" />
+
+			</div>
+		</div>
+
+        <div class="control-group">
+            <label class="control-label" for="cdr_url">CDR URL</label>
+            <div class="controls">
+                <input id="cdr_url" name="cdr_url" type="text" value="{{ data.cdr_url }}" rel="popover" data-content="{{ i18nApp.cdr_url }}" />
+
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label" for="caller_exit_key">Caller exit key</label>
+            <div class="controls">
+                <select name="caller_exit_key" id="caller_exit_key" class="input-medium" >
+                    <option value=""></option>
+                    <option value="1" {{#compare data.caller_exit_key "===" "1"}} selected{{/compare}}>1</option>
+                    <option value="2" {{#compare data.caller_exit_key "===" "2"}} selected{{/compare}}>2</option>
+                    <option value="3" {{#compare data.caller_exit_key "===" "3"}} selected{{/compare}}>3</option>
+                    <option value="4" {{#compare data.caller_exit_key "===" "4"}} selected{{/compare}}>4</option>
+                    <option value="5" {{#compare data.caller_exit_key "===" "5"}} selected{{/compare}}>5</option>
+                    <option value="6" {{#compare data.caller_exit_key "===" "6"}} selected{{/compare}}>6</option>
+                    <option value="7" {{#compare data.caller_exit_key "===" "7"}} selected{{/compare}}>7</option>
+                    <option value="8" {{#compare data.caller_exit_key "===" "8"}} selected{{/compare}}>8</option>
+                    <option value="9" {{#compare data.caller_exit_key "===" "9"}} selected{{/compare}}>9</option>
+                    <option value="*" {{#compare data.caller_exit_key "===" "*"}} selected{{/compare}}>*</option>
+                    <option value="0" {{#compare data.caller_exit_key "===" "0"}} selected{{/compare}}>0</option>
+                    <option value="#" {{#compare data.caller_exit_key "===" "#"}} selected{{/compare}}>#</option>
+                </select>
+                <span class="help-block">{{ i18nApp.caller_exit_key }}</span>
+            </div>
+        </div>
 
 		<h4>{{ i18nApp.userLabel }}</h4>
 		<table class="users-table table table-striped">
